@@ -101,11 +101,18 @@ body.light .rb2.danger{background:rgba(204,34,34,.06);border-color:rgba(204,34,3
 /* info */
 .info{font-size:12px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 13px;line-height:1.6;margin-bottom:14px;}
 .info strong{color:var(--text);font-weight:700;}
-/* vaos */
-.vh{display:grid;grid-template-columns:36px 1fr 78px 28px;gap:8px;margin-bottom:6px;}
-.vr2{display:grid;grid-template-columns:36px 1fr 78px 28px;gap:8px;align-items:center;margin-bottom:8px;}
+/* vaos - ATUALIZADO para incluir coluna de info do cabo */
+.vh{display:grid;grid-template-columns:36px 1fr 180px 78px 28px;gap:8px;margin-bottom:6px;}
+.vr2{display:grid;grid-template-columns:36px 1fr 180px 78px 28px;gap:8px;align-items:center;margin-bottom:8px;}
 .vh span{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
 .vn{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;padding-top:8px;}
+/* NOVO - Info do cabo */
+.vinfo{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:11px;line-height:1.5;display:flex;flex-direction:column;gap:4px;}
+.vinfo-row{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.vinfo .vi-lbl{color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.03em;min-width:75px;}
+.vinfo .vi-val{font-family:var(--mono);font-size:13px;font-weight:700;text-align:right;}
+.vinfo .vi-30{color:var(--ok);}
+.vinfo .vi-60{color:var(--warn);}
 .vres{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap;padding-top:8px;}
 .vres.ok{color:var(--ok);}
 .vres.danger{color:var(--danger);}
@@ -252,7 +259,13 @@ body.light .rb2.danger{background:rgba(204,34,34,.06);border-color:rgba(204,34,3
           <div class="ct">Cabos — trecho doador → ponto de interligação</div>
           <div class="info">Insira <strong>apenas os vãos entre o transformador doador e o ponto de interligação</strong>. A corrente é calculada pela fase do doador. A verificação usa os valores de <strong>pico</strong>.</div>
           <div style="margin-top:12px;">
-            <div class="vh"><span>Vão</span><span>Cabo</span><span>Resultado</span><span></span></div>
+            <div class="vh">
+              <span>Vão</span>
+              <span>Cabo</span>
+              <span>Correntes</span>
+              <span>Resultado</span>
+              <span></span>
+            </div>
             <div id="vaos"></div>
           </div>
           <button class="badd" onclick="addVao()">+ Adicionar vão</button>
@@ -331,61 +344,22 @@ body.light .rb2.danger{background:rgba(204,34,34,.06);border-color:rgba(204,34,3
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 var CURVA=[0.32,0.25,0.20,0.18,0.19,0.22,0.30,0.42,0.52,0.55,0.56,0.54,0.52,0.50,0.51,0.53,0.58,0.65,0.78,1.00,0.95,0.82,0.65,0.48];
-var CABOS=[
-  
-{ n:"Cabo de Cobre Nu 8AWG - 8,37mm", i:76, t:28.96, m:16.72 },
-  { n:"Cabo de Cobre Nu 6AWG - 13,30mm", i:101, t:38.49, m:22.22 },
-  { n:"Cabo de Cobre Nu 4AWG - 21,15mm", i:136, t:51.82, m:29.92 },
-  { n:"Cabo de Cobre Nu 2AWG - 33,63mm", i:194, t:73.92, m:42.68 },
-  { n:"Cabo de Cobre Nu 1/0AWG - 53,43mm", i:252, t:96.02, m:55.44 },
-  { n:"Cabo de Cobre Nu 2/0AWG - 67,42mm", i:293, t:111.65, m:64.46 },
-  { n:"Cabo de Cobre Nu 3/0AWG - 85,03mm", i:335, t:127.65, m:73.70 },
-  { n:"Cabo de Cobre Nu 4/0AWG - 107,20mm", i:394, t:150.13, m:86.68 },
-  { n:"Cabo de Cobre Nu 300MCM - 120mm", i:496, t:189.00, m:109.12 },
+var CABOS = [
+  { n:"Cabo de Alumínio CA 6AWG - 13,30mm", i:81,  ie:110, t:30.87,  m:17.82 },
+  { n:"Cabo de Alumínio CA 4AWG - 21,15mm", i:111, ie:150, t:42.30,  m:24.42 },
+  { n:"Cabo de Alumínio CA 2AWG - 33,63mm", i:149, ie:201, t:56.78,  m:32.78 },
+  { n:"Cabo de Alumínio CA 1/0AWG - 53,43mm", i:201, ie:272, t:45.00,  m:44.22 },
+  { n:"Cabo de Alumínio CA 2/0AWG - 67,43mm", i:230, ie:313, t:87.64,  m:50.60 },
+  { n:"Cabo de Alumínio CA 3/0AWG - 85,03mm", i:270, ie:366, t:102.88, m:59.40 },
+  { n:"Cabo de Alumínio CA 4/0AWG - 107,20mm", i:314, ie:425, t:119.65, m:69.08 },
 
-  { n:"Cabo de Alumínio CA 6AWG - 13,30mm", i:81, t:30.87, m:17.82 },
-  { n:"Cabo de Alumínio CA 4AWG - 21,15mm", i:111, t:42.30, m:24.42 },
-  { n:"Cabo de Alumínio CA 2AWG - 33,63mm", i:149, t:56.78, m:32.78 },
-  { n:"Cabo de Alumínio CA 1/0AWG - 53,43mm", i:201, t:45.00, m:44.22 },
-  { n:"Cabo de Alumínio CA 2/0AWG - 67,43mm", i:230, t:87.64, m:50.60 },
-  { n:"Cabo de Alumínio CA 3/0AWG - 85,03mm", i:270, t:102.88, m:59.40 },
-  { n:"Cabo de Alumínio CA 4/0AWG - 107,20mm", i:314, t:119.65, m:69.08 },
-  { n:"Cabo de Alumínio CA 336,4MCM - 170,50mm", i:425, t:161.95, m:93.50 },
-
-  { n:"Cabo de Alumínio CAA 6AWG - 13,30mm", i:84, t:32.01, m:18.48 },
-  { n:"Cabo de Alumínio CAA 4AWG - 21,15mm", i:112, t:42.68, m:24.64 },
-  { n:"Cabo de Alumínio CAA 2AWG - 33,63mm", i:151, t:57.54, m:33.22 },
-  { n:"Cabo de Alumínio CAA 1/0AWG - 53,43mm", i:203, t:77.35, m:44.66 },
-  { n:"Cabo de Alumínio CAA 2/0AWG - 67,43mm", i:233, t:88.78, m:51.26 },
-  { n:"Cabo de Alumínio CAA 3/0AWG - 85,03mm", i:294, t:112.03, m:64.68 },
-  { n:"Cabo de Alumínio CAA 4/0AWG - 107,20mm", i:318, t:121.17, m:69.96 },
-  { n:"Cabo de Alumínio CAA 336,4MCM - 170,50mm", i:432, t:164.61, m:95.04 },
-
-  { n:"Cabo Cobre Isolado 4AWG 15kV", i:136, t:51.82, m:29.92 },
-  { n:"Cabo Cobre Isolado 2AWG 15kV", i:116, t:44.20, m:25.52 },
-  { n:"Cabo Cobre Isolado 1/0AWG 15kV", i:149, t:56.78, m:32.78 },
-  { n:"Cabo Cobre Isolado 4/0AWG 15kV", i:375, t:142.89, m:82.50 },
-
-  { n:"Cabo Al Isol 2AWG 15kV", i:116, t:44.20, m:25.52 },
-  { n:"Cabo Al Isol 1/0AWG 15kV", i:151, t:57.54, m:33.22 },
-  { n:"Cabo Al Isol 2/0AWG 15kV", i:171, t:65.16, m:37.62 },
-  { n:"Cabo Al Isol 4/0AWG 15kV", i:222, t:84.59, m:48.84 },
-  { n:"Cabo Al Isol 250MCM 15kV", i:243, t:92.60, m:53.46 },
-  { n:"Cabo Al Isol 350MCM 15kV", i:293, t:111.65, m:64.46 },
-  { n:"Cabo Al Isol 500MCM 15kV", i:356, t:135.65, m:78.32 },
-  { n:"Cabo Al Isol 750MCM 15kV", i:439, t:167.28, m:96.58 },
-
-  { n:"Cabo Condutor Aço Zincado 11,93mm", i:37, t:14.10, m:8.14 },
-
-  { n:"Cabo Protegido XLPE 70mm 35kV", i:270, t:102.88, m:59.40 },
-  { n:"Cabo Protegido XLPE 150mm 35kV", i:432, t:164.61, m:95.04 },
-
-  { n:"Cabo Multiplexado 2x35+70 1kV", i:146, t:55.63, m:32.12 },
-  { n:"Cabo Multiplexado 2x70+70 1kV", i:227, t:86.50, m:49.94 },
-  { n:"Cabo Multiplexado 3x35+70 1kV", i:146, t:55.63, m:32.12 },
-  { n:"Cabo Multiplexado 3x70+70 1kV", i:227, t:86.50, m:49.94 },
-  { n:"Cabo Multiplexado 3x120+70 1kV", i:311, t:118.51, m:68.42 }
+  { n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x35mm+70mm - 0,6/1kV", i:146, ie:146, t:55.63,  m:32.12 },
+  { n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x70mm+70mm - 0,6/1kV", i:227, ie:227, t:86.50,  m:49.94 },
+  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x35mm+70mm - 0,6/1kV", i:146, ie:146, t:55.63,  m:32.12 },
+  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x70mm+70mm - 0,6/1kV", i:227, ie:227, t:86.50,  m:49.94 },
+  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x120mm+70mm - 0,6/1kV", i:311, ie:311, t:118.51, m:68.42 }
 ];
+
 
 var S={protD:'conv',protQ:'conv',faseD:'tri',faseQ:'tri',vaos:[],vid:0};
 var VT=220,VM=127,CI=null,DARK=true;
@@ -434,16 +408,34 @@ function setF(t,v){
 }
 function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();calcular();}
 function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();calcular();}
+
+// ATUALIZADO - renderVaos com info do cabo
 function renderVaos(){
   var c=document.getElementById('vaos');c.innerHTML='';
   S.vaos.forEach(function(vao,idx){
     var row=document.createElement('div');row.className='vr2';
     var opts=CABOS.map(function(cab,i){return '<option value="'+i+'"'+(i===vao.cabo?' selected':'')+'>'+cab.n+'</option>';}).join('');
-    row.innerHTML='<div class="vn">'+(idx+1)+'</div><select onchange="updVao('+vao.id+',this.value)">'+opts+'</select><div class="vres" id="vr-'+vao.id+'">—</div><button class="vdel" onclick="removeVao('+vao.id+')">×</button>';
+    
+    var cab = CABOS[vao.cabo];
+    var infoHTML = '<div class="vinfo">'+
+  '<div class="vinfo-row"><span class="vi-lbl">Nominal 30°C:</span><span class="vi-val vi-30">'+cab.i+' A</span></div>'+
+  '<div class="vinfo-row"><span class="vi-lbl">Emergencial 60°C:</span><span class="vi-val vi-60">'+cab.ie+' A</span></div>'+
+  '</div>';
+    
+    row.innerHTML='<div class="vn">'+(idx+1)+'</div><select onchange="updVao('+vao.id+',this.value)">'+opts+'</select>'+infoHTML+'<div class="vres" id="vr-'+vao.id+'">—</div><button class="vdel" onclick="removeVao('+vao.id+')">×</button>';
     c.appendChild(row);
   });
 }
-function updVao(id,val){var v=S.vaos.filter(function(x){return x.id===id;})[0];if(v){v.cabo=parseInt(val);calcular();}}
+
+function updVao(id,val){
+  var v=S.vaos.filter(function(x){return x.id===id;})[0];
+  if(v){
+    v.cabo=parseInt(val);
+    renderVaos(); // Re-renderiza para atualizar as correntes
+    calcular();
+  }
+}
+
 function iDem(kva,fase){return fase==='tri'?(kva*1000)/(Math.sqrt(3)*VT):(kva*1000)/VM;}
 
 function calcular(){
@@ -615,10 +607,6 @@ function cConverter(){
     return;
   }
 
-  // Extrai números no formato:
-  // -20
-  // -20.37343
-  // -20,37343
   var nums = val.match(/-?\d+(?:[.,]\d+)?/g);
 
   if (!nums || nums.length < 2) {
