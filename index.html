@@ -377,7 +377,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
           <div class="card">
             <div class="ct">Transformador Doador</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-doador" value="75" min="1" oninput="atualizarFase()">
+            <input type="number" id="pot-doador" value="75" min="1" oninput="calcular()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-doador-conv" onclick="setP('doador','conv')">🔻 Convencional</div>
@@ -389,12 +389,12 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
               <div class="rb"    id="fase-doador-mono" onclick="setF('doador','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga Atual (kVA)</span>
-            <input type="number" id="carga-doador" value="40" min="0" oninput="atualizarFase()">
+            <input type="number" id="carga-doador" value="40" min="0" oninput="calcular()">
           </div>
           <div class="card card-queimado">
             <div class="ct ct-queimado">Transformador Queimado</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-queimado" value="30" min="1" oninput="atualizarFase()">
+            <input type="number" id="pot-queimado" value="30" min="1" oninput="calcular()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-queimado-conv" onclick="setP('queimado','conv')">🔻 Convencional</div>
@@ -406,7 +406,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
               <div class="rb"    id="fase-queimado-mono" onclick="setF('queimado','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga a Transferir (kVA)</span>
-            <input type="number" id="carga-queimado" value="22" min="0" oninput="atualizarFase()">
+            <input type="number" id="carga-queimado" value="22" min="0" oninput="calcular()">
             <div id="alert-fase" class="ail"></div>
           </div>
         </div>
@@ -618,15 +618,15 @@ function toast(msg){
 function setP(t,v){
   S[t==="doador"?"protD":"protQ"]=v;
   ["conv","prot"].forEach(function(x){document.getElementById("tp-"+t+"-"+x).classList.toggle("on",x===v);});
-  atualizarFase();
+  calcular();
 }
 function setF(t,v){
   S[t==="doador"?"faseD":"faseQ"]=v;
   ["tri","mono"].forEach(function(x){document.getElementById("fase-"+t+"-"+x).classList.toggle("on",x===v);});
-  atualizarFase();
+  calcular();
 }
-function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();atualizarFase();}
-function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();atualizarFase();}
+function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();calcular();}
+function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();calcular();}
 
 function renderVaos(){
   var cont=document.getElementById("vaos");cont.innerHTML="";
@@ -642,7 +642,7 @@ function renderVaos(){
 
 function updVao(id,val){
   var v=S.vaos.filter(function(x){return x.id===id;})[0];
-  if(v){v.cabo=parseInt(val);renderVaos();atualizarFase();}
+  if(v){v.cabo=parseInt(val);renderVaos();calcular();}
 }
 
 function iDem(kva,fase){return fase==="tri"?(kva*1000)/(Math.sqrt(3)*VT):(kva*1000)/VM;}
@@ -650,20 +650,6 @@ function iDem(kva,fase){return fase==="tri"?(kva*1000)/(Math.sqrt(3)*VT):(kva*10
 function mkMetric(val,unit,label,color){
   var col=color?" style=\"color:"+color+"\"":"";
   return "<div class=\"res-metric\"><div class=\"res-metric-v\""+col+">"+val+"<span class=\"res-metric-u\">"+unit+"</span></div><div class=\"res-metric-l\">"+label+"</div></div>";
-}
-
-function atualizarFase(){
-  var inv=S.faseD==="mono"&&S.faseQ==="tri";
-  var avi=S.faseD==="tri"&&S.faseQ==="mono";
-  var aEl=document.getElementById("alert-fase");
-  if(inv){aEl.className="ail danger";aEl.textContent="✗ Trafo monofásico não pode alimentar rede trifásica. Interligação inviável.";}
-  else if(avi){aEl.className="ail warn";aEl.textContent="⚠ Doador trifásico alimentando rede monofásica — somente uma fase será usada.";}
-  else{aEl.className="ail";}
-  // Limpa resultados anteriores ao mudar parâmetros
-  document.getElementById("resultado-trafo").innerHTML="";
-  document.getElementById("resultado-final").innerHTML="";
-  document.getElementById("jsum").innerHTML="";
-  if(CI){CI.destroy();CI=null;}
 }
 
 function calcular(){
@@ -1135,7 +1121,7 @@ function cAddHist(lat,lon,orig){
 }
 
 /* INIT */
-addVao();addVao();atualizarFase();gAtualizar();
+addVao();addVao();calcular();gAtualizar();
 
 </script>
 </body>
