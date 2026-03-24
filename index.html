@@ -219,6 +219,47 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 .res-detail-val{font-family:var(--mono);font-size:12px;font-weight:700;text-align:right;}
 @media(max-width:600px){.res-metrics{grid-template-columns:repeat(2,1fr);}.res-detail-grid{grid-template-columns:1fr;}.res-detail-item:nth-last-child(-n+2){border-bottom:1px solid var(--border);}.res-detail-item:last-child{border-bottom:none;}}
 
+/* ── TIMELINE HORÁRIA ── */
+.jwin-block{margin-top:16px;}
+.jwin-title{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.jwin-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);}
+.jwin-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(0,0,0,.7);transition:filter .15s;position:relative;overflow:hidden;}
+.jwin-seg:hover{filter:brightness(1.15);}
+.jwin-seg.s-ok{background:rgba(0,212,170,.55);}
+.jwin-seg.s-warn{background:rgba(245,166,35,.6);}
+.jwin-seg.s-inv{background:rgba(255,77,77,.55);}
+.jwin-labels{display:flex;margin-top:4px;position:relative;height:16px;}
+.jwin-lbl{position:absolute;font-size:9px;color:var(--muted);transform:translateX(-50%);}
+.jwin-legend{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;}
+.jwin-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
+.jwin-leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.jwin-janelas{display:flex;flex-direction:column;gap:6px;margin-top:12px;}
+.jwin-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid;font-size:13px;}
+.jwin-row.s-ok{background:rgba(0,212,170,.06);border-color:rgba(0,212,170,.2);}
+.jwin-row.s-warn{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2);}
+.jwin-row.s-inv{background:rgba(255,77,77,.06);border-color:rgba(255,77,77,.2);}
+.jwin-row-ic{font-size:14px;flex-shrink:0;}
+.jwin-row-hrs{font-family:var(--mono);font-weight:700;flex-shrink:0;min-width:80px;}
+.jwin-row-hrs.s-ok{color:var(--ok);}
+.jwin-row-hrs.s-warn{color:var(--warn);}
+.jwin-row-hrs.s-inv{color:var(--danger);}
+.jwin-row-desc{color:var(--muted);font-size:12px;}
+.jwin-row-pct{font-family:var(--mono);font-size:12px;font-weight:700;margin-left:auto;}
+
+/* ── CONCLUSÃO FINAL ── */
+.concl-block{margin-top:14px;padding:14px 16px;border-radius:9px;border:1px solid;font-size:13px;line-height:1.7;}
+.concl-block.s-ok{background:rgba(0,212,170,.06);border-color:rgba(0,212,170,.22);}
+.concl-block.s-warn{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.22);}
+.concl-block.s-inv{background:rgba(255,77,77,.06);border-color:rgba(255,77,77,.22);}
+.concl-block.s-partial{background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.22);}
+.concl-title{font-weight:700;font-size:13px;margin-bottom:6px;}
+.concl-title.s-ok{color:var(--ok);}
+.concl-title.s-warn{color:var(--warn);}
+.concl-title.s-inv{color:var(--danger);}
+.concl-title.s-partial{color:var(--warn);}
+.concl-text{color:var(--muted);}
+.concl-text .n{font-family:var(--mono);color:var(--text);font-weight:600;}
+
 /* ── GDIS EXPANDIDO ── */
 .gdis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .gdis-stat{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden;}
@@ -516,85 +557,86 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 var CURVA=[0.32,0.25,0.20,0.18,0.19,0.22,0.30,0.42,0.52,0.55,0.56,0.54,0.52,0.50,0.51,0.53,0.58,0.65,0.78,1.00,0.95,0.82,0.65,0.48];
-var CABOS = [
-  { n:"Cabo de Alumínio CA 6AWG - 13,30mm", i:81,  ie:110, t:30.87,  m:17.82 },
-  { n:"Cabo de Alumínio CA 4AWG - 21,15mm", i:111, ie:150, t:42.30,  m:24.42 },
-  { n:"Cabo de Alumínio CA 2AWG - 33,63mm", i:149, ie:201, t:56.78,  m:32.78 },
-  { n:"Cabo de Alumínio CA 1/0AWG - 53,43mm", i:201, ie:272, t:45.00,  m:44.22 },
-  { n:"Cabo de Alumínio CA 2/0AWG - 67,43mm", i:230, ie:313, t:87.64,  m:50.60 },
-  { n:"Cabo de Alumínio CA 3/0AWG - 85,03mm", i:270, ie:366, t:102.88, m:59.40 },
-  { n:"Cabo de Alumínio CA 4/0AWG - 107,20mm", i:314, ie:425, t:119.65, m:69.08 },
-  { n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x35mm+70mm - 0,6/1kV", i:146, ie:146, t:55.63,  m:32.12 },
-  { n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x70mm+70mm - 0,6/1kV", i:227, ie:227, t:86.50,  m:49.94 },
-  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x35mm+70mm - 0,6/1kV", i:146, ie:146, t:55.63,  m:32.12 },
-  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x70mm+70mm - 0,6/1kV", i:227, ie:227, t:86.50,  m:49.94 },
-  { n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x120mm+70mm - 0,6/1kV", i:311, ie:311, t:118.51, m:68.42 }
+var CABOS=[
+  {n:"Cabo de Alumínio CA 6AWG - 13,30mm",i:81,ie:110,t:30.87,m:17.82},
+  {n:"Cabo de Alumínio CA 4AWG - 21,15mm",i:111,ie:150,t:42.30,m:24.42},
+  {n:"Cabo de Alumínio CA 2AWG - 33,63mm",i:149,ie:201,t:56.78,m:32.78},
+  {n:"Cabo de Alumínio CA 1/0AWG - 53,43mm",i:201,ie:272,t:45.00,m:44.22},
+  {n:"Cabo de Alumínio CA 2/0AWG - 67,43mm",i:230,ie:313,t:87.64,m:50.60},
+  {n:"Cabo de Alumínio CA 3/0AWG - 85,03mm",i:270,ie:366,t:102.88,m:59.40},
+  {n:"Cabo de Alumínio CA 4/0AWG - 107,20mm",i:314,ie:425,t:119.65,m:69.08},
+  {n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x35mm+70mm - 0,6/1kV",i:146,ie:146,t:55.63,m:32.12},
+  {n:"Cabo Multiplexado CA/CAL Isol XLPE 2x1x70mm+70mm - 0,6/1kV",i:227,ie:227,t:86.50,m:49.94},
+  {n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x35mm+70mm - 0,6/1kV",i:146,ie:146,t:55.63,m:32.12},
+  {n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x70mm+70mm - 0,6/1kV",i:227,ie:227,t:86.50,m:49.94},
+  {n:"Cabo Multiplexado CA/CAL Isol XLPE 3x1x120mm+70mm - 0,6/1kV",i:311,ie:311,t:118.51,m:68.42}
 ];
 
-var S={protD:'conv',protQ:'conv',faseD:'tri',faseQ:'tri',vaos:[],vid:0};
+var S={protD:"conv",protQ:"conv",faseD:"tri",faseQ:"tri",vaos:[],vid:0};
 var VT=220,VM=127,CI=null,DARK=true;
 var COORD_HIST=[];
+var periodosHrs=[];
 
 var PTITLES={
-  interlig:{t:'Verificação de Interligação',s:'Análise de capacidade do doador · Cabos · Janelas horárias'},
-  gdis:{t:'Copiar G-Dis',s:'Extrai e organiza notas de OS do texto copiado do G-Dis'},
-  coord:{t:'Corrigir Coordenadas',s:'Converte e padroniza coordenadas geográficas — histórico de sessão'}
+  interlig:{t:"Verificação de Interligação",s:"Análise de capacidade do doador · Cabos · Janelas horárias"},
+  gdis:{t:"Copiar G-Dis",s:"Extrai e organiza notas de OS do texto copiado do G-Dis"},
+  coord:{t:"Corrigir Coordenadas",s:"Converte e padroniza coordenadas geográficas — histórico de sessão"}
 };
 
-function openSb(){document.getElementById('sb').classList.add('open');document.getElementById('overlay').classList.add('on');}
-function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('overlay').classList.remove('on');}
+function openSb(){document.getElementById("sb").classList.add("open");document.getElementById("overlay").classList.add("on");}
+function closeSb(){document.getElementById("sb").classList.remove("open");document.getElementById("overlay").classList.remove("on");}
 
 function navTo(id){
-  document.querySelectorAll('.ni').forEach(function(e){e.classList.remove('active');});
-  document.querySelectorAll('.pg').forEach(function(e){e.classList.remove('active');});
-  document.getElementById('nav-'+id).classList.add('active');
-  document.getElementById('page-'+id).classList.add('active');
-  document.getElementById('ttitle').textContent=PTITLES[id].t;
-  document.getElementById('tsub').textContent=PTITLES[id].s;
+  document.querySelectorAll(".ni").forEach(function(e){e.classList.remove("active");});
+  document.querySelectorAll(".pg").forEach(function(e){e.classList.remove("active");});
+  document.getElementById("nav-"+id).classList.add("active");
+  document.getElementById("page-"+id).classList.add("active");
+  document.getElementById("ttitle").textContent=PTITLES[id].t;
+  document.getElementById("tsub").textContent=PTITLES[id].s;
   closeSb();
 }
 
 function toggleTheme(){
   DARK=!DARK;
-  document.body.classList.toggle('light',!DARK);
-  document.getElementById('themeLbl').textContent=DARK?'Modo claro':'Modo escuro';
-  var ic=document.getElementById('themeIcon');
-  ic.innerHTML=DARK?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>':'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>';
+  document.body.classList.toggle("light",!DARK);
+  document.getElementById("themeLbl").textContent=DARK?"Modo claro":"Modo escuro";
+  var ic=document.getElementById("themeIcon");
+  ic.innerHTML=DARK?"<path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/>":"<circle cx=\"12\" cy=\"12\" r=\"5\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"/><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/>";
   if(CI){calcular();}
 }
 
 var TTM;
 function toast(msg){
-  var el=document.getElementById('toast');
-  el.childNodes[1]?el.childNodes[1].textContent=msg:el.appendChild(document.createTextNode(msg));
-  el.lastChild.textContent=msg;
-  el.classList.add('show');
-  clearTimeout(TTM);TTM=setTimeout(function(){el.classList.remove('show');},1800);
+  var el=document.getElementById("toast");
+  while(el.childNodes.length>1){el.removeChild(el.lastChild);}
+  el.appendChild(document.createTextNode(msg));
+  el.classList.add("show");
+  clearTimeout(TTM);TTM=setTimeout(function(){el.classList.remove("show");},1800);
 }
 
-/* ── INTERLIGAÇÃO ── */
+/* INTERLIGAÇÃO */
 function setP(t,v){
-  S[t==='doador'?'protD':'protQ']=v;
-  ['conv','prot'].forEach(function(x){document.getElementById('tp-'+t+'-'+x).classList.toggle('on',x===v);});
+  S[t==="doador"?"protD":"protQ"]=v;
+  ["conv","prot"].forEach(function(x){document.getElementById("tp-"+t+"-"+x).classList.toggle("on",x===v);});
   calcular();
 }
 function setF(t,v){
-  S[t==='doador'?'faseD':'faseQ']=v;
-  ['tri','mono'].forEach(function(x){document.getElementById('fase-'+t+'-'+x).classList.toggle('on',x===v);});
+  S[t==="doador"?"faseD":"faseQ"]=v;
+  ["tri","mono"].forEach(function(x){document.getElementById("fase-"+t+"-"+x).classList.toggle("on",x===v);});
   calcular();
 }
 function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();calcular();}
 function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();calcular();}
 
 function renderVaos(){
-  var c=document.getElementById('vaos');c.innerHTML='';
+  var cont=document.getElementById("vaos");cont.innerHTML="";
   S.vaos.forEach(function(vao,idx){
-    var row=document.createElement('div');row.className='vr2';
-    var opts=CABOS.map(function(cab,i){return '<option value="'+i+'"'+(i===vao.cabo?' selected':'')+'>'+cab.n+'</option>';}).join('');
+    var row=document.createElement("div");row.className="vr2";
+    var opts=CABOS.map(function(cab,i){return "<option value=\""+i+"\""+(i===vao.cabo?" selected":"")+">"+cab.n+"</option>";}).join("");
     var cab=CABOS[vao.cabo];
-    var infoHTML='<div class="vinfo"><div class="vinfo-row"><span class="vi-lbl">Nominal 30°C:</span><span class="vi-val vi-30">'+cab.i+' A</span></div><div class="vinfo-row"><span class="vi-lbl">Emergencial 60°C:</span><span class="vi-val vi-60">'+cab.ie+' A</span></div></div>';
-    row.innerHTML='<div class="vn">'+(idx+1)+'</div><select onchange="updVao('+vao.id+',this.value)">'+opts+'</select>'+infoHTML+'<div class="vres" id="vr-'+vao.id+'">—</div><button class="vdel" onclick="removeVao('+vao.id+')">×</button>';
-    c.appendChild(row);
+    var info="<div class=\"vinfo\"><div class=\"vinfo-row\"><span class=\"vi-lbl\">Nominal 30\xb0C:</span><span class=\"vi-val vi-30\">"+cab.i+" A</span></div><div class=\"vinfo-row\"><span class=\"vi-lbl\">Emergencial 60\xb0C:</span><span class=\"vi-val vi-60\">"+cab.ie+" A</span></div></div>";
+    row.innerHTML="<div class=\"vn\">"+(idx+1)+"</div><select onchange=\"updVao("+vao.id+",this.value)\">"+opts+"</select>"+info+"<div class=\"vres\" id=\"vr-"+vao.id+"\">—</div><button class=\"vdel\" onclick=\"removeVao("+vao.id+")\">×</button>";
+    cont.appendChild(row);
   });
 }
 
@@ -603,73 +645,91 @@ function updVao(id,val){
   if(v){v.cabo=parseInt(val);renderVaos();calcular();}
 }
 
-function iDem(kva,fase){return fase==='tri'?(kva*1000)/(Math.sqrt(3)*VT):(kva*1000)/VM;}
+function iDem(kva,fase){return fase==="tri"?(kva*1000)/(Math.sqrt(3)*VT):(kva*1000)/VM;}
+
+function mkMetric(val,unit,label,color){
+  var col=color?" style=\"color:"+color+"\"":"";
+  return "<div class=\"res-metric\"><div class=\"res-metric-v\""+col+">"+val+"<span class=\"res-metric-u\">"+unit+"</span></div><div class=\"res-metric-l\">"+label+"</div></div>";
+}
 
 function calcular(){
-  var potD=parseFloat(document.getElementById('pot-doador').value)||0;
-  var cD=parseFloat(document.getElementById('carga-doador').value)||0;
-  var cQ=parseFloat(document.getElementById('carga-queimado').value)||0;
+  var potD=parseFloat(document.getElementById("pot-doador").value)||0;
+  var cD=parseFloat(document.getElementById("carga-doador").value)||0;
+  var cQ=parseFloat(document.getElementById("carga-queimado").value)||0;
 
-  var aEl=document.getElementById('alert-fase');
-  var inv=S.faseD==='mono'&&S.faseQ==='tri';
-  var avi=S.faseD==='tri'&&S.faseQ==='mono';
-  if(inv){aEl.className='ail danger';aEl.textContent='✗ Trafo monofásico não pode alimentar rede trifásica. Interligação inviável.';}
-  else if(avi){aEl.className='ail warn';aEl.textContent='⚠ Doador trifásico alimentando rede monofásica — somente uma fase será usada.';}
-  else{aEl.className='ail';}
+  var aEl=document.getElementById("alert-fase");
+  var inv=S.faseD==="mono"&&S.faseQ==="tri";
+  var avi=S.faseD==="tri"&&S.faseQ==="mono";
+  if(inv){aEl.className="ail danger";aEl.textContent="\u2717 Trafo monofásico não pode alimentar rede trifásica. Interligação inviável.";}
+  else if(avi){aEl.className="ail warn";aEl.textContent="\u26a0 Doador trifásico alimentando rede monofásica — somente uma fase será usada.";}
+  else{aEl.className="ail";}
 
-  var fator=S.protD==='prot'?1.00:1.20;
+  var fator=S.protD==="prot"?1.00:1.20;
   var maxD=potD*fator,tot=cD+cQ,sobra=maxD-tot,pct=maxD>0?(tot/maxD*100):0;
   var cls,tit,msg;
-  if(inv){cls='danger';tit='✗ Interligação inviável';msg='Trafo monofásico não pode suprir rede trifásica.';}
-  else if(tot<=maxD*0.85){cls='ok';tit='✓ Capacidade suficiente no pico';msg='Carga total no pico de <span class="n">'+tot.toFixed(1)+' kVA</span> dentro do limite de <span class="n">'+maxD.toFixed(0)+' kVA</span>. Margem: <span class="n">'+sobra.toFixed(1)+' kVA</span>.';}
-  else if(tot<=maxD){cls='warn';tit='⚠ Viável no pico com atenção';msg='Carga total de <span class="n">'+tot.toFixed(1)+' kVA</span> próxima ao limite de <span class="n">'+maxD.toFixed(0)+' kVA</span> ('+pct.toFixed(0)+'%). Margem: <span class="n">'+sobra.toFixed(1)+' kVA</span>.';}
-  else{cls='danger';tit='✗ Inviável no pico — verifique janelas horárias';msg='Carga total de <span class="n">'+tot.toFixed(1)+' kVA</span> excede o limite de <span class="n">'+maxD.toFixed(0)+' kVA</span>. Excesso: <span class="n">'+Math.abs(sobra).toFixed(1)+' kVA</span>.';}
+  if(inv){
+    cls="danger";tit="\u2717 Interligação inviável";msg="Trafo monofásico não pode suprir rede trifásica.";
+  } else if(tot<=maxD*0.85){
+    cls="ok";tit="\u2713 Capacidade suficiente no pico";
+    msg="Carga total de <span class=\"n\">"+tot.toFixed(1)+" kVA</span> dentro do limite de <span class=\"n\">"+maxD.toFixed(0)+" kVA</span>. Margem: <span class=\"n\">"+sobra.toFixed(1)+" kVA</span>.";
+  } else if(tot<=maxD){
+    cls="warn";tit="\u26a0 Viável no pico com atenção";
+    msg="Carga total de <span class=\"n\">"+tot.toFixed(1)+" kVA</span> próxima ao limite de <span class=\"n\">"+maxD.toFixed(0)+" kVA</span> ("+pct.toFixed(0)+"%). Margem: <span class=\"n\">"+sobra.toFixed(1)+" kVA</span>.";
+  } else {
+    cls="danger";tit="\u2717 Inviável no pico — verifique janelas horárias";
+    msg="Carga total de <span class=\"n\">"+tot.toFixed(1)+" kVA</span> excede o limite de <span class=\"n\">"+maxD.toFixed(0)+" kVA</span>. Excesso: <span class=\"n\">"+Math.abs(sobra).toFixed(1)+" kVA</span>.";
+  }
 
-  var fLbl={'tri-tri':'Trifásico → Trifásico','tri-mono':'Trifásico → Monofásico','mono-mono':'Monofásico → Monofásico','mono-tri':'Monofásico → Trifásico ✗'}[S.faseD+'-'+S.faseQ];
-  var metricColor=pct>100?'var(--danger)':pct>85?'var(--warn)':'var(--ok)';
-  var margemColor=sobra<0?'var(--danger)':sobra<maxD*0.15?'var(--warn)':'var(--ok)';
-  var metricGrid=!inv?
-    '<div class="res-metrics">'+
-      '<div class="res-metric"><div class="res-metric-v" style="color:'+metricColor+'">'+pct.toFixed(1)+'<span class="res-metric-u">%</span></div><div class="res-metric-l">Uso no pico</div></div>'+
-      '<div class="res-metric"><div class="res-metric-v">'+tot.toFixed(1)+'<span class="res-metric-u">kVA</span></div><div class="res-metric-l">Carga total</div></div>'+
-      '<div class="res-metric"><div class="res-metric-v" style="color:'+margemColor+'">'+sobra.toFixed(1)+'<span class="res-metric-u">kVA</span></div><div class="res-metric-l">Margem</div></div>'+
-      '<div class="res-metric"><div class="res-metric-v">'+maxD.toFixed(0)+'<span class="res-metric-u">kVA</span></div><div class="res-metric-l">Limite</div></div>'+
-    '</div>'+
-    '<div class="gr" style="margin-top:14px;"><span class="gl">Carregamento</span><div class="gb"><div class="gf" style="width:'+Math.min(pct,100).toFixed(1)+'%;background:'+metricColor+'"></div></div><span class="gv" style="color:'+metricColor+'">'+pct.toFixed(1)+'%</span></div>'
-  :'';
-  var detFases='<div class="res-detail-grid">'+
-    '<div class="res-detail-item"><span class="res-detail-lbl">Fases</span><span class="res-detail-val">'+fLbl+'</span></div>'+
-    '<div class="res-detail-item"><span class="res-detail-lbl">Limite doador</span><span class="res-detail-val">'+maxD.toFixed(1)+' kVA <span style="color:var(--muted);font-weight:400;font-size:11px;">('+( fator===1?'100':'120')+'%)</span></span></div>'+
-    '<div class="res-detail-item"><span class="res-detail-lbl">Carga doador</span><span class="res-detail-val">'+cD.toFixed(1)+' kVA</span></div>'+
-    '<div class="res-detail-item"><span class="res-detail-lbl">Carga queimado</span><span class="res-detail-val">'+cQ.toFixed(1)+' kVA</span></div>'+
-  '</div>';
-  document.getElementById('resultado-trafo').innerHTML=
-    '<div class="rb2 '+cls+'">'+
-      '<div class="rb2-header"><h3>'+tit+'</h3><p>'+msg+'</p></div>'+
-      metricGrid+
-      '<div class="rb2-sep"></div>'+
-      detFases+
-    '</div>';
+  var fLbl={"tri-tri":"Trifásico → Trifásico","tri-mono":"Trifásico → Monofásico","mono-mono":"Monofásico → Monofásico","mono-tri":"Monofásico → Trifásico \u2717"}[S.faseD+"-"+S.faseQ];
+  var pctColor=pct>100?"var(--danger)":pct>85?"var(--warn)":"var(--ok)";
+  var margemColor=sobra<0?"var(--danger)":sobra<maxD*0.15?"var(--warn)":"var(--ok)";
 
+  var metricsHtml="";
+  if(!inv){
+    metricsHtml="<div class=\"res-metrics\">"+
+      mkMetric(pct.toFixed(1),"%","Uso no pico",pctColor)+
+      mkMetric(tot.toFixed(1),"kVA","Carga total","")+
+      mkMetric(sobra.toFixed(1),"kVA","Margem",margemColor)+
+      mkMetric(maxD.toFixed(0),"kVA","Limite","")+
+    "</div>"+
+    "<div class=\"gr\" style=\"margin-top:14px;\"><span class=\"gl\">Carregamento</span><div class=\"gb\"><div class=\"gf\" style=\"width:"+Math.min(pct,100).toFixed(1)+"%;background:"+pctColor+"\"></div></div><span class=\"gv\" style=\"color:"+pctColor+"\">"+pct.toFixed(1)+"%</span></div>";
+  }
+
+  var detFasesHtml="<div class=\"res-detail-grid\">"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Fases</span><span class=\"res-detail-val\">"+fLbl+"</span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Limite doador</span><span class=\"res-detail-val\">"+maxD.toFixed(1)+" kVA <span style=\"color:var(--muted);font-weight:400;font-size:11px;\">("+(fator===1?"100":"120")+"%)</span></span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga doador</span><span class=\"res-detail-val\">"+cD.toFixed(1)+" kVA</span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga queimado</span><span class=\"res-detail-val\">"+cQ.toFixed(1)+" kVA</span></div>"+
+  "</div>";
+
+  document.getElementById("resultado-trafo").innerHTML=
+    "<div class=\"rb2 "+cls+"\">"+
+      "<div class=\"rb2-header\"><h3>"+tit+"</h3><p>"+msg+"</p></div>"+
+      metricsHtml+
+      "<div class=\"rb2-sep\"></div>"+
+      detFasesHtml+
+    "</div>";
+
+  /* GRÁFICO */
   var hrs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
   var dD=hrs.map(function(h){return cD*CURVA[h];});
   var dQ=hrs.map(function(h){return cQ*CURVA[h];});
   var dT=hrs.map(function(h){return(cD+cQ)*CURVA[h];});
-  var gc=DARK?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.06)';
-  var tc=DARK?'#5a6785':'#6b7280';
-  var lc=DARK?'#dde6f0':'#1a1d27';
+  var gc=DARK?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.06)";
+  var tc=DARK?"#5a6785":"#6b7280";
+  var lc=DARK?"#dde6f0":"#1a1d27";
 
   if(CI){CI.destroy();CI=null;}
-  var canvas=document.getElementById('chartCurvas');
-  if(canvas&&typeof Chart!=='undefined'){
+  var canvas=document.getElementById("chartCurvas");
+  if(canvas&&typeof Chart!=="undefined"){
     CI=new Chart(canvas,{
-      type:'bar',
+      type:"bar",
       data:{
-        labels:hrs.map(function(h){return h+'h';}),
+        labels:hrs.map(function(h){return h+"h";}),
         datasets:[
-          {type:'line',label:'Total',data:dT,borderColor:lc,borderWidth:2,pointRadius:2,tension:0.4,fill:false,order:1,yAxisID:'y'},
-          {type:'bar',label:'Doador',data:dD,backgroundColor:'rgba(0,153,255,0.4)',borderRadius:3,order:2,yAxisID:'y',stack:'s'},
-          {type:'bar',label:'Queimado',data:dQ,backgroundColor:'rgba(245,166,35,0.45)',borderRadius:3,order:2,yAxisID:'y',stack:'s'}
+          {type:"line",label:"Total",data:dT,borderColor:lc,borderWidth:2,pointRadius:2,tension:0.4,fill:false,order:1,yAxisID:"y"},
+          {type:"bar",label:"Doador",data:dD,backgroundColor:"rgba(0,153,255,0.4)",borderRadius:3,order:2,yAxisID:"y",stack:"s"},
+          {type:"bar",label:"Queimado",data:dQ,backgroundColor:"rgba(245,166,35,0.45)",borderRadius:3,order:2,yAxisID:"y",stack:"s"}
         ]
       },
       options:{
@@ -677,136 +737,269 @@ function calcular(){
         plugins:{
           legend:{display:false},
           tooltip:{callbacks:{
-            title:function(c){return c[0].label;},
-            afterBody:function(items){var h=items[0].dataIndex,t=dT[h],p=maxD>0?(t/maxD*100):0;return['Total: '+t.toFixed(1)+' kVA ('+p.toFixed(0)+'%)',p>100?'✗ Inviável':p>85?'⚠ Atenção':'✓ Viável'];}
+            title:function(ctx){return ctx[0].label;},
+            afterBody:function(items){
+              var h=items[0].dataIndex,t=dT[h],p=maxD>0?(t/maxD*100):0;
+              return["Total: "+t.toFixed(1)+" kVA ("+p.toFixed(0)+"%)",p>100?"\u2717 Inviável":p>85?"\u26a0 Atenção":"\u2713 Viável"];
+            }
           }}
         },
         scales:{
           x:{stacked:true,ticks:{color:tc,font:{size:10},autoSkip:false,maxRotation:0},grid:{color:gc}},
-          y:{stacked:false,beginAtZero:true,max:Math.ceil(Math.max(maxD,Math.max.apply(null,dT.concat([0])))*1.15)||10,ticks:{color:tc,font:{size:10},callback:function(v){return v+' kVA';}},grid:{color:gc}}
+          y:{stacked:false,beginAtZero:true,max:Math.ceil(Math.max(maxD,Math.max.apply(null,dT.concat([0])))*1.15)||10,ticks:{color:tc,font:{size:10},callback:function(v){return v+" kVA";}},grid:{color:gc}}
         }
       },
-      plugins:[{id:'refs',afterDraw:function(chart){
-        var c2=chart.ctx,y=chart.scales.y,x=chart.scales.x;
+      plugins:[{id:"refs",afterDraw:function(chart){
+        var ctx2=chart.ctx,y=chart.scales.y,x=chart.scales.x;
         if(!maxD)return;
         function dl(val,col,dash,lbl){
           var yp=y.getPixelForValue(val);
-          c2.save();c2.setLineDash(dash);c2.strokeStyle=col;c2.lineWidth=1.5;
-          c2.beginPath();c2.moveTo(x.left,yp);c2.lineTo(x.right,yp);c2.stroke();
-          if(lbl){c2.setLineDash([]);c2.fillStyle=col;c2.font='700 10px Consolas,monospace';c2.fillText(lbl,x.right-112,yp-4);}
-          c2.restore();
+          ctx2.save();ctx2.setLineDash(dash);ctx2.strokeStyle=col;ctx2.lineWidth=1.5;
+          ctx2.beginPath();ctx2.moveTo(x.left,yp);ctx2.lineTo(x.right,yp);ctx2.stroke();
+          if(lbl){ctx2.setLineDash([]);ctx2.fillStyle=col;ctx2.font="700 10px Consolas,monospace";ctx2.fillText(lbl,x.right-112,yp-4);}
+          ctx2.restore();
         }
-        dl(maxD,'rgba(255,77,77,0.8)',[6,4],'Limite '+maxD.toFixed(0)+' kVA');
-        dl(maxD*0.85,'rgba(245,166,35,0.55)',[3,4],null);
+        dl(maxD,"rgba(255,77,77,0.8)",[6,4],"Limite "+maxD.toFixed(0)+" kVA");
+        dl(maxD*0.85,"rgba(245,166,35,0.55)",[3,4],null);
       }}]
     });
   }
 
+  /* JANELAS HORÁRIAS */
+  periodosHrs=[];
   if(!inv&&maxD>0){
-    var status=hrs.map(function(h){var p=(dT[h]/maxD)*100;return p>100?'inv':p>85?'warn':'ok';});
-    var periodos=[],i=0;
-    while(i<24){var s=status[i],j=i;while(j<24&&status[j]===s)j++;periodos.push({de:i,ate:j-1,s:s});i=j;}
-    var f2=function(h){return h+'h';};
-    var html='<strong style="color:var(--text)">Janelas horárias:</strong><br>';
-    periodos.forEach(function(p){
-      var lbl=p.de===p.ate?f2(p.de):f2(p.de)+'–'+f2(p.ate+1);
-      if(p.s==='ok')html+='<span class="pok">'+lbl+'</span> viável &nbsp;';
-      else if(p.s==='warn')html+='<span class="pwarn">'+lbl+'</span> atenção &nbsp;';
-      else html+='<span class="pinv">'+lbl+'</span> inviável &nbsp;';
+    var statusHrs=hrs.map(function(h){var p=(dT[h]/maxD)*100;return p>100?"inv":p>85?"warn":"ok";});
+    var pi=0;
+    while(pi<24){
+      var ps=statusHrs[pi],pj=pi;
+      while(pj<24&&statusHrs[pj]===ps){pj++;}
+      var maxPct=0;
+      for(var ph=pi;ph<pj;ph++){var pp=(dT[ph]/maxD)*100;if(pp>maxPct){maxPct=pp;}}
+      periodosHrs.push({de:pi,ate:pj-1,s:ps,maxPct:maxPct});
+      pi=pj;
+    }
+
+    var f2=function(h){return h+"h";};
+    var fmtP=function(arr){return arr.map(function(p){return p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);}).join(", ");};
+
+    /* Timeline */
+    var barSegs="";
+    periodosHrs.forEach(function(p){
+      var w=((p.ate-p.de+1)/24*100).toFixed(2);
+      var lbl=p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);
+      var showLbl=(p.ate-p.de+1)>=2;
+      barSegs+="<div class=\"jwin-seg s-"+p.s+"\" style=\"width:"+w+"%\" title=\""+lbl+": "+(p.s==="ok"?"Viável":p.s==="warn"?"Atenção":"Inviável")+"\">"+
+        (showLbl?lbl:"")+
+      "</div>";
     });
-    var oks=periodos.filter(function(p){return p.s==='ok';});
-    var invs=periodos.filter(function(p){return p.s==='inv';});
-    if(oks.length)html+='<br><br>Sem restrição: <span class="pok">'+oks.map(function(p){return p.de===p.ate?f2(p.de):f2(p.de)+'–'+f2(p.ate+1);}).join(', ')+'</span>';
-    if(invs.length)html+='<br>Inviável: <span class="pinv">'+invs.map(function(p){return p.de===p.ate?f2(p.de):f2(p.de)+'–'+f2(p.ate+1);}).join(', ')+'</span>';
-    document.getElementById('jsum').innerHTML=html;
+
+    var lblsHtml="";
+    [0,6,12,18,23].forEach(function(h){
+      var left=(h/24*100).toFixed(1);
+      lblsHtml+="<span class=\"jwin-lbl\" style=\"left:"+left+"%\">"+h+"h</span>";
+    });
+
+    var rowsHtml="";
+    periodosHrs.forEach(function(p){
+      var lbl=p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);
+      var ic=p.s==="ok"?"\u2713":p.s==="warn"?"\u26a0":"\u2717";
+      var desc=p.s==="ok"?"Interligação viável":p.s==="warn"?"Viável com atenção — próximo ao limite":"Inviável — carga excede o limite";
+      var pctColor=p.s==="ok"?"var(--ok)":p.s==="warn"?"var(--warn)":"var(--danger)";
+      rowsHtml+="<div class=\"jwin-row s-"+p.s+"\">"+
+        "<span class=\"jwin-row-ic\">"+ic+"</span>"+
+        "<span class=\"jwin-row-hrs s-"+p.s+"\">"+lbl+"</span>"+
+        "<span class=\"jwin-row-desc\">"+desc+"</span>"+
+        "<span class=\"jwin-row-pct\" style=\"color:"+pctColor+"\">"+p.maxPct.toFixed(0)+"%</span>"+
+      "</div>";
+    });
+
+    var jsumHtml="<div class=\"jwin-block\">"+
+      "<div class=\"jwin-title\">Distribuição horária — 0h às 23h</div>"+
+      "<div class=\"jwin-bar\">"+barSegs+"</div>"+
+      "<div class=\"jwin-labels\">"+lblsHtml+"</div>"+
+      "<div class=\"jwin-legend\">"+
+        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(0,212,170,.55)\"></div>Viável (&le;85%)</div>"+
+        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(245,166,35,.6)\"></div>Atenção (85\u2013100%)</div>"+
+        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(255,77,77,.55)\"></div>Inviável (&gt;100%)</div>"+
+      "</div>"+
+      "<div class=\"jwin-janelas\">"+rowsHtml+"</div>"+
+    "</div>";
+    document.getElementById("jsum").innerHTML=jsumHtml;
   } else {
-    document.getElementById('jsum').innerHTML=inv?'<span style="color:var(--danger)">Interligação inviável — incompatibilidade de fase.</span>':'';
+    var jsinvMsg=inv?"<div class=\"jwin-row s-inv\" style=\"margin-top:8px;\"><span>\u2717</span><span style=\"color:var(--danger);font-weight:700;\">Interligação inviável — incompatibilidade de fase.</span></div>":"";
+    document.getElementById("jsum").innerHTML=jsinvMsg;
   }
 
-  if(!S.vaos.length){document.getElementById('resultado-final').innerHTML='';return;}
+  /* RESULTADO FINAL (CABOS) */
+  if(!S.vaos.length){document.getElementById("resultado-final").innerHTML="";return;}
   var iVao=iDem(cQ,S.faseD),todosOk=true;
   S.vaos.forEach(function(vao){
     var cab=CABOS[vao.cabo],ok=iVao<=cab.i;
-    if(!ok)todosOk=false;
-    var p=(iVao/cab.i*100),el=document.getElementById('vr-'+vao.id);
-    if(el){el.className='vres '+(ok?'ok':'danger');el.textContent=(ok?'✓ ':'✗ ')+p.toFixed(0)+'%';el.title='Demanda: '+iVao.toFixed(1)+' A | Limite: '+cab.i+' A';}
+    if(!ok){todosOk=false;}
+    var p=(iVao/cab.i*100),el=document.getElementById("vr-"+vao.id);
+    if(el){
+      el.className="vres "+(ok?"ok":"danger");
+      el.textContent=(ok?"\u2713 ":"\u2717 ")+p.toFixed(0)+"%";
+      el.title="Demanda: "+iVao.toFixed(1)+" A | Limite: "+cab.i+" A";
+    }
   });
-  var cg=(inv||cls==='danger'||!todosOk)?'danger':cls==='warn'?'warn':'ok';
-  var tg=cg==='ok'?'✓ Interligação aprovada':cg==='warn'?'⚠ Aprovada com atenção':'✗ Interligação reprovada';
+
+  var cg=(inv||cls==="danger"||!todosOk)?"danger":cls==="warn"?"warn":"ok";
+  var tg=cg==="ok"?"\u2713 Interligação aprovada":cg==="warn"?"\u26a0 Aprovada com atenção":"\u2717 Interligação reprovada";
   var rep=S.vaos.filter(function(v){return iVao>CABOS[v.cabo].i;});
-  var det=rep.length?'<p style="margin-top:8px;">Vãos reprovados:<br>'+rep.map(function(v){var c=CABOS[v.cabo];return'<span class="n">Vão '+(S.vaos.indexOf(v)+1)+' — '+c.n+': limite '+c.i+' A, demanda '+iVao.toFixed(1)+' A</span>';}).join('<br>')+'</p>':'';
-  var tlbl=S.faseD==='tri'?'trifásica, '+VT+' V':'monofásica, '+VM+' V';
-  var cfinal=pct>100?'var(--danger)':pct>85?'var(--warn)':'var(--ok)';
-  document.getElementById('resultado-final').innerHTML=
-    '<div class="rb2 '+cg+'">'+
-      '<div class="rb2-header"><h3>'+tg+'</h3></div>'+
-      '<div class="res-metrics">'+
-        '<div class="res-metric"><div class="res-metric-v" style="color:'+(rep.length?'var(--danger)':'var(--ok)')+'">'+rep.length+'<span class="res-metric-u"> vão'+(rep.length!==1?'s':'')+'</span></div><div class="res-metric-l">Reprovados</div></div>'+
-        '<div class="res-metric"><div class="res-metric-v">'+S.vaos.length+'<span class="res-metric-u"> vão'+(S.vaos.length!==1?'s':'')+'</span></div><div class="res-metric-l">Verificados</div></div>'+
-        '<div class="res-metric"><div class="res-metric-v">'+iVao.toFixed(1)+'<span class="res-metric-u"> A</span></div><div class="res-metric-l">Corrente pico</div></div>'+
-        '<div class="res-metric"><div class="res-metric-v">'+cQ.toFixed(1)+'<span class="res-metric-u"> kVA</span></div><div class="res-metric-l">Carga interligada</div></div>'+
-      '</div>'+
-      '<div class="rb2-sep"></div>'+
-      '<div class="res-detail-grid">'+
-        '<div class="res-detail-item"><span class="res-detail-lbl">Tensão / Fase</span><span class="res-detail-val">'+tlbl+'</span></div>'+
-        '<div class="res-detail-item"><span class="res-detail-lbl">Vãos aprovados</span><span class="res-detail-val" style="color:var(--ok)">'+(S.vaos.length-rep.length)+'</span></div>'+
-      '</div>'+
-      det+
-    '</div>';
+
+  /* Vãos reprovados */
+  var detHtml="";
+  if(rep.length){
+    var repRows=rep.map(function(v){
+      var cab=CABOS[v.cabo];
+      return "<div style=\"font-family:var(--mono);color:var(--text2);font-size:12px;padding:3px 0;\">"+
+        "Vão "+(S.vaos.indexOf(v)+1)+" — "+cab.n+
+        ": limite <strong style=\"color:var(--danger)\">"+cab.i+" A</strong>"+
+        ", demanda <strong>"+iVao.toFixed(1)+" A</strong>"+
+      "</div>";
+    }).join("");
+    detHtml="<div style=\"margin-top:10px;padding:10px 12px;background:var(--danger-dim);border:1px solid rgba(255,77,77,.25);border-radius:8px;\">"+
+      "<strong style=\"color:var(--danger);font-size:12px;\">Vãos com capacidade insuficiente:</strong>"+
+      "<div style=\"margin-top:6px;\">"+repRows+"</div>"+
+    "</div>";
+  }
+
+  /* Conclusão com janelas */
+  var conclHtml="";
+  if(!inv&&maxD>0){
+    var oksH=periodosHrs.filter(function(p){return p.s==="ok";});
+    var warnsH=periodosHrs.filter(function(p){return p.s==="warn";});
+    var invsH=periodosHrs.filter(function(p){return p.s==="inv";});
+    var f2c=function(h){return h+"h";};
+    // Agrupa horas contíguas de períodos ok+warn em faixas unificadas
+    var mergeRanges=function(periodos){
+      // Coleta todas as horas individuais que pertencem a esses períodos
+      var horas=[];
+      periodos.forEach(function(p){for(var h=p.de;h<=p.ate;h++){horas.push(h);}});
+      horas.sort(function(a,b){return a-b;});
+      if(!horas.length){return "";}
+      // Agrupa em faixas contíguas
+      var faixas=[];
+      var ini=horas[0],fim=horas[0];
+      for(var i=1;i<horas.length;i++){
+        if(horas[i]===fim+1){fim=horas[i];}
+        else{faixas.push({de:ini,ate:fim});ini=horas[i];fim=horas[i];}
+      }
+      faixas.push({de:ini,ate:fim});
+      // Formata cada faixa: hora única = "19h", faixa = "0h–19h"
+      return faixas.map(function(f){
+        if(f.de===f.ate){return f.de+"h";}
+        return f.de+"h\u2013"+(f.ate+1)+"h";
+      }).join(", ");
+    };
+    var fmtPC=function(arr){return arr.map(function(p){return p.de===p.ate?f2c(p.de):f2c(p.de)+"\u2013"+f2c(p.ate+1);}).join(", ");};
+    var hasInv=invsH.length>0;
+    var hasOk=oksH.length>0||warnsH.length>0;
+
+    if(cg==="ok"){
+      conclHtml="<div class=\"concl-block s-ok\">"+
+        "<div class=\"concl-title s-ok\">\u2713 Interligação viável em todos os horários</div>"+
+        "<div class=\"concl-text\">A carga combinada permanece dentro do limite do doador ao longo de todo o dia.</div>"+
+      "</div>";
+    } else if(cg==="warn"&&!hasInv){
+      conclHtml="<div class=\"concl-block s-warn\">"+
+        "<div class=\"concl-title s-warn\">\u26a0 Viável, mas próxima ao limite</div>"+
+        "<div class=\"concl-text\">A interligação pode ser realizada. Monitore o carregamento — a margem é pequena no pico.</div>"+
+      "</div>";
+    } else if(hasInv&&hasOk){
+      var okList=mergeRanges(oksH.concat(warnsH));
+      var invList=mergeRanges(invsH);
+      conclHtml="<div class=\"concl-block s-partial\">"+
+        "<div class=\"concl-title s-partial\">\u26a0 Interligação parcialmente viável — atenção ao horário</div>"+
+        "<div class=\"concl-text\" style=\"margin-bottom:12px;\">A carga excede a capacidade do doador durante o pico. "+
+          "A interligação <strong style=\"color:var(--text)\">pode ser realizada nos demais horários</strong> "+
+          "e deve ser <strong style=\"color:var(--danger)\">evitada no período inviável</strong>.</div>"+
+        "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;\">"+
+          "<div style=\"padding:10px 12px;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);border-radius:8px;\">"+
+            "<div style=\"font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ok);margin-bottom:6px;\">Pode interligar</div>"+
+            "<div style=\"font-family:var(--mono);font-weight:700;color:var(--ok);font-size:13px;\">"+okList+"</div>"+
+          "</div>"+
+          "<div style=\"padding:10px 12px;background:rgba(255,77,77,.07);border:1px solid rgba(255,77,77,.2);border-radius:8px;\">"+
+            "<div style=\"font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--danger);margin-bottom:6px;\">Não interligar</div>"+
+            "<div style=\"font-family:var(--mono);font-weight:700;color:var(--danger);font-size:13px;\">"+invList+"</div>"+
+          "</div>"+
+        "</div>"+
+      "</div>";
+    } else if(hasInv&&!hasOk){
+      conclHtml="<div class=\"concl-block s-inv\">"+
+        "<div class=\"concl-title s-inv\">\u2717 Interligação inviável em todos os horários</div>"+
+        "<div class=\"concl-text\">A carga total excede a capacidade do doador mesmo nos horários de menor demanda.</div>"+
+      "</div>";
+    }
+  }
+
+  document.getElementById("resultado-final").innerHTML=
+    "<div class=\"rb2 "+cg+"\">"+
+      "<div class=\"rb2-header\"><h3>"+tg+"</h3></div>"+
+      "<div class=\"res-metrics\">"+
+        mkMetric(rep.length+(rep.length!==1?" vãos":" vão"),"","Reprovados",rep.length?"var(--danger)":"var(--ok)")+
+        mkMetric(S.vaos.length+(S.vaos.length!==1?" vãos":" vão"),"","Verificados","")+
+        mkMetric(iVao.toFixed(1)," A","Corrente pico","")+
+        mkMetric(cQ.toFixed(1)," kVA","Carga interligada","")+
+      "</div>"+
+      conclHtml+
+      detHtml+
+    "</div>";
 }
 
-/* ── G-DIS ── */
+/* G-DIS */
 var RNOTA=/(?:^|[^\d])(\d{9})(?!\d)/g,GTMR;
 var GNOTAS=[];
 
 function gAtualizar(){
-  var inp=document.getElementById('gin').value.trim();
+  var inp=document.getElementById("gin").value.trim();
   var hasOut=GNOTAS.length>0;
-  document.getElementById('gBtnEx').disabled=!inp;
-  document.getElementById('gBtnLp').disabled=!inp&&!hasOut;
-  document.getElementById('gBtnCp').disabled=!hasOut;
-  document.getElementById('gBtnCpChip').disabled=!hasOut;
+  document.getElementById("gBtnEx").disabled=!inp;
+  document.getElementById("gBtnLp").disabled=!inp&&!hasOut;
+  document.getElementById("gBtnCp").disabled=!hasOut;
+  document.getElementById("gBtnCpChip").disabled=!hasOut;
 }
 function gDebounce(){clearTimeout(GTMR);GTMR=setTimeout(gExtrair,300);}
 
 function gExtrair(){
-  var txt=document.getElementById('gin').value.trim();
+  var txt=document.getElementById("gin").value.trim();
   if(!txt){
     GNOTAS=[];
-    document.getElementById('gout').value='';
-    document.getElementById('gStatus').textContent='';
-    document.getElementById('gstat-total').textContent='—';
-    document.getElementById('gstat-dup').textContent='—';
-    document.getElementById('gdis-chips').innerHTML='<span class="notas-empty">As notas aparecerão aqui após a extração…</span>';
+    document.getElementById("gout").value="";
+    document.getElementById("gStatus").textContent="";
+    document.getElementById("gstat-total").textContent="—";
+    document.getElementById("gstat-dup").textContent="—";
+    document.getElementById("gdis-chips").innerHTML="<span class=\"notas-empty\">As notas aparecerão aqui após a extração…</span>";
     gAtualizar();return;
   }
-  document.getElementById('gStatus').textContent='Processando…';
+  document.getElementById("gStatus").textContent="Processando…";
   requestAnimationFrame(function(){
     var m=[...txt.matchAll(RNOTA)].map(function(x){return x[1];});
     var total=m.length;
     var u=[...new Set(m)];
     GNOTAS=u;
     var dup=total-u.length;
-    document.getElementById('gstat-total').textContent=u.length||'0';
-    document.getElementById('gstat-dup').textContent=dup>0?dup:'0';
+    document.getElementById("gstat-total").textContent=u.length||"0";
+    document.getElementById("gstat-dup").textContent=dup>0?dup:"0";
     if(u.length){
-      document.getElementById('gout').value=u.join(', ');
-      document.getElementById('gStatus').textContent=u.length+' nota(s) — '+total+' ocorrências'+(dup?' ('+dup+' dup.)':'')+'.';}
+      document.getElementById("gout").value=u.join(", ");
+      document.getElementById("gStatus").textContent=u.length+" nota(s) — "+total+" ocorrências"+(dup?" ("+dup+" dup.)":"")+".";}
     else{
-      document.getElementById('gout').value='';
-      document.getElementById('gStatus').textContent='Nenhuma nota encontrada.';}
+      document.getElementById("gout").value="";
+      document.getElementById("gStatus").textContent="Nenhuma nota encontrada.";}
     renderChips();
     gAtualizar();
   });
 }
 
 function renderChips(){
-  var el=document.getElementById('gdis-chips');
-  if(!GNOTAS.length){el.innerHTML='<span class="notas-empty">Nenhuma nota encontrada…</span>';return;}
-  el.innerHTML='';
+  var el=document.getElementById("gdis-chips");
+  if(!GNOTAS.length){el.innerHTML="<span class=\"notas-empty\">Nenhuma nota encontrada…</span>";return;}
+  el.innerHTML="";
   GNOTAS.forEach(function(n){
-    var chip=document.createElement('div');
-    chip.className='nota-chip';
+    var chip=document.createElement("div");
+    chip.className="nota-chip";
     chip.textContent=n;
     el.appendChild(chip);
   });
@@ -817,113 +1010,119 @@ function copyText(txt){
   else{fbCopy(txt);}
 }
 function fbCopy(txt){
-  var ta=document.createElement('textarea');
-  ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
-  document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  var ta=document.createElement("textarea");
+  ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);
 }
 
 function gCopiar(){
-  if(!GNOTAS.length)return;
-  var txt=GNOTAS.join(', ');
-  copyText(txt);toast(''+GNOTAS.length+' notas copiadas');
+  if(!GNOTAS.length){return;}
+  copyText(GNOTAS.join(", "));toast(GNOTAS.length+" notas copiadas");
 }
 function gCopiarFormatado(){
-  if(!GNOTAS.length)return;
-  copyText(GNOTAS.join('\n'));toast('Copiado — uma nota por linha');
+  if(!GNOTAS.length){return;}
+  copyText(GNOTAS.join("\n"));toast("Copiado — uma nota por linha");
 }
 function gLimpar(){
   GNOTAS=[];
-  document.getElementById('gin').value='';
-  document.getElementById('gout').value='';
-  document.getElementById('gStatus').textContent='';
-  document.getElementById('gstat-total').textContent='—';
-  document.getElementById('gstat-dup').textContent='—';
-  document.getElementById('gdis-chips').innerHTML='<span class="notas-empty">As notas aparecerão aqui após a extração…</span>';
-  gAtualizar();toast('Campos limpos');
+  document.getElementById("gin").value="";
+  document.getElementById("gout").value="";
+  document.getElementById("gStatus").textContent="";
+  document.getElementById("gstat-total").textContent="—";
+  document.getElementById("gstat-dup").textContent="—";
+  document.getElementById("gdis-chips").innerHTML="<span class=\"notas-empty\">As notas aparecerão aqui após a extração…</span>";
+  gAtualizar();toast("Campos limpos");
 }
 
-/* ── COORDENADAS ── */
-var CFMT='ponto',CLAT=null,CLON=null;
+/* COORDENADAS */
+var CFMT="ponto",CLAT=null,CLON=null;
 function cFmt(v){
   CFMT=v;
-  ['ponto','virgula'].forEach(function(x){document.getElementById('fmt-'+x).classList.toggle('on',x===v);});
+  ["ponto","virgula"].forEach(function(x){document.getElementById("fmt-"+x).classList.toggle("on",x===v);});
   cConverter();
 }
 function cConverter(){
-  var val=document.getElementById('cinput').value.trim();
-  var latEl=document.getElementById('clat');
-  var lonEl=document.getElementById('clon');
-  var hint=document.getElementById('coord-hint');
-  var bLat=document.getElementById('cbox-lat');
-  var bLon=document.getElementById('cbox-lon');
+  var val=document.getElementById("cinput").value.trim();
+  var latEl=document.getElementById("clat");
+  var lonEl=document.getElementById("clon");
+  var hint=document.getElementById("coord-hint");
   if(!val){
     CLAT=null;CLON=null;
-    latEl.textContent='—';lonEl.textContent='—';
-    latEl.className='coord-box-val';lonEl.className='coord-box-val';
-    hint.textContent='Aguardando entrada…';
-    return;
+    latEl.textContent="—";lonEl.textContent="—";
+    latEl.className="coord-box-val";lonEl.className="coord-box-val";
+    hint.textContent="Aguardando entrada…";return;
   }
   var nums=val.match(/-?\d+(?:[.,]\d+)?/g);
   if(!nums||nums.length<2){
-    latEl.textContent='Inválido';lonEl.textContent='Inválido';
-    latEl.className='coord-box-val';lonEl.className='coord-box-val';
-    hint.textContent='Formato não reconhecido';
-    return;
+    latEl.textContent="Inválido";lonEl.textContent="Inválido";
+    latEl.className="coord-box-val";lonEl.className="coord-box-val";
+    hint.textContent="Formato não reconhecido";return;
   }
-  var lat=parseFloat(nums[0].replace(',','.'));
-  var lon=parseFloat(nums[1].replace(',','.'));
+  var lat=parseFloat(nums[0].replace(",","."));
+  var lon=parseFloat(nums[1].replace(",","."));
   if(isNaN(lat)||isNaN(lon)){
-    latEl.textContent='Inválido';lonEl.textContent='Inválido';
-    hint.textContent='Valores inválidos';
-    return;
+    latEl.textContent="Inválido";lonEl.textContent="Inválido";
+    hint.textContent="Valores inválidos";return;
   }
   CLAT=lat;CLON=lon;
-  var f=function(v){return CFMT==='virgula'?v.toString().replace('.',','):v.toString();};
+  var f=function(v){return CFMT==="virgula"?v.toString().replace(".",","):v.toString();};
   latEl.textContent=f(CLAT);lonEl.textContent=f(CLON);
-  latEl.className='coord-box-val filled';lonEl.className='coord-box-val filled';
-  hint.textContent='Clique nos campos para copiar individualmente';
+  latEl.className="coord-box-val filled";lonEl.className="coord-box-val filled";
+  hint.textContent="Clique nos campos para copiar individualmente";
   cAddHist(f(CLAT),f(CLON),val);
 }
 function cCopiar(campo){
-  var v=campo==='lat'?CLAT:CLON;
-  if(v===null)return;
-  var f=function(v){return CFMT==='virgula'?v.toString().replace('.',','):v.toString();};
-  copyText(f(v));toast((campo==='lat'?'Latitude':'Longitude')+' copiada');
+  var v=campo==="lat"?CLAT:CLON;
+  if(v===null){return;}
+  var f=function(v){return CFMT==="virgula"?v.toString().replace(".",","):v.toString();};
+  copyText(f(v));toast((campo==="lat"?"Latitude":"Longitude")+" copiada");
 }
 function cCopiarTudo(){
-  if(CLAT===null)return;
-  var f=function(v){return CFMT==='virgula'?v.toString().replace('.',','):v.toString();};
-  copyText(f(CLAT)+' '+f(CLON));toast('Lat + Lon copiados');
+  if(CLAT===null){return;}
+  var f=function(v){return CFMT==="virgula"?v.toString().replace(".",","):v.toString();};
+  copyText(f(CLAT)+" "+f(CLON));toast("Lat + Lon copiados");
 }
 function cLimpar(){
-  document.getElementById('cinput').value='';
+  document.getElementById("cinput").value="";
   CLAT=null;CLON=null;
-  document.getElementById('clat').textContent='—';
-  document.getElementById('clon').textContent='—';
-  document.getElementById('clat').className='coord-box-val';
-  document.getElementById('clon').className='coord-box-val';
-  document.getElementById('coord-hint').textContent='Aguardando entrada…';
+  document.getElementById("clat").textContent="—";
+  document.getElementById("clon").textContent="—";
+  document.getElementById("clat").className="coord-box-val";
+  document.getElementById("clon").className="coord-box-val";
+  document.getElementById("coord-hint").textContent="Aguardando entrada…";
 }
 function cAddHist(lat,lon,orig){
   var already=COORD_HIST.some(function(h){return h.lat===lat&&h.lon===lon;});
-  if(already)return;
+  if(already){return;}
   COORD_HIST.unshift({lat:lat,lon:lon,orig:orig});
-  if(COORD_HIST.length>8)COORD_HIST.pop();
-  var el=document.getElementById('coord-hist');
-  el.innerHTML='';
-  COORD_HIST.forEach(function(h){
-    var row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;gap:10px;';
-    row.innerHTML='<span style="color:var(--muted);font-size:11px;font-family:var(--mono);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+h.orig+'</span>'+
-      '<span style="font-family:var(--mono);font-weight:700;color:var(--accent);white-space:nowrap;">'+h.lat+'  '+h.lon+'</span>'+
-      '<button onclick="copyText(\''+h.lat+' '+h.lon+'\');toast(\'Copiado\')" style="background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);cursor:pointer;font-size:11px;padding:3px 8px;font-family:var(--sans);transition:all .15s;" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border2)\';this.style.color=\'var(--muted)\'">Copiar</button>';
+  if(COORD_HIST.length>8){COORD_HIST.pop();}
+  var el=document.getElementById("coord-hist");
+  el.innerHTML="";
+  COORD_HIST.forEach(function(h,idx){
+    var row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;gap:10px;";
+    if(idx===COORD_HIST.length-1){row.style.borderBottom="none";}
+    var origSpan=document.createElement("span");
+    origSpan.style.cssText="color:var(--muted);font-size:11px;font-family:var(--mono);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;";
+    origSpan.textContent=h.orig;
+    var valSpan=document.createElement("span");
+    valSpan.style.cssText="font-family:var(--mono);font-weight:700;color:var(--accent);white-space:nowrap;";
+    valSpan.textContent=h.lat+"  "+h.lon;
+    var btn=document.createElement("button");
+    btn.style.cssText="background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);cursor:pointer;font-size:11px;padding:3px 8px;font-family:var(--sans);transition:all .15s;flex-shrink:0;";
+    btn.textContent="Copiar";
+    var hLat=h.lat,hLon=h.lon;
+    btn.onclick=function(){copyText(hLat+" "+hLon);toast("Copiado");};
+    btn.onmouseover=function(){this.style.borderColor="var(--accent)";this.style.color="var(--accent)";};
+    btn.onmouseout=function(){this.style.borderColor="var(--border2)";this.style.color="var(--muted)";};
+    row.appendChild(origSpan);row.appendChild(valSpan);row.appendChild(btn);
     el.appendChild(row);
   });
-  if(el.lastChild)el.lastChild.style.borderBottom='none';
 }
 
-/* ── INIT ── */
+/* INIT */
 addVao();addVao();calcular();gAtualizar();
+
 </script>
 </body>
 </html>
