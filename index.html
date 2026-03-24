@@ -6,25 +6,25 @@
 <title>Ferramentas CSI — CEMIG</title>
 <style>
 :root {
-  --bg:#080b11; --surface:#0e1219; --surface2:#141a26; --surface3:#1a2133;
-  --border:#1c2336; --border2:#26304a; --border3:#303d5a;
-  --accent:#00d4aa; --accent-dim:rgba(0,212,170,.13); --accent-glow:rgba(0,212,170,.06);
-  --warn:#f5a623; --warn-dim:rgba(245,166,35,.12);
-  --danger:#ff4d4d; --danger-dim:rgba(255,77,77,.1);
+  --bg:#111720; --surface:#181f2e; --surface2:#1e2740; --surface3:#243050;
+  --border:#263045; --border2:#2f3d5a; --border3:#3d4f6e;
+  --accent:#00d4aa; --accent-dim:rgba(0,212,170,.15); --accent-glow:rgba(0,212,170,.08);
+  --warn:#f5a623; --warn-dim:rgba(245,166,35,.14);
+  --danger:#ff5555; --danger-dim:rgba(255,85,85,.12);
   --ok:#00d4aa;
-  --text:#dde6f0; --text2:#b8c6d8; --muted:#5a6785; --hint:#2e3a52;
+  --text:#eaf0fa; --text2:#c8d6ea; --muted:#7a8faa; --hint:#3a4d68;
   --sw:228px; --r:11px;
   --mono:Consolas,'Courier New',monospace;
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 body.light {
-  --bg:#edf0f7; --surface:#fff; --surface2:#f3f6fc; --surface3:#e8ecf6;
-  --border:#dce1ef; --border2:#c5cedf; --border3:#b0bdd4;
-  --accent:#008f74; --accent-dim:rgba(0,143,116,.10); --accent-glow:rgba(0,143,116,.05);
-  --warn:#c47a00; --warn-dim:rgba(196,122,0,.10);
-  --danger:#cc2222; --danger-dim:rgba(204,34,34,.08);
-  --ok:#008f74;
-  --text:#1a1f30; --text2:#384060; --muted:#5a6478; --hint:#b0bbd0;
+  --bg:#f0f3fa; --surface:#ffffff; --surface2:#eaf0fb; --surface3:#dde6f7;
+  --border:#cdd6eb; --border2:#b5c3dc; --border3:#96aacb;
+  --accent:#007a64; --accent-dim:rgba(0,122,100,.12); --accent-glow:rgba(0,122,100,.06);
+  --warn:#b86a00; --warn-dim:rgba(184,106,0,.12);
+  --danger:#c41f1f; --danger-dim:rgba(196,31,31,.10);
+  --ok:#007a64;
+  --text:#0f1624; --text2:#263350; --muted:#445570; --hint:#8fa0bc;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -377,7 +377,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
           <div class="card">
             <div class="ct">Transformador Doador</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-doador" value="75" min="1" oninput="calcular()">
+            <input type="number" id="pot-doador" value="75" min="1" oninput="atualizarFase()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-doador-conv" onclick="setP('doador','conv')">🔻 Convencional</div>
@@ -389,12 +389,12 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
               <div class="rb"    id="fase-doador-mono" onclick="setF('doador','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga Atual (kVA)</span>
-            <input type="number" id="carga-doador" value="40" min="0" oninput="calcular()">
+            <input type="number" id="carga-doador" value="40" min="0" oninput="atualizarFase()">
           </div>
           <div class="card card-queimado">
             <div class="ct ct-queimado">Transformador Queimado</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-queimado" value="30" min="1" oninput="calcular()">
+            <input type="number" id="pot-queimado" value="30" min="1" oninput="atualizarFase()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-queimado-conv" onclick="setP('queimado','conv')">🔻 Convencional</div>
@@ -406,7 +406,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
               <div class="rb"    id="fase-queimado-mono" onclick="setF('queimado','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga a Transferir (kVA)</span>
-            <input type="number" id="carga-queimado" value="22" min="0" oninput="calcular()">
+            <input type="number" id="carga-queimado" value="22" min="0" oninput="atualizarFase()">
             <div id="alert-fase" class="ail"></div>
           </div>
         </div>
@@ -618,15 +618,15 @@ function toast(msg){
 function setP(t,v){
   S[t==="doador"?"protD":"protQ"]=v;
   ["conv","prot"].forEach(function(x){document.getElementById("tp-"+t+"-"+x).classList.toggle("on",x===v);});
-  calcular();
+  atualizarFase();
 }
 function setF(t,v){
   S[t==="doador"?"faseD":"faseQ"]=v;
   ["tri","mono"].forEach(function(x){document.getElementById("fase-"+t+"-"+x).classList.toggle("on",x===v);});
-  calcular();
+  atualizarFase();
 }
-function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();calcular();}
-function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();calcular();}
+function addVao(){S.vid++;S.vaos.push({id:S.vid,cabo:0});renderVaos();atualizarFase();}
+function removeVao(id){S.vaos=S.vaos.filter(function(v){return v.id!==id;});renderVaos();atualizarFase();}
 
 function renderVaos(){
   var cont=document.getElementById("vaos");cont.innerHTML="";
@@ -642,7 +642,7 @@ function renderVaos(){
 
 function updVao(id,val){
   var v=S.vaos.filter(function(x){return x.id===id;})[0];
-  if(v){v.cabo=parseInt(val);renderVaos();calcular();}
+  if(v){v.cabo=parseInt(val);renderVaos();atualizarFase();}
 }
 
 function iDem(kva,fase){return fase==="tri"?(kva*1000)/(Math.sqrt(3)*VT):(kva*1000)/VM;}
@@ -650,6 +650,20 @@ function iDem(kva,fase){return fase==="tri"?(kva*1000)/(Math.sqrt(3)*VT):(kva*10
 function mkMetric(val,unit,label,color){
   var col=color?" style=\"color:"+color+"\"":"";
   return "<div class=\"res-metric\"><div class=\"res-metric-v\""+col+">"+val+"<span class=\"res-metric-u\">"+unit+"</span></div><div class=\"res-metric-l\">"+label+"</div></div>";
+}
+
+function atualizarFase(){
+  var inv=S.faseD==="mono"&&S.faseQ==="tri";
+  var avi=S.faseD==="tri"&&S.faseQ==="mono";
+  var aEl=document.getElementById("alert-fase");
+  if(inv){aEl.className="ail danger";aEl.textContent="✗ Trafo monofásico não pode alimentar rede trifásica. Interligação inviável.";}
+  else if(avi){aEl.className="ail warn";aEl.textContent="⚠ Doador trifásico alimentando rede monofásica — somente uma fase será usada.";}
+  else{aEl.className="ail";}
+  // Limpa resultados anteriores ao mudar parâmetros
+  document.getElementById("resultado-trafo").innerHTML="";
+  document.getElementById("resultado-final").innerHTML="";
+  document.getElementById("jsum").innerHTML="";
+  if(CI){CI.destroy();CI=null;}
 }
 
 function calcular(){
@@ -1121,7 +1135,7 @@ function cAddHist(lat,lon,orig){
 }
 
 /* INIT */
-addVao();addVao();calcular();gAtualizar();
+addVao();addVao();atualizarFase();gAtualizar();
 
 </script>
 </body>
