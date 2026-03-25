@@ -359,6 +359,15 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 
 
 /* ── THEME TOGGLE ── */
+.bm-box{margin-bottom:10px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;}
+.bm-label{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.bm-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.bm-link{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:9px;background:linear-gradient(135deg,rgba(0,212,170,.18),rgba(0,212,170,.08));border:1.5px solid var(--accent);color:var(--accent);font-size:12px;font-weight:700;text-decoration:none;cursor:grab;user-select:none;transition:all .15s;letter-spacing:.01em;}
+.bm-link:hover{background:linear-gradient(135deg,rgba(0,212,170,.28),rgba(0,212,170,.14));box-shadow:0 0 0 3px var(--accent-dim),0 4px 14px rgba(0,212,170,.15);}
+.bm-link:active{cursor:grabbing;transform:scale(.98);}
+.bm-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.bm-drag-hint{font-size:10px;color:var(--hint);margin-top:5px;text-align:center;letter-spacing:.03em;}
+.bm-hint{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.55;}
 /* ── HAMBURGER ── */
 #mbtn{display:none;background:transparent;border:none;cursor:pointer;padding:6px;color:var(--text);}
 #mbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;}
@@ -473,6 +482,15 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
     </a>
   </div>
   <div class="sbot">
+    <div class="bm-box">
+      <span class="bm-label">Bookmarklet — Digiteam</span>
+      <a class="bm-link" href="javascript:(async function(){const s=m=>new Promise(r=>setTimeout(r,m));const ps=document.querySelector(&quot;p-select#pn_id_265&quot;);if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}const lbl=ps.querySelector(&quot;span.p-select-label[role='combobox']&quot;);if(!lbl){alert(&quot;Label do período não encontrado&quot;);return}if(lbl.getAttribute(&quot;aria-label&quot;)!==&quot;Intervalo&quot;){const trg=ps.querySelector(&quot;div.p-select-dropdown[role='button']&quot;);if(!trg){alert(&quot;Trigger não encontrado&quot;);return}trg.click();await s(300);const opt=[...document.querySelectorAll(&quot;[role='option'],.p-select-option&quot;)].find(e=>e.textContent.trim()===&quot;Intervalo&quot;);if(!opt){alert(&quot;Opção Intervalo não encontrada&quot;);return}opt.click();await s(400)}const i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=>e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(300);const h=new Date(),a=new Date;a.setMonth(h.getMonth()-6);const d=x=>`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j<m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(120)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(200);for(let j=0;j<m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(120)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();})();" title="Arraste para a barra de favoritos do navegador">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Intervalo 6 meses
+      </a>
+      <div class="bm-drag-hint">↔ arraste para os favoritos</div>
+      <div class="bm-hint">Arraste para os favoritos do navegador. Com o Digiteam aberto e a aba lateral de notas visível, clique no favorito para selecionar automaticamente os últimos 6 meses.</div>
+    </div>
     <div class="sb-warn">
       <svg viewBox="0 0 24 24" class="sb-warn-ic"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>Dashboard Painel do Operador em fase final de desenvolvimento, em breve disponível como nova ferramenta de gestão unificada.</span>
