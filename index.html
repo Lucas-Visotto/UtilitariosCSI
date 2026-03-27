@@ -1823,15 +1823,7 @@ function ceDrag(x,y){
   if(INTERLIG_VERIFICADO)calcular();
 }
 
-function ceUpdateInfo(){
-  var maxV=Math.max.apply(null,CURVA);
-  var picoH=CURVA.indexOf(maxV);
-  var el1=document.getElementById("curva-pico-hora");
-  var el2=document.getElementById("curva-pico-pct");
-  if(el1)el1.textContent=picoH+"h";
-  if(el2)el2.textContent=Math.round(maxV*100)+"%";
-}
-
+/* ceUpdateInfo — versão completa com faixa de pico */
 function ceUpdateInfo(){
   var maxV=Math.max.apply(null,CURVA);
   /* Encontra intervalo de pico: horas com valor >= 90% do máximo */
@@ -2209,7 +2201,7 @@ function calcular(){
 
   /* Tudo abaixo só renderiza após o usuário clicar em Verificar */
   if(!INTERLIG_VERIFICADO){
-    document.getElementById("resultado-trafo").innerHTML="";
+    var _rt0=document.getElementById("resultado-trafo");if(_rt0)_rt0.innerHTML="";
     if(document.getElementById("jsum"))document.getElementById("jsum").innerHTML="";
     if(CI){CI.destroy();CI=null;}
     /* Manter KPI strip com traços */
@@ -2288,7 +2280,7 @@ function calcular(){
   if(hero)hero.style.display="none";
 
   /* ── CARD DE RESULTADO UNIFICADO ── escrito em resultado-final no final da função ── */
-  document.getElementById("resultado-trafo").innerHTML=""; /* limpo — não usado mais */
+  var _rt1=document.getElementById("resultado-trafo");if(_rt1)_rt1.innerHTML=""; /* limpo — não usado mais */
 
   /* GRÁFICO */
   var hrs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
@@ -2618,7 +2610,7 @@ function animateGauge(){
   var target=parseFloat(gf.getAttribute("data-pct")||"0");
   var cls2=target>100?"gf-danger":target>85?"gf-warn":"animate";
   gf.className="gf "+cls2;
-  gf.style.cssText=gf.style.cssText;
+  void gf.offsetWidth; /* força reflow para reiniciar a animação CSS */
   setTimeout(function(){gf.style.width=Math.min(target,100).toFixed(1)+"%";},20);
 }
 
@@ -3161,7 +3153,10 @@ function cvSetF(f){
 }
 function cvSetFP(fp){
   CV.fp=fp;
-  ["085","090","092","1"].forEach(function(x){document.getElementById("cvfp-"+x).classList.toggle("on",parseFloat("0."+x.replace("0","."))==fp||(x==="1"&&fp===1.0)||(x==="085"&&fp===0.85)||(x==="090"&&fp===0.90)||(x==="092"&&fp===0.92));});
+  ["085","090","092","1"].forEach(function(x){
+    var val=x==="085"?0.85:x==="090"?0.90:x==="092"?0.92:1.0;
+    document.getElementById("cvfp-"+x).classList.toggle("on",val===fp);
+  });
   cvCalc();
 }
 function cvSetU(u){
