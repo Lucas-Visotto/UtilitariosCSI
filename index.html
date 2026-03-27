@@ -207,7 +207,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 .bok:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,229,184,.35);}
 .bok:active{transform:translateY(0);box-shadow:none;}
 .bok:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none;}
-.bokw{width:100%;margin-top:14px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--accent),#00c49a);color:#000;border:none;border-radius:10px;cursor:pointer;transition:opacity .15s,transform .12s,box-shadow .15s;letter-spacing:.01em;}
+.bokw{width:100%;margin-top:14px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--accent),#00c49a);color:#002b22;border:none;border-radius:10px;cursor:pointer;transition:opacity .15s,transform .12s,box-shadow .15s;letter-spacing:.01em;}
 .bokw:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,229,184,.4);}
 .bokw:active{transform:translateY(0);box-shadow:none;}
 .bsec{padding:10px 16px;background:transparent;border:1.5px solid var(--border2);border-radius:9px;color:var(--muted);font-family:var(--sans);font-size:13px;cursor:pointer;transition:all .15s;}
@@ -218,7 +218,7 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 .brow{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap;align-items:center;}
 
 /* ── CHART ── */
-.chbox{position:relative;height:260px;width:100%;}
+.chbox{position:relative;height:290px;width:100%;}
 .jleg{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap;}
 .jleg span{display:flex;align-items:center;gap:5px;}
 .dot{width:9px;height:9px;border-radius:2px;display:inline-block;}
@@ -484,7 +484,80 @@ body.light .rb2.danger{background:rgba(204,34,34,.05);border-color:rgba(204,34,3
 .pg.active .kpi-strip{animation:cardIn .2s ease both;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-/* ── SCROLLBAR ── */
+/* ── INTERLIGAÇÃO HERO ── */
+.interlig-hero{
+  display:flex;flex-direction:column;gap:12px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 20px 14px;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.interlig-hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(0,229,184,.04) 0%,transparent 70%);
+  pointer-events:none;}
+.ih-svg-wrap{width:100%;max-width:760px;margin:0 auto;}
+.ih-svg{width:100%;height:auto;display:block;}
+/* SVG classes */
+.ih-wire{stroke:var(--border3);stroke-width:1.5;fill:none;}
+.ih-wire-sag{stroke:var(--border3);stroke-width:1.5;fill:none;}
+.ih-wire-dim{opacity:.45;}
+.ih-tower{stroke:var(--muted);fill:none;}
+.ih-isolator{fill:var(--hint);stroke:var(--border3);stroke-width:1;}
+.ih-isolator-top{fill:var(--accent);opacity:.7;}
+.ih-trafo-body{fill:var(--surface2);stroke:var(--border2);stroke-width:1.5;}
+.ih-trafo-inner{fill:var(--surface3);stroke:var(--border);stroke-width:1;}
+.ih-coil{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.7;}
+.ih-coil-fill{fill:var(--surface2);}
+.ih-bushing{fill:var(--surface3);stroke:var(--border2);stroke-width:1;}
+.ih-bushing-bt{fill:var(--muted);stroke:var(--border2);stroke-width:1;opacity:.7;}
+.ih-radiator{fill:var(--surface3);stroke:var(--border);stroke-width:1;}
+.ih-radiator-fin{fill:var(--border2);}
+.ih-relay{fill:var(--surface);stroke:var(--border2);stroke-width:1;}
+.ih-relay-dot{fill:var(--hint);}
+.ih-relay-active{fill:var(--accent);filter:drop-shadow(0 0 3px var(--accent));}
+.ih-label{font-size:10px;fill:var(--muted);font-family:var(--mono);text-anchor:middle;font-weight:700;letter-spacing:.06em;}
+.ih-label-main{font-size:9px;fill:var(--accent);font-family:var(--mono);text-anchor:middle;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.ih-bolt{fill:none;stroke:var(--warn);stroke-width:2;stroke-linejoin:round;
+  animation:boltFlash 3s ease-in-out infinite;}
+.ih-bolt-delay{animation-delay:1.5s;}
+@keyframes boltFlash{0%,60%,100%{opacity:0;}65%,75%{opacity:1;}70%{opacity:.4;}}
+/* Animate relay dot */
+.ih-relay-active{animation:relayPulse 2s ease-in-out infinite;}
+@keyframes relayPulse{0%,100%{opacity:.6;}50%{opacity:1;filter:drop-shadow(0 0 5px var(--accent));}}
+/* Animate wire energy flow */
+.ih-wire-sag{stroke-dasharray:6 4;animation:wireFlow 2s linear infinite;}
+@keyframes wireFlow{to{stroke-dashoffset:-20;}}
+.ih-wire-dim{animation-duration:2.8s;}
+.ih-info{text-align:center;}
+.ih-info-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:4px;letter-spacing:-.01em;}
+.ih-info-sub{font-size:11.5px;color:var(--muted);line-height:1.55;}
+body.light .ih-wire{stroke:var(--border2);}
+body.light .ih-wire-sag{stroke:var(--border3);}
+
+/* ── INTERLIGAÇÃO STEPS ── */
+.interlig-steps{
+  display:flex;align-items:flex-start;gap:0;margin:14px 0 16px;
+  padding:14px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;flex-wrap:wrap;gap:4px;
+}
+.interlig-step{
+  display:flex;align-items:flex-start;gap:10px;flex:1;min-width:120px;
+  padding:8px 10px;border-radius:8px;transition:background .2s,border-color .2s;
+  border:1px solid transparent;
+}
+.interlig-step.done{background:rgba(0,229,184,.06);border-color:rgba(0,229,184,.15);}
+.interlig-step-num{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:var(--surface3);border:1.5px solid var(--border3);
+  color:var(--muted);font-size:10px;font-weight:700;font-family:var(--mono);
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.interlig-step.done .interlig-step-num{background:var(--accent-dim);border-color:rgba(0,229,184,.4);color:var(--accent);}
+.interlig-step-title{font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;}
+.interlig-step-desc{font-size:10.5px;color:var(--muted);line-height:1.45;}
+.interlig-step-arrow{color:var(--hint);font-size:14px;align-self:center;flex-shrink:0;padding:0 2px;}
+@media(max-width:700px){.interlig-steps{flex-direction:column;}.interlig-step-arrow{transform:rotate(90deg);align-self:flex-start;margin-left:10px;}}
+
+
 #pages{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border3) transparent;}
 #pages::-webkit-scrollbar{width:4px;}
 #pages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
@@ -935,12 +1008,13 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
   <div class="sbot">
     <div class="bm-box">
       <span class="bm-label">Bookmarklet — Digiteam</span>
-<a class="bm-link" href="javascript:(async function(){const s=m=&gt;new Promise(r=&gt;setTimeout(r,m));let ps=null,ai=false;for(const l of document.querySelectorAll(&quot;span.p-select-label[role='combobox']&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role='button']&quot;);if(!b)continue;if(x===&quot;intervalo&quot;){ps=p;ai=true;break}b.click();await s(100);const o=[...document.querySelectorAll(&quot;[role='option'],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(o){o.click();await s(100);ps=p;break}document.body.click();await s(100)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(ai&amp;&amp;(!i||!i.value)){const b=ps.querySelector(&quot;div.p-select-dropdown[role='button']&quot;);b.click();await s(60);const h=[...document.querySelectorAll(&quot;[role='option'],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);h?.click();await s(60);b.click();await s(60);const it=[...document.querySelectorAll(&quot;[role='option'],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);it?.click();await s(100)}i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(50);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(20)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(20);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(20)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();})();"
-   title="Arraste para a barra de favoritos do navegador">        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<a class="bm-link" href="javascript:(async function(){try{const s=m=&gt;new Promise(r=&gt;setTimeout(r,m)),waitFor=async(fn,max=5000)=&gt;{const start=Date.now();while(Date.now()-start&lt;max){if(fn())return true;await s(50)}return false};const f=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi.pi-filter&quot;));if(!f){alert(&quot;Botão de filtro não encontrado&quot;);return}f.click();await s(150);const t=[...document.querySelectorAll(&quot;input[type=&#x27;checkbox&#x27;][role=&#x27;switch&#x27;]&quot;)].filter(x=&gt;x.offsetParent!==null);if(t.length&lt;3){alert(&quot;Toggle &#x27;Tempo real&#x27; não encontrado&quot;);return}if(!t[2].checked){t[2].click()}await s(250);const ch=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;));if(ch){const ic=ch.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;);if(ic&amp;&amp;ic.classList.contains(&quot;pi-chevron-left&quot;)){ch.click();await s(400);const ok=await waitFor(()=&gt;{const labels=[...document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)].filter(e=&gt;e.offsetParent!==null);return labels.length&gt;=2},3000);if(!ok)await s(500)}}let ps=null;for(const l of document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(!b)continue;ps=p;b.click();await s(80);const hOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);if(hOpt){hOpt.click();await s(80)}b.click();await s(80);const iOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(iOpt){iOpt.click();await s(80);break}document.body.click();await s(80)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}await s(100);let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(40);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(15);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();await s(200);const allSelects=[...document.querySelectorAll(&quot;p-select&quot;)].filter(sel=&gt;sel!==ps&amp;&amp;sel.offsetParent!==null);for(const pSel of allSelects){const lbl=pSel.querySelector(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;);if(!lbl)continue;const ariaLbl=lbl.getAttribute(&quot;aria-label&quot;);if(ariaLbl&amp;&amp;(ariaLbl.includes(&quot;min&quot;)||ariaLbl.includes(&quot;Não Atualizar&quot;))){const dropBtn=pSel.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(dropBtn){dropBtn.click();await s(250);const minOpt=[...document.querySelectorAll(&quot;li[role=&#x27;option&#x27;]&quot;)].find(e=&gt;{const span=e.querySelector(&quot;span.ng-star-inserted&quot;);return span&amp;&amp;span.textContent.trim()===&quot;1 min&quot;});if(minOpt){minOpt.click();await s(100);break}}}}}catch(e){alert(&quot;Erro: &quot;+e.message)}})();void 0;"
+   title="Arraste para a barra de favoritos do navegador">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Intervalo 6 meses
       </a>
       <div class="bm-drag-hint">↔ arraste para os favoritos</div>
-      <div class="bm-hint">Arraste para os favoritos do navegador. Com o Digiteam aberto e a aba lateral de notas visível, clique no favorito para selecionar automaticamente os últimos 6 meses.</div>
+      <div class="bm-hint">Arraste para os favoritos. Com o Digiteam aberto, clique no favorito para: ativar filtro, habilitar <strong>Tempo real</strong>, selecionar <strong>Intervalo 6 meses</strong> e definir atualização para <strong>1 min</strong> automaticamente.</div>
     </div>
   </div>
 
@@ -983,7 +1057,7 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
             <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
             <div class="home-title">Ferramentas de<br><span>Operação e Controle</span></div>
             <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do setor. Desenvolvido internamente pelo CSI para agilizar decisões e processos diários.</div>
-            <span class="home-ver-badge">2.1 &nbsp;·&nbsp; Março 2026</span>
+            <span class="home-ver-badge">2.2 &nbsp;·&nbsp; Março 2026</span>
           </div>
         </div>
 
@@ -1128,7 +1202,14 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
             <div class="ct">Histórico de versões</div>
             <div class="home-changelog">
               <div class="home-cl-item">
-                <div class="home-cl-ver cl-new">v2.1</div>
+                <div class="home-cl-ver cl-new">v2.2</div>
+                <div class="home-cl-body">
+                  <div class="home-cl-title">Interligação step-by-step · G-Dis auto-extração · Bookmarklet v2</div>
+                  <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span class="home-cl-tag t-ui">UI</span><span class="home-cl-tag t-fix">FIX</span></div>
+                </div>
+              </div>
+              <div class="home-cl-item">
+                <div class="home-cl-ver cl-mid">v2.1</div>
                 <div class="home-cl-body">
                   <div class="home-cl-title">Home · KPIs ao vivo · Gauge animado · Empty state G-Dis</div>
                   <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span class="home-cl-tag t-ui">UI</span><span class="home-cl-tag t-fix">FIX</span></div>
@@ -1186,31 +1267,122 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
     <div class="pg" id="page-interlig">
       <div style="max-width:920px;">
 
-        <!-- KPI Strip -->
-        <div class="kpi-strip" id="kpi-interlig">
-          <div class="kpi-card kpi-neutral">
-            <div class="kpi-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><line x1="9" y1="12" x2="15" y2="12"/></svg></div>
-            <div class="kpi-val" id="kpi-potD">75 kVA</div>
-            <div class="kpi-lbl">Doador</div>
-            <div class="kpi-sub">Potência nominal</div>
+        <!-- Hero decorativo — transformadores e energia -->
+        <div class="interlig-hero" id="interlig-hero">
+          <div class="ih-svg-wrap">
+            <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" class="ih-svg">
+              <!-- Fio de alta tensão esquerda -->
+              <line x1="0" y1="38" x2="140" y2="38" class="ih-wire"/>
+              <!-- Torre esquerda -->
+              <g class="ih-tower" transform="translate(140,10)">
+                <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5"/>
+                <line x1="0" y1="18" x2="30" y2="18" stroke-width="2"/>
+                <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5"/>
+                <line x1="0" y1="18" x2="15" y2="80" stroke-width="1.5"/>
+                <line x1="30" y1="18" x2="15" y2="80" stroke-width="1.5"/>
+                <circle cx="0" cy="18" r="3.5" class="ih-isolator"/>
+                <circle cx="30" cy="18" r="3.5" class="ih-isolator"/>
+                <circle cx="3" cy="30" r="2.5" class="ih-isolator"/>
+                <circle cx="27" cy="30" r="2.5" class="ih-isolator"/>
+              </g>
+              <!-- Fio entre torres -->
+              <path d="M 155 28 Q 250 55 345 28" class="ih-wire ih-wire-sag"/>
+              <path d="M 158 40 Q 250 65 342 40" class="ih-wire ih-wire-sag ih-wire-dim"/>
+              <!-- Torre central / Transformador -->
+              <g transform="translate(310,5)">
+                <!-- Base transformador -->
+                <rect x="0" y="20" width="72" height="80" rx="6" class="ih-trafo-body"/>
+                <rect x="8" y="28" width="56" height="64" rx="4" class="ih-trafo-inner"/>
+                <!-- Núcleo do trafo (bobinas) -->
+                <ellipse cx="36" cy="45" rx="14" ry="7" class="ih-coil"/>
+                <ellipse cx="36" cy="58" rx="14" ry="7" class="ih-coil"/>
+                <ellipse cx="36" cy="71" rx="14" ry="7" class="ih-coil"/>
+                <rect x="22" y="45" width="28" height="26" class="ih-coil-fill"/>
+                <!-- Bucha AT -->
+                <rect x="14" y="6" width="8" height="18" rx="3" class="ih-bushing"/>
+                <rect x="50" y="6" width="8" height="18" rx="3" class="ih-bushing"/>
+                <circle cx="18" cy="5" r="4" class="ih-isolator-top"/>
+                <circle cx="54" cy="5" r="4" class="ih-isolator-top"/>
+                <!-- Bucha BT -->
+                <rect x="28" y="96" width="6" height="14" rx="2" class="ih-bushing-bt"/>
+                <rect x="38" y="96" width="6" height="14" rx="2" class="ih-bushing-bt"/>
+                <!-- Radiadores -->
+                <rect x="-10" y="30" width="8" height="50" rx="2" class="ih-radiator"/>
+                <rect x="-6" y="34" width="2" height="42" rx="1" class="ih-radiator-fin"/>
+                <rect x="74" y="30" width="8" height="50" rx="2" class="ih-radiator"/>
+                <rect x="76" y="34" width="2" height="42" rx="1" class="ih-radiator-fin"/>
+                <!-- Relé -->
+                <rect x="20" y="28" width="32" height="10" rx="2" class="ih-relay"/>
+                <circle cx="30" cy="33" r="2" class="ih-relay-dot"/>
+                <circle cx="36" cy="33" r="2" class="ih-relay-dot ih-relay-active"/>
+                <circle cx="42" cy="33" r="2" class="ih-relay-dot"/>
+              </g>
+              <!-- Fio entre transformador e torre direita -->
+              <path d="M 415 28 Q 510 55 605 28" class="ih-wire ih-wire-sag"/>
+              <path d="M 418 40 Q 510 65 602 40" class="ih-wire ih-wire-sag ih-wire-dim"/>
+              <!-- Torre direita -->
+              <g class="ih-tower" transform="translate(604,10)">
+                <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5"/>
+                <line x1="0" y1="18" x2="30" y2="18" stroke-width="2"/>
+                <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5"/>
+                <line x1="0" y1="18" x2="15" y2="80" stroke-width="1.5"/>
+                <line x1="30" y1="18" x2="15" y2="80" stroke-width="1.5"/>
+                <circle cx="0" cy="18" r="3.5" class="ih-isolator"/>
+                <circle cx="30" cy="18" r="3.5" class="ih-isolator"/>
+                <circle cx="3" cy="30" r="2.5" class="ih-isolator"/>
+                <circle cx="27" cy="30" r="2.5" class="ih-isolator"/>
+              </g>
+              <!-- Fio saída direita -->
+              <line x1="620" y1="38" x2="760" y2="38" class="ih-wire"/>
+              <!-- Labels -->
+              <text x="70" y="25" class="ih-label">AT</text>
+              <text x="688" y="25" class="ih-label">BT</text>
+              <text x="346" y="118" class="ih-label-main">Transformador Doador</text>
+              <!-- Raios animados -->
+              <g class="ih-sparks">
+                <path d="M 328 2 L 322 12 L 328 10 L 322 22" class="ih-bolt"/>
+                <path d="M 348 2 L 342 12 L 348 10 L 342 22" class="ih-bolt ih-bolt-delay"/>
+              </g>
+            </svg>
           </div>
-          <div class="kpi-card kpi-accent">
-            <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <div class="kpi-val" id="kpi-limite">90 kVA</div>
-            <div class="kpi-lbl">Limite operativo</div>
-            <div class="kpi-sub" id="kpi-limitetip">Convencional (120%)</div>
+          <div class="ih-info">
+            <div class="ih-info-title">Verificação de Interligação</div>
+            <div class="ih-info-sub">Configure o doador, o transformador queimado e os cabos — clique em <strong>Verificar</strong> para obter a análise completa.</div>
           </div>
-          <div class="kpi-card kpi-ok" id="kpi-card-uso">
-            <div class="kpi-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-            <div class="kpi-val" id="kpi-uso">—</div>
-            <div class="kpi-lbl">Uso no pico</div>
-            <div class="kpi-sub" id="kpi-usotip">Carga combinada</div>
+        </div>
+
+        <!-- Passo a passo — topo da página -->
+        <div class="interlig-steps" id="interlig-steps" style="margin-bottom:16px;">
+          <div class="interlig-step" id="istep-1">
+            <div class="interlig-step-num">1</div>
+            <div class="interlig-step-body">
+              <div class="interlig-step-title">Configure o Doador</div>
+              <div class="interlig-step-desc">Potência, proteção, fase e carga atual.</div>
+            </div>
           </div>
-          <div class="kpi-card kpi-ok" id="kpi-card-margem">
-            <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-            <div class="kpi-val" id="kpi-margem">—</div>
-            <div class="kpi-lbl">Margem disponível</div>
-            <div class="kpi-sub" id="kpi-margemtip">No pico máximo</div>
+          <div class="interlig-step-arrow">→</div>
+          <div class="interlig-step" id="istep-2">
+            <div class="interlig-step-num">2</div>
+            <div class="interlig-step-body">
+              <div class="interlig-step-title">Configure o Queimado</div>
+              <div class="interlig-step-desc">Potência, fase e carga a transferir.</div>
+            </div>
+          </div>
+          <div class="interlig-step-arrow">→</div>
+          <div class="interlig-step" id="istep-3">
+            <div class="interlig-step-num">3</div>
+            <div class="interlig-step-body">
+              <div class="interlig-step-title">Ajuste a Curva</div>
+              <div class="interlig-step-desc">Modele a curva de carga da região.</div>
+            </div>
+          </div>
+          <div class="interlig-step-arrow">→</div>
+          <div class="interlig-step" id="istep-4">
+            <div class="interlig-step-num">4</div>
+            <div class="interlig-step-body">
+              <div class="interlig-step-title">Adicione Cabos e Verifique</div>
+              <div class="interlig-step-desc">Clique em <strong>Verificar Interligação</strong>.</div>
+            </div>
           </div>
         </div>
 
@@ -1218,7 +1390,7 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
           <div class="card">
             <div class="ct">Transformador Doador</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-doador" value="75" min="1" oninput="calcular()">
+            <input type="number" id="pot-doador" placeholder="ex: 75" min="1" oninput="calcular()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-doador-conv" onclick="setP('doador','conv')">🔻 Convencional</div>
@@ -1230,12 +1402,12 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
               <div class="rb"    id="fase-doador-mono" onclick="setF('doador','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga Atual (kVA)</span>
-            <input type="number" id="carga-doador" value="40" min="0" oninput="calcular()">
+            <input type="number" id="carga-doador" placeholder="ex: 40" min="0" oninput="calcular()">
           </div>
           <div class="card card-queimado">
             <div class="ct ct-queimado">Transformador Queimado</div>
             <span class="lbl">Potência nominal (kVA)</span>
-            <input type="number" id="pot-queimado" value="30" min="1" oninput="calcular()">
+            <input type="number" id="pot-queimado" placeholder="ex: 30" min="1" oninput="calcular()">
             <span class="lbl">Proteção</span>
             <div class="rg">
               <div class="rb on" id="tp-queimado-conv" onclick="setP('queimado','conv')">🔻 Convencional</div>
@@ -1247,25 +1419,36 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
               <div class="rb"    id="fase-queimado-mono" onclick="setF('queimado','mono')">Monofásico</div>
             </div>
             <span class="lbl">Carga a Transferir (kVA)</span>
-            <input type="number" id="carga-queimado" value="22" min="0" oninput="calcular()">
+            <input type="number" id="carga-queimado" placeholder="ex: 22" min="0" oninput="calcular()">
             <div id="alert-fase" class="ail"></div>
           </div>
         </div>
 
-        <div id="resultado-trafo"></div>
-
-        <div class="card">
-          <div class="ct">Análise horária — viabilidade ao longo do dia</div>
-          <div class="info">Curva de carga típica residencial/misto normalizada. Os valores de pico definem a escala — demais horas são proporcionais. Cada hora mostra se a interligação é viável considerando a carga <strong>somada</strong> do doador e do queimado.</div>
-          <div class="chbox"><canvas id="chartCurvas"></canvas></div>
-          <div id="jsum" class="jsum"></div>
+        <!-- Editor de curva de carga interativo -->
+        <div class="card" style="margin-bottom:14px;" id="card-curva-editor">
+          <div class="ct">Curva de carga da região — arraste os pontos</div>
+          <div class="info" style="margin-bottom:12px;">
+            Modele a curva de carga baseando-se na <strong>curva do Gemini do trafo doador</strong>. Cada ponto representa a demanda relativa de uma hora do dia (0–100%). O maior valor sempre corresponde a 100% (pico). Arraste as bolinhas para replicar o formato da curva que você vê no sistema — o resultado da interligação será calculado com base nesse perfil.
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="bsec" onclick="resetCurva()" style="font-size:11px;padding:6px 12px;display:flex;align-items:center;gap:5px;">
+              <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+              Resetar (Residencial)
+            </button>
+            <span style="font-size:10.5px;color:var(--muted);">Pico: <strong id="curva-pico-hora" style="color:var(--accent);font-family:var(--mono);">19h</strong> — <strong id="curva-pico-pct" style="color:var(--accent);font-family:var(--mono);">100%</strong></span>
+            <span style="font-size:10px;color:var(--hint);margin-left:auto;font-style:italic;">Espelhe a curva do Gemini ↗</span>
+          </div>
+          <div style="position:relative;width:100%;user-select:none;">
+            <canvas id="curvaEditor" style="width:100%;display:block;cursor:crosshair;border-radius:8px;background:var(--surface2);border:1px solid var(--border);"></canvas>
+          </div>
+          <!-- labels de hora ficam dentro do canvas -->
         </div>
 
-        <div class="sep"></div>
-
-        <div class="card">
+        <!-- Card de cabos + botão verificar — sempre visível pois o usuário precisa adicionar vãos -->
+        <div class="card" style="margin-top:14px;">
           <div class="ct">Cabos — trecho doador → ponto de interligação</div>
           <div class="info">Insira <strong>apenas os vãos entre o transformador doador e o ponto de interligação</strong>. A corrente é calculada pela fase do doador. A verificação usa os valores de <strong>pico</strong>.</div>
+
           <div style="margin-top:12px;">
             <div class="vh">
               <span>Vão</span><span>Cabo</span><span>Correntes</span><span>Resultado</span><span></span>
@@ -1273,9 +1456,23 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
             <div id="vaos"></div>
           </div>
           <button class="badd" onclick="addVao()">+ Adicionar vão</button>
+          <button class="bokw" id="btn-verificar" onclick="verificarInterligacao()" style="margin-top:12px;">
+            ⚡ Verificar Interligação
+          </button>
         </div>
 
-        <div style="margin-top:12px;" id="resultado-final"></div>
+        <!-- ══ BLOCO DE RESULTADO — só aparece após clicar em Verificar ══ -->
+        <!-- Card único de resultado (trafo + cabos + janelas) -->
+        <div style="margin-top:14px;" id="resultado-final"></div>
+
+        <!-- Análise horária -->
+        <div class="card" id="card-curvas" style="display:none;margin-top:14px;">
+          <div class="ct">Análise horária — viabilidade ao longo do dia</div>
+          <div class="info" id="info-curvas">Curva baseada no perfil ajustado acima. Cada hora mostra se a interligação é viável considerando a carga <strong>somada</strong> do doador e do queimado.</div>
+          <div class="chbox"><canvas id="chartCurvas"></canvas></div>
+          <div id="jsum" class="jsum"></div>
+        </div>
+
       </div>
     </div>
 
@@ -1323,14 +1520,13 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
                 </div>
                 <div class="gdis-empty-step">
                   <div class="gdis-empty-step-num">3</div>
-                  <span>Cole no campo abaixo e clique em <strong>Extrair notas</strong></span>
+                  <span>Cole no campo abaixo — as notas serão extraídas <strong>automaticamente</strong></span>
                 </div>
               </div>
             </div>
             <span class="lbl">Cole o texto copiado do G-Dis</span>
             <textarea id="gin" placeholder="Cole aqui o texto copiado do G-Dis…" rows="8" oninput="gAtualizar()"></textarea>
             <div class="brow">
-              <button class="bok" id="gBtnEx" onclick="gExtrair()" disabled>Extrair notas</button>
               <button class="bdel" id="gBtnLp" onclick="gLimpar()" disabled>Limpar</button>
             </div>
           </div>
@@ -1523,12 +1719,7 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
   </div><!-- #pages -->
 
   <div id="footer">
-    <div class="cred">
-      <span>Lucas Visotto</span>
-      <span>Vitor Coutinho</span>
-      <span>Frederico Eustáquio</span>
-    </div>
-    <div class="fright">Ferramentas CSI — CEMIG Operação · 2026</div>
+    <div class="fright" style="width:100%;text-align:center;">Ferramentas CSI — CEMIG Operação · 2026</div>
   </div>
 </div><!-- #main -->
 </div><!-- #app -->
@@ -1537,7 +1728,287 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-var CURVA=[0.32,0.25,0.20,0.18,0.19,0.22,0.30,0.42,0.52,0.55,0.56,0.54,0.52,0.50,0.51,0.53,0.58,0.65,0.78,1.00,0.95,0.82,0.65,0.48];
+/* ── CURVA DE CARGA EDITÁVEL ── */
+var CURVA_BASE=[0.32,0.25,0.20,0.18,0.19,0.22,0.30,0.42,0.52,0.55,0.56,0.54,0.52,0.50,0.51,0.53,0.58,0.65,0.78,1.00,0.95,0.82,0.65,0.48];
+var CURVA=CURVA_BASE.slice();
+
+/* Editor canvas state */
+var CE={
+  canvas:null, ctx:null,
+  W:0, H:0,
+  dragging:-1,
+  pad:{l:8,r:42,t:26,b:22}
+};
+
+function ceInit(){
+  var c=document.getElementById("curvaEditor");
+  if(!c)return;
+  CE.canvas=c;
+  CE.ctx=c.getContext("2d");
+  ceResize();
+  ceRender();
+
+  /* Mouse events */
+  c.addEventListener("mousedown",function(e){
+    var pt=ceEvtPt(e);
+    CE.dragging=ceHitTest(pt.x,pt.y);
+    if(CE.dragging===-1){CE.dragging=ceClosest(pt.x);}
+    ceDrag(pt.x,pt.y);
+  });
+  window.addEventListener("mousemove",function(e){
+    if(CE.dragging<0)return;
+    var pt=ceEvtPt(e);
+    ceDrag(pt.x,pt.y);
+  });
+  window.addEventListener("mouseup",function(){
+    if(CE.dragging>=0){CE.dragging=-1;if(INTERLIG_VERIFICADO)calcular();}
+  });
+
+  /* Touch events */
+  c.addEventListener("touchstart",function(e){
+    e.preventDefault();
+    var pt=ceEvtPt(e.touches[0]);
+    CE.dragging=ceHitTest(pt.x,pt.y);
+    if(CE.dragging===-1){CE.dragging=ceClosest(pt.x);}
+    ceDrag(pt.x,pt.y);
+  },{passive:false});
+  window.addEventListener("touchmove",function(e){
+    if(CE.dragging<0)return;
+    e.preventDefault();
+    var pt=ceEvtPt(e.touches[0]);
+    ceDrag(pt.x,pt.y);
+  },{passive:false});
+  window.addEventListener("touchend",function(){
+    if(CE.dragging>=0){CE.dragging=-1;if(INTERLIG_VERIFICADO)calcular();}
+  });
+
+  window.addEventListener("resize",function(){ceResize();ceRender();});
+}
+
+function ceResize(){
+  var c=CE.canvas;
+  var dpr=window.devicePixelRatio||1;
+  var cssW=c.offsetWidth||800;
+  var cssH=Math.max(185,Math.round(cssW*0.30));
+  c.width=cssW*dpr; c.height=cssH*dpr;
+  c.style.height=cssH+"px";
+  CE.W=cssW; CE.H=cssH;
+  CE.ctx.scale(dpr,dpr);
+}
+
+function ceX(h){ return CE.pad.l+(h/23)*(CE.W-CE.pad.l-CE.pad.r); }
+function ceY(v){ return CE.pad.t+(1-v)*(CE.H-CE.pad.t-CE.pad.b); }
+function ceVfromY(y){ return Math.max(0.05,Math.min(1,1-(y-CE.pad.t)/(CE.H-CE.pad.t-CE.pad.b))); }
+function ceHfromX(x){ return Math.round(Math.max(0,Math.min(23,(x-CE.pad.l)/(CE.W-CE.pad.l-CE.pad.r)*23))); }
+
+function ceEvtPt(e){
+  var r=CE.canvas.getBoundingClientRect();
+  return {x:e.clientX-r.left, y:e.clientY-r.top};
+}
+function ceHitTest(x,y){
+  for(var h=0;h<24;h++){
+    var dx=x-ceX(h),dy=y-ceY(CURVA[h]);
+    if(Math.sqrt(dx*dx+dy*dy)<14)return h;
+  }
+  return -1;
+}
+function ceClosest(x){
+  return Math.round(Math.max(0,Math.min(23,(x-CE.pad.l)/(CE.W-CE.pad.l-CE.pad.r)*23)));
+}
+function ceDrag(x,y){
+  if(CE.dragging<0)return;
+  CURVA[CE.dragging]=ceVfromY(y);
+  ceRender();
+  ceUpdateInfo();
+  if(INTERLIG_VERIFICADO)calcular();
+}
+
+function ceUpdateInfo(){
+  var maxV=Math.max.apply(null,CURVA);
+  var picoH=CURVA.indexOf(maxV);
+  var el1=document.getElementById("curva-pico-hora");
+  var el2=document.getElementById("curva-pico-pct");
+  if(el1)el1.textContent=picoH+"h";
+  if(el2)el2.textContent=Math.round(maxV*100)+"%";
+}
+
+function ceUpdateInfo(){
+  var maxV=Math.max.apply(null,CURVA);
+  /* Encontra intervalo de pico: horas com valor >= 90% do máximo */
+  var LIMIAR=0.90;
+  var picoHoras=[];
+  for(var h=0;h<24;h++){if(CURVA[h]>=maxV*LIMIAR)picoHoras.push(h);}
+  var picoStart=picoHoras[0],picoEnd=picoHoras[picoHoras.length-1];
+  var picoStr=picoStart===picoEnd ? picoStart+"h" : picoStart+"h–"+(picoEnd+1)+"h";
+  var el1=document.getElementById("curva-pico-hora");
+  var el2=document.getElementById("curva-pico-pct");
+  if(el1)el1.textContent=picoStr;
+  if(el2)el2.textContent=Math.round(maxV*100)+"%";
+}
+
+function ceRender(){
+  var ctx=CE.ctx,W=CE.W,H=CE.H;
+  var dark=DARK;
+
+  /* ── Verde original da UI — melhor contraste no dark, consistente com a paleta ── */
+  var acc=dark?"#00e5b8":"#007a60";
+  var accRgb=dark?"0,229,184":"0,122,96";
+  var accFill=dark?"rgba(0,229,184,0.10)":"rgba(0,122,96,0.08)";
+  var barFill=dark?"rgba(0,229,184,0.18)":"rgba(0,122,96,0.15)";
+  var barPico=dark?"rgba(0,229,184,0.40)":"rgba(0,122,96,0.32)";
+  var gridC=dark?"rgba(255,255,255,0.06)":"rgba(0,0,0,0.07)";
+  var gridStrong=dark?"rgba(56,189,248,0.20)":"rgba(2,132,199,0.18)";
+  var labelHr=dark?"rgba(200,220,240,1)":"rgba(30,60,100,1)";    /* horários — bem visíveis */
+  var labelPct=dark?"rgba(160,190,215,1)":"rgba(50,85,130,1)";   /* percentuais */
+  var dotBg=dark?"#131b27":"#dde5f0";
+
+  /* Pico range (>= 90% do max) */
+  var maxV=Math.max.apply(null,CURVA);
+  var LIMIAR=0.90;
+
+  ctx.clearRect(0,0,W,H);
+
+  /* ── Barras verticais por hora ── */
+  var barW=Math.max(2,(ceX(1)-ceX(0))*0.55);
+  for(var hb=0;hb<24;hb++){
+    var bx=ceX(hb);
+    var byTop=ceY(CURVA[hb]);
+    var byBot=ceY(0);
+    var isPicoBar=CURVA[hb]>=maxV*LIMIAR;
+    ctx.save();
+    ctx.fillStyle=isPicoBar?barPico:barFill;
+    ctx.beginPath();
+    ctx.roundRect(bx-barW/2, byTop, barW, byBot-byTop, [3,3,0,0]);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /* ── Grid horizontal 25/50/75/100% ── */
+  [0.25,0.5,0.75,1.0].forEach(function(v){
+    var y=ceY(v);
+    var isTop=(v===1.0);
+    ctx.save();
+    ctx.strokeStyle=isTop?gridStrong:gridC;
+    ctx.lineWidth=isTop?1:1;
+    ctx.setLineDash(isTop?[5,4]:[3,6]);
+    ctx.beginPath();ctx.moveTo(CE.pad.l,y);ctx.lineTo(W-CE.pad.r,y);ctx.stroke();
+    ctx.setLineDash([]);
+    /* Label % — à direita, bem legível */
+    ctx.fillStyle=isTop?acc:labelPct;
+    ctx.font=(isTop?"bold ":"")+"9px monospace";
+    ctx.textAlign="right";
+    ctx.fillText(Math.round(v*100)+"%", W-CE.pad.r+1, y-2);
+    ctx.restore();
+  });
+
+  /* ── Grid vertical 6h/12h/18h ── */
+  [6,12,18].forEach(function(hv){
+    ctx.save();
+    ctx.strokeStyle=gridC;ctx.lineWidth=1;ctx.setLineDash([2,6]);
+    ctx.beginPath();ctx.moveTo(ceX(hv),CE.pad.t);ctx.lineTo(ceX(hv),H-CE.pad.b);ctx.stroke();
+    ctx.setLineDash([]);ctx.restore();
+  });
+
+  /* ── Área preenchida (sobre as barras) ── */
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(ceX(0),ceY(CURVA[0]));
+  for(var ha=1;ha<24;ha++){
+    var xm=(ceX(ha-1)+ceX(ha))/2;
+    ctx.bezierCurveTo(xm,ceY(CURVA[ha-1]),xm,ceY(CURVA[ha]),ceX(ha),ceY(CURVA[ha]));
+  }
+  ctx.lineTo(ceX(23),ceY(0));
+  ctx.lineTo(ceX(0),ceY(0));
+  ctx.closePath();
+  ctx.fillStyle=accFill;
+  ctx.fill();
+  ctx.restore();
+
+  /* ── Linha principal ── */
+  ctx.save();
+  ctx.beginPath();
+  ctx.strokeStyle=acc;
+  ctx.lineWidth=2.5;
+  ctx.shadowColor="rgba("+accRgb+",0.35)";
+  ctx.shadowBlur=4;
+  ctx.moveTo(ceX(0),ceY(CURVA[0]));
+  for(var hl=1;hl<24;hl++){
+    var xm2=(ceX(hl-1)+ceX(hl))/2;
+    ctx.bezierCurveTo(xm2,ceY(CURVA[hl-1]),xm2,ceY(CURVA[hl]),ceX(hl),ceY(CURVA[hl]));
+  }
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  /* ── Labels de hora no eixo X — dentro do canvas, todos os 3h ── */
+  var yLbl=H-CE.pad.b+11;
+  for(var lh=0;lh<24;lh++){
+    if(lh%3!==0)continue;
+    ctx.save();
+    ctx.fillStyle=labelHr;
+    ctx.font="bold 9.5px monospace";
+    ctx.textAlign="center";
+    ctx.fillText(lh+"h", ceX(lh), yLbl);
+    ctx.restore();
+  }
+
+  /* ── Pontos (dots) ── */
+  for(var hd=0;hd<24;hd++){
+    var px=ceX(hd), py=ceY(CURVA[hd]);
+    var isActive=CE.dragging===hd;
+    var isPico=CURVA[hd]>=maxV*LIMIAR;
+
+    /* Halo externo */
+    if(isActive||isPico){
+      ctx.save();
+      ctx.beginPath();ctx.arc(px,py,isActive?12:9,0,Math.PI*2);
+      ctx.fillStyle=isActive?"rgba("+accRgb+",0.25)":"rgba("+accRgb+",0.14)";
+      ctx.fill();ctx.restore();
+    }
+    /* Dot */
+    ctx.save();
+    ctx.beginPath();ctx.arc(px,py,isActive?6:isPico?5.5:4,0,Math.PI*2);
+    ctx.fillStyle=dotBg;
+    ctx.strokeStyle=isPico?acc:(dark?"rgba("+accRgb+",0.65)":"rgba("+accRgb+",0.75)");
+    ctx.lineWidth=isActive?2.5:isPico?2.5:1.6;
+    ctx.fill();ctx.stroke();
+    ctx.restore();
+
+    /* Label flutuante ao arrastar */
+    if(isActive){
+      var lbx=Math.max(28,Math.min(px,W-30));
+      ctx.save();
+      ctx.fillStyle="rgba("+accRgb+",0.92)";
+      ctx.beginPath();ctx.roundRect(lbx-26,py-30,52,18,4);ctx.fill();
+      ctx.fillStyle=dark?"#0c1118":"#ffffff";
+      ctx.font="bold 9.5px monospace";ctx.textAlign="center";
+      ctx.fillText(hd+"h · "+Math.round(CURVA[hd]*100)+"%", lbx, py-17);
+      ctx.restore();
+    }
+  }
+
+  /* ── Label de pico fixo (faixa de horas de pico) ── */
+  var picoHs=[];for(var ph=0;ph<24;ph++){if(CURVA[ph]>=maxV*LIMIAR)picoHs.push(ph);}
+  if(picoHs.length&&CE.dragging<0){
+    var pmid=picoHs[Math.floor(picoHs.length/2)];
+    var pStr=(picoHs[0]===picoHs[picoHs.length-1])?picoHs[0]+"h":picoHs[0]+"h–"+(picoHs[picoHs.length-1]+1)+"h";
+    var ppx=ceX(pmid), ppy=ceY(maxV);
+    var lbx2=Math.max(32,Math.min(ppx,W-CE.pad.r-32));
+    ctx.save();
+    ctx.fillStyle=acc;
+    ctx.font="bold 9.5px monospace";ctx.textAlign="center";
+    ctx.fillText("⬆ pico "+pStr, lbx2, ppy-14);
+    ctx.restore();
+  }
+}
+
+function resetCurva(){
+  CURVA=CURVA_BASE.slice();
+  ceRender();
+  ceUpdateInfo();
+  if(INTERLIG_VERIFICADO)calcular();
+}
+
 var CABOS=[
   {n:"Cabo de Alumínio CA 6AWG - 13,30mm",i:81,ie:110,t:30.87,m:17.82},
   {n:"Cabo de Alumínio CA 4AWG - 21,15mm",i:111,ie:150,t:42.30,m:24.42},
@@ -1622,6 +2093,8 @@ function navTo(id){
   document.getElementById("tsub").textContent=PTITLES[id].s;
   setTimeout(function(){
     if(titleBlock){titleBlock.style.opacity="";titleBlock.style.transform="";}
+    /* Re-render curve editor when navigating to interlig (canvas may have been hidden) */
+    if(id==="interlig"&&CE.canvas){ceResize();ceRender();}
   },60);
   closeSb();
 }
@@ -1633,6 +2106,7 @@ function toggleTheme(){
   var ic=document.getElementById("themeIcon");
   ic.innerHTML=DARK?"<path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/>":"<circle cx=\"12\" cy=\"12\" r=\"5\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"/><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/>";
   if(CI){calcular();}
+  if(CE.canvas){ceRender();}
 }
 
 var TTM;
@@ -1645,6 +2119,39 @@ function toast(msg){
   requestAnimationFrame(function(){
     el.classList.add("show");
     TTM=setTimeout(function(){el.classList.remove("show");},1800);
+  });
+}
+
+/* INTERLIGAÇÃO — verificação explícita */
+var INTERLIG_VERIFICADO=false;
+
+function verificarInterligacao(){
+  INTERLIG_VERIFICADO=true;
+  calcular();
+  /* Reveal chart card and resultado */
+  var cc=document.getElementById("card-curvas");
+  if(cc){cc.style.display="";}
+  /* Scroll to result */
+  setTimeout(function(){
+    var r=document.getElementById("resultado-final");
+    if(r){r.scrollIntoView({behavior:"smooth",block:"nearest"});}
+  },120);
+}
+
+function updateInterligSteps(){
+  var potD=parseFloat(document.getElementById("pot-doador").value)||0;
+  var cD=parseFloat(document.getElementById("carga-doador").value)||0;
+  var potQ=parseFloat(document.getElementById("pot-queimado").value)||0;
+  var cQ=parseFloat(document.getElementById("carga-queimado").value)||0;
+  var hasVaos=S.vaos.length>0;
+  var s1=potD>0&&cD>=0;
+  var s2=potQ>0&&cQ>=0;
+  var s3=hasVaos;
+  ["istep-1","istep-2","istep-3","istep-4"].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(!el)return;
+    var ok=[s1,s2,s3,INTERLIG_VERIFICADO][i];
+    el.classList.toggle("done",!!ok);
   });
 }
 
@@ -1687,16 +2194,34 @@ function mkMetric(val,unit,label,color){
 }
 
 function calcular(){
+  updateInterligSteps();
   var potD=parseFloat(document.getElementById("pot-doador").value)||0;
   var cD=parseFloat(document.getElementById("carga-doador").value)||0;
   var cQ=parseFloat(document.getElementById("carga-queimado").value)||0;
 
+  /* Alerta de fase — sempre visível pois orienta o preenchimento */
   var aEl=document.getElementById("alert-fase");
   var inv=S.faseD==="mono"&&S.faseQ==="tri";
   var avi=S.faseD==="tri"&&S.faseQ==="mono";
   if(inv){aEl.className="ail danger";aEl.textContent="\u2717 Trafo monofásico não pode alimentar rede trifásica. Interligação inviável.";}
   else if(avi){aEl.className="ail warn";aEl.textContent="\u26a0 Doador trifásico alimentando rede monofásica — somente uma fase será usada.";}
   else{aEl.className="ail";}
+
+  /* Tudo abaixo só renderiza após o usuário clicar em Verificar */
+  if(!INTERLIG_VERIFICADO){
+    document.getElementById("resultado-trafo").innerHTML="";
+    if(document.getElementById("jsum"))document.getElementById("jsum").innerHTML="";
+    if(CI){CI.destroy();CI=null;}
+    /* Manter KPI strip com traços */
+    ["kpi-potD","kpi-limite","kpi-uso","kpi-margem"].forEach(function(id){
+      var el=document.getElementById(id);if(el)el.textContent="—";
+    });
+    /* Mostrar hero, limpar resultado */
+    var heroEl=document.getElementById("interlig-hero");
+    if(heroEl)heroEl.style.display="";
+    document.getElementById("resultado-final").innerHTML="";
+    return;
+  }
 
   var fator=S.protD==="prot"?1.00:1.20;
   var maxD=potD*fator,tot=cD+cQ,sobra=maxD-tot,pct=maxD>0?(tot/maxD*100):0;
@@ -1717,6 +2242,24 @@ function calcular(){
   var fLbl={"tri-tri":"Trifásico → Trifásico","tri-mono":"Trifásico → Monofásico","mono-mono":"Monofásico → Monofásico","mono-tri":"Monofásico → Trifásico \u2717"}[S.faseD+"-"+S.faseQ];
   var pctColor=pct>100?"var(--danger)":pct>85?"var(--warn)":"var(--ok)";
   var margemColor=sobra<0?"var(--danger)":sobra<maxD*0.15?"var(--warn)":"var(--ok)";
+
+  var metricsHtml="";
+  if(!inv){
+    metricsHtml="<div class=\"res-metrics\">"+
+      mkMetric(pct.toFixed(1),"%","Uso no pico",pctColor)+
+      mkMetric(tot.toFixed(1),"kVA","Carga total","")+
+      mkMetric(sobra.toFixed(1),"kVA","Margem",margemColor)+
+      mkMetric(maxD.toFixed(0),"kVA","Limite","")+
+    "</div>"+
+    "<div class=\"gr\" style=\"margin-top:14px;\"><span class=\"gl\">Carregamento</span><div class=\"gb\"><div class=\"gf\" id=\"gauge-fill\" data-pct=\""+Math.min(pct,100).toFixed(1)+"\" style=\"width:0%;background:"+pctColor+"\"></div></div><span class=\"gv\" style=\"color:"+pctColor+"\">"+pct.toFixed(1)+"%</span></div>";
+  }
+
+  var detFasesHtml="<div class=\"res-detail-grid\">"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Fases</span><span class=\"res-detail-val\">"+fLbl+"</span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Limite doador</span><span class=\"res-detail-val\">"+maxD.toFixed(1)+" kVA <span style=\"color:var(--muted);font-weight:400;font-size:11px;\">("+(fator===1?"100":"120")+"%)</span></span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga doador</span><span class=\"res-detail-val\">"+cD.toFixed(1)+" kVA</span></div>"+
+    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga queimado</span><span class=\"res-detail-val\">"+cQ.toFixed(1)+" kVA</span></div>"+
+  "</div>";
 
   /* ── KPI STRIP UPDATE ── */
   if(!inv && document.getElementById("kpi-potD")){
@@ -1740,41 +2283,12 @@ function calcular(){
     if(kpiMarg){kpiMarg.className="kpi-card "+(sobra<0?"kpi-danger":sobra<maxD*0.15?"kpi-warn":"kpi-ok");}
   }
 
-  var metricsHtml="";
-  if(!inv){
-    metricsHtml="<div class=\"res-metrics\">"+
-      mkMetric(pct.toFixed(1),"%","Uso no pico",pctColor)+
-      mkMetric(tot.toFixed(1),"kVA","Carga total","")+
-      mkMetric(sobra.toFixed(1),"kVA","Margem",margemColor)+
-      mkMetric(maxD.toFixed(0),"kVA","Limite","")+
-    "</div>"+
-    "<div class=\"gr\" style=\"margin-top:14px;\"><span class=\"gl\">Carregamento</span><div class=\"gb\"><div class=\"gf\" id=\"gauge-fill\" data-pct=\""+Math.min(pct,100).toFixed(1)+"\" style=\"width:0%;background:"+pctColor+"\"></div></div><span class=\"gv\" style=\"color:"+pctColor+"\">"+pct.toFixed(1)+"%</span></div>";
-  }
+  /* ── Esconde o hero quando resultado aparece ── */
+  var hero=document.getElementById("interlig-hero");
+  if(hero)hero.style.display="none";
 
-  var detFasesHtml="<div class=\"res-detail-grid\">"+
-    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Fases</span><span class=\"res-detail-val\">"+fLbl+"</span></div>"+
-    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Limite doador</span><span class=\"res-detail-val\">"+maxD.toFixed(1)+" kVA <span style=\"color:var(--muted);font-weight:400;font-size:11px;\">("+(fator===1?"100":"120")+"%)</span></span></div>"+
-    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga doador</span><span class=\"res-detail-val\">"+cD.toFixed(1)+" kVA</span></div>"+
-    "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Carga queimado</span><span class=\"res-detail-val\">"+cQ.toFixed(1)+" kVA</span></div>"+
-  "</div>";
-
-  document.getElementById("resultado-trafo").innerHTML=
-    "<div class=\"rb2 "+cls+"\">"+
-      "<div class=\"rb2-header\"><h3>"+tit+"</h3><p>"+msg+"</p></div>"+
-      metricsHtml+
-      "<div class=\"rb2-sep\"></div>"+
-      detFasesHtml+
-    "</div>";
-  /* Animate gauge fill */
-  (function(){
-    var gf=document.getElementById("gauge-fill");
-    if(!gf)return;
-    var target=parseFloat(gf.getAttribute("data-pct")||"0");
-    var cls2=target>100?"gf-danger":target>85?"gf-warn":"animate";
-    gf.className="gf "+cls2;
-    gf.style.cssText=gf.style.cssText; // reflow trick
-    setTimeout(function(){gf.style.width=Math.min(target,100).toFixed(1)+"%";},20);
-  })();
+  /* ── CARD DE RESULTADO UNIFICADO ── escrito em resultado-final no final da função ── */
+  document.getElementById("resultado-trafo").innerHTML=""; /* limpo — não usado mais */
 
   /* GRÁFICO */
   var hrs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
@@ -1782,8 +2296,22 @@ function calcular(){
   var dQ=hrs.map(function(h){return cQ*CURVA[h];});
   var dT=hrs.map(function(h){return(cD+cQ)*CURVA[h];});
   var gc=DARK?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.06)";
-  var tc=DARK?"#5a6785":"#6b7280";
-  var lc=DARK?"#dde6f0":"#1a1d27";
+  var tc=DARK?"#8ba3be":"#526480";
+  var lc=DARK?"#e2eaf4":"#1a2030";
+
+  /* Cor das barras por status da hora */
+  var barColD=dT.map(function(t){
+    var p=maxD>0?(t/maxD*100):0;
+    if(p>100)return DARK?"rgba(255,80,100,0.55)":"rgba(220,40,60,0.45)";
+    if(p>85) return DARK?"rgba(255,184,48,0.55)":"rgba(200,130,0,0.45)";
+    return DARK?"rgba(0,184,255,0.50)":"rgba(0,130,200,0.40)";
+  });
+  var barColQ=dT.map(function(t){
+    var p=maxD>0?(t/maxD*100):0;
+    if(p>100)return DARK?"rgba(255,80,100,0.35)":"rgba(220,40,60,0.28)";
+    if(p>85) return DARK?"rgba(255,184,48,0.35)":"rgba(200,130,0,0.28)";
+    return DARK?"rgba(0,229,184,0.35)":"rgba(0,122,96,0.28)";
+  });
 
   if(CI){CI.destroy();CI=null;}
   var canvas=document.getElementById("chartCurvas");
@@ -1793,45 +2321,100 @@ function calcular(){
       data:{
         labels:hrs.map(function(h){return h+"h";}),
         datasets:[
-          {type:"line",label:"Total",data:dT,borderColor:lc,borderWidth:2.5,pointRadius:3,pointBackgroundColor:lc,tension:0.4,fill:false,order:1,yAxisID:"y"},
-          {type:"bar",label:"Doador",data:dD,backgroundColor:"rgba(0,184,255,0.45)",borderRadius:3,order:2,yAxisID:"y",stack:"s"},
-          {type:"bar",label:"Queimado",data:dQ,backgroundColor:"rgba(255,184,48,0.5)",borderRadius:3,order:2,yAxisID:"y",stack:"s"}
+          {
+            type:"line",label:"Carga Total",data:dT,
+            borderColor:lc,borderWidth:2.5,
+            pointRadius:3,pointBackgroundColor:lc,
+            pointBorderColor:lc,
+            tension:0.35,fill:false,order:1,yAxisID:"y"
+          },
+          {
+            type:"bar",label:"Doador",data:dD,
+            backgroundColor:barColD,
+            borderRadius:3,order:2,yAxisID:"y",stack:"s"
+          },
+          {
+            type:"bar",label:"Queimado",data:dQ,
+            backgroundColor:barColQ,
+            borderRadius:0,order:2,yAxisID:"y",stack:"s"
+          }
         ]
       },
       options:{
         responsive:true,maintainAspectRatio:false,
         plugins:{
-          legend:{display:false},
+          legend:{
+            display:true,
+            position:"bottom",
+            labels:{
+              color:tc,
+              font:{size:11},
+              padding:16,
+              usePointStyle:true,
+              pointStyleWidth:10,
+              generateLabels:function(chart){
+                /* Legenda customizada com indicadores de status */
+                var base=[
+                  {text:"Carga Total (kVA)",fillStyle:lc,strokeStyle:lc,lineWidth:2,pointStyle:"line"},
+                  {text:"Doador",fillStyle:DARK?"rgba(0,184,255,0.55)":"rgba(0,130,200,0.45)",strokeStyle:"transparent",lineWidth:0,pointStyle:"rect"},
+                  {text:"Queimado",fillStyle:DARK?"rgba(0,229,184,0.40)":"rgba(0,122,96,0.30)",strokeStyle:"transparent",lineWidth:0,pointStyle:"rect"},
+                  {text:"Viável (≤85%)",fillStyle:DARK?"rgba(0,184,255,0.5)":"rgba(0,130,200,0.4)",strokeStyle:"transparent",lineWidth:0,pointStyle:"rectRounded"},
+                  {text:"Atenção (85–100%)",fillStyle:DARK?"rgba(255,184,48,0.55)":"rgba(200,130,0,0.45)",strokeStyle:"transparent",lineWidth:0,pointStyle:"rectRounded"},
+                  {text:"Inviável (>100%)",fillStyle:DARK?"rgba(255,80,100,0.55)":"rgba(220,40,60,0.45)",strokeStyle:"transparent",lineWidth:0,pointStyle:"rectRounded"}
+                ];
+                return base.map(function(b,i){return Object.assign({index:i,hidden:false,datasetIndex:i<3?i:0},b);});
+              }
+            }
+          },
           tooltip:{callbacks:{
             title:function(ctx){return ctx[0].label;},
             afterBody:function(items){
               var h=items[0].dataIndex,t=dT[h],p=maxD>0?(t/maxD*100):0;
-              return["Total: "+t.toFixed(1)+" kVA ("+p.toFixed(0)+"%)",p>100?"\u2717 Inviável":p>85?"\u26a0 Atenção":"\u2713 Viável"];
+              return[
+                "Total: "+t.toFixed(1)+" kVA ("+p.toFixed(0)+"%)",
+                "Doador: "+dD[h].toFixed(1)+" kVA | Queimado: "+dQ[h].toFixed(1)+" kVA",
+                p>100?"\u2717 Inviável — excede o limite":p>85?"\u26a0 Atenção — próximo ao limite":"\u2713 Viável"
+              ];
             }
           }}
         },
         scales:{
           x:{stacked:true,ticks:{color:tc,font:{size:10},autoSkip:false,maxRotation:0},grid:{color:gc}},
-          y:{stacked:false,beginAtZero:true,max:Math.ceil(Math.max(maxD,Math.max.apply(null,dT.concat([0])))*1.15)||10,ticks:{color:tc,font:{size:10},callback:function(v){return v+" kVA";}},grid:{color:gc}}
+          y:{
+            stacked:false,beginAtZero:true,
+            max:Math.ceil(Math.max(maxD,Math.max.apply(null,dT.concat([0])))*1.18)||10,
+            ticks:{color:tc,font:{size:10},callback:function(v){return v+" kVA";}},
+            grid:{color:gc}
+          }
         }
       },
       plugins:[{id:"refs",afterDraw:function(chart){
         var ctx2=chart.ctx,y=chart.scales.y,x=chart.scales.x;
         if(!maxD)return;
-        function dl(val,col,dash,lbl){
+        function dl(val,col,dash,lbl,lblRight){
           var yp=y.getPixelForValue(val);
-          ctx2.save();ctx2.setLineDash(dash);ctx2.strokeStyle=col;ctx2.lineWidth=1.5;
+          if(yp<chart.chartArea.top||yp>chart.chartArea.bottom)return;
+          ctx2.save();
+          ctx2.setLineDash(dash);
+          ctx2.strokeStyle=col;
+          ctx2.lineWidth=1.5;
           ctx2.beginPath();ctx2.moveTo(x.left,yp);ctx2.lineTo(x.right,yp);ctx2.stroke();
-          if(lbl){ctx2.setLineDash([]);ctx2.fillStyle=col;ctx2.font="700 10px Consolas,monospace";ctx2.fillText(lbl,x.right-112,yp-4);}
+          if(lbl){
+            ctx2.setLineDash([]);
+            ctx2.fillStyle=col;
+            ctx2.font="bold 10px Consolas,monospace";
+            ctx2.textAlign="right";
+            ctx2.fillText(lbl,x.right-4,yp-4);
+          }
           ctx2.restore();
         }
-        dl(maxD,"rgba(255,77,77,0.8)",[6,4],"Limite "+maxD.toFixed(0)+" kVA");
-        dl(maxD*0.85,"rgba(245,166,35,0.55)",[3,4],null);
+        dl(maxD,"rgba(255,77,77,0.9)",[6,4],"Limite "+maxD.toFixed(0)+" kVA");
+        dl(maxD*0.85,"rgba(245,166,35,0.6)",[3,5],"Atenção 85%");
       }}]
     });
   }
 
-  /* JANELAS HORÁRIAS */
+  /* JANELAS HORÁRIAS — só para o jsum do card-curvas */
   periodosHrs=[];
   if(!inv&&maxD>0){
     var statusHrs=hrs.map(function(h){var p=(dT[h]/maxD)*100;return p>100?"inv":p>85?"warn":"ok";});
@@ -1844,60 +2427,62 @@ function calcular(){
       periodosHrs.push({de:pi,ate:pj-1,s:ps,maxPct:maxPct});
       pi=pj;
     }
-
     var f2=function(h){return h+"h";};
-    var fmtP=function(arr){return arr.map(function(p){return p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);}).join(", ");};
-
-    /* Timeline */
     var barSegs="";
     periodosHrs.forEach(function(p){
       var w=((p.ate-p.de+1)/24*100).toFixed(2);
       var lbl=p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);
-      var showLbl=(p.ate-p.de+1)>=2;
-      barSegs+="<div class=\"jwin-seg s-"+p.s+"\" style=\"width:"+w+"%\" title=\""+lbl+": "+(p.s==="ok"?"Viável":p.s==="warn"?"Atenção":"Inviável")+"\">"+
-        (showLbl?lbl:"")+
-      "</div>";
+      barSegs+="<div class=\"jwin-seg s-"+p.s+"\" style=\"width:"+w+"%\" title=\""+lbl+": "+(p.s==="ok"?"Viável":p.s==="warn"?"Atenção":"Inviável")+"\">"+((p.ate-p.de+1)>=2?lbl:"")+"</div>";
     });
-
     var lblsHtml="";
     [0,6,12,18,23].forEach(function(h){
-      var left=(h/24*100).toFixed(1);
-      lblsHtml+="<span class=\"jwin-lbl\" style=\"left:"+left+"%\">"+h+"h</span>";
+      lblsHtml+="<span class=\"jwin-lbl\" style=\"left:"+(h/24*100).toFixed(1)+"%\">"+h+"h</span>";
     });
-
     var rowsHtml="";
     periodosHrs.forEach(function(p){
       var lbl=p.de===p.ate?f2(p.de):f2(p.de)+"\u2013"+f2(p.ate+1);
       var ic=p.s==="ok"?"\u2713":p.s==="warn"?"\u26a0":"\u2717";
       var desc=p.s==="ok"?"Interligação viável":p.s==="warn"?"Viável com atenção — próximo ao limite":"Inviável — carga excede o limite";
       var pctColor=p.s==="ok"?"var(--ok)":p.s==="warn"?"var(--warn)":"var(--danger)";
-      rowsHtml+="<div class=\"jwin-row s-"+p.s+"\">"+
-        "<span class=\"jwin-row-ic\">"+ic+"</span>"+
+      rowsHtml+="<div class=\"jwin-row s-"+p.s+"\"><span class=\"jwin-row-ic\">"+ic+"</span>"+
         "<span class=\"jwin-row-hrs s-"+p.s+"\">"+lbl+"</span>"+
         "<span class=\"jwin-row-desc\">"+desc+"</span>"+
-        "<span class=\"jwin-row-pct\" style=\"color:"+pctColor+"\">"+p.maxPct.toFixed(0)+"%</span>"+
-      "</div>";
+        "<span class=\"jwin-row-pct\" style=\"color:"+pctColor+"\">"+p.maxPct.toFixed(0)+"%</span></div>";
     });
-
-    var jsumHtml="<div class=\"jwin-block\">"+
-      "<div class=\"jwin-title\">Distribuição horária — 0h às 23h</div>"+
-      "<div class=\"jwin-bar\">"+barSegs+"</div>"+
-      "<div class=\"jwin-labels\">"+lblsHtml+"</div>"+
-      "<div class=\"jwin-janelas\">"+rowsHtml+"</div>"+
-      "<div class=\"jwin-legend\">"+
-        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(0,229,184,.6)\"></div>Viável (&le;85%)</div>"+
-        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(255,184,48,.65)\"></div>Atenção (85\u2013100%)</div>"+
-        "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(255,77,106,.6)\"></div>Inviável (&gt;100%)</div>"+
-      "</div>"+
-    "</div>";
-    document.getElementById("jsum").innerHTML=jsumHtml;
+    document.getElementById("jsum").innerHTML=
+      "<div class=\"jwin-block\">"+
+        "<div class=\"jwin-title\">Distribuição horária — 0h às 23h</div>"+
+        "<div class=\"jwin-bar\">"+barSegs+"</div>"+
+        "<div class=\"jwin-labels\">"+lblsHtml+"</div>"+
+        "<div class=\"jwin-janelas\">"+rowsHtml+"</div>"+
+        "<div class=\"jwin-legend\">"+
+          "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(0,229,184,.6)\"></div>Viável (&le;85%)</div>"+
+          "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(255,184,48,.65)\"></div>Atenção (85\u2013100%)</div>"+
+          "<div class=\"jwin-leg-item\"><div class=\"jwin-leg-dot\" style=\"background:rgba(255,77,106,.6)\"></div>Inviável (&gt;100%)</div>"+
+        "</div>"+
+      "</div>";
   } else {
-    var jsinvMsg=inv?"<div class=\"jwin-row s-inv\" style=\"margin-top:8px;\"><span>\u2717</span><span style=\"color:var(--danger);font-weight:700;\">Interligação inviável — incompatibilidade de fase.</span></div>":"";
-    document.getElementById("jsum").innerHTML=jsinvMsg;
+    document.getElementById("jsum").innerHTML=inv?"<div class=\"jwin-row s-inv\" style=\"margin-top:8px;\"><span>\u2717</span><span style=\"color:var(--danger);font-weight:700;\">Interligação inviável — incompatibilidade de fase.</span></div>":"";
   }
 
-  /* RESULTADO FINAL (CABOS) */
-  if(!S.vaos.length){document.getElementById("resultado-final").innerHTML="";return;}
+  // ═══════════════════════════════════════════
+  // CARD DE RESULTADO UNIFICADO
+  // ═══════════════════════════════════════════
+
+  /* Se não há vãos, ainda mostra resultado da capacidade */
+  if(!S.vaos.length){
+    document.getElementById("resultado-final").innerHTML=
+      "<div class=\"rb2 "+cls+"\">"+
+        "<div class=\"rb2-header\"><h3>"+tit+"</h3><p>"+msg+"</p></div>"+
+        metricsHtml+
+        "<div class=\"rb2-sep\"></div>"+
+        detFasesHtml+
+        "<div class=\"info\" style=\"margin-top:12px;\">Adicione os vãos de cabo acima para completar a verificação de capacidade dos condutores.</div>"+
+      "</div>";
+    animateGauge();
+    return;
+  }
+
   var iVao=iDem(cQ,S.faseD),todosOk=true;
   S.vaos.forEach(function(vao){
     var cab=CABOS[vao.cabo],ok=iVao<=cab.i;
@@ -1911,96 +2496,9 @@ function calcular(){
   });
 
   var cg=(inv||cls==="danger"||!todosOk)?"danger":cls==="warn"?"warn":"ok";
-  var tg=cg==="ok"?"\u2713 Interligação aprovada":cg==="warn"?"\u26a0 Aprovada com atenção":"\u2717 Interligação reprovada";
   var rep=S.vaos.filter(function(v){return iVao>CABOS[v.cabo].i;});
 
-  /* Vãos reprovados */
-  var detHtml="";
-  if(rep.length){
-    var repRows=rep.map(function(v){
-      var cab=CABOS[v.cabo];
-      return "<div style=\"font-family:var(--mono);color:var(--text2);font-size:12px;padding:3px 0;\">"+
-        "Vão "+(S.vaos.indexOf(v)+1)+" — "+cab.n+
-        ": limite <strong style=\"color:var(--danger)\">"+cab.i+" A</strong>"+
-        ", demanda <strong>"+iVao.toFixed(1)+" A</strong>"+
-      "</div>";
-    }).join("");
-    detHtml="<div style=\"margin-top:10px;padding:10px 12px;background:var(--danger-dim);border:1px solid rgba(255,77,77,.25);border-radius:8px;\">"+
-      "<strong style=\"color:var(--danger);font-size:12px;\">Vãos com capacidade insuficiente:</strong>"+
-      "<div style=\"margin-top:6px;\">"+repRows+"</div>"+
-    "</div>";
-  }
-
-  /* Conclusão com janelas */
-  var conclHtml="";
-  if(!inv&&maxD>0){
-    var oksH=periodosHrs.filter(function(p){return p.s==="ok";});
-    var warnsH=periodosHrs.filter(function(p){return p.s==="warn";});
-    var invsH=periodosHrs.filter(function(p){return p.s==="inv";});
-    var f2c=function(h){return h+"h";};
-    // Agrupa horas contíguas de períodos ok+warn em faixas unificadas
-    var mergeRanges=function(periodos){
-      // Coleta todas as horas individuais que pertencem a esses períodos
-      var horas=[];
-      periodos.forEach(function(p){for(var h=p.de;h<=p.ate;h++){horas.push(h);}});
-      horas.sort(function(a,b){return a-b;});
-      if(!horas.length){return "";}
-      // Agrupa em faixas contíguas
-      var faixas=[];
-      var ini=horas[0],fim=horas[0];
-      for(var i=1;i<horas.length;i++){
-        if(horas[i]===fim+1){fim=horas[i];}
-        else{faixas.push({de:ini,ate:fim});ini=horas[i];fim=horas[i];}
-      }
-      faixas.push({de:ini,ate:fim});
-      // Formata cada faixa: hora única = "19h", faixa = "0h–19h"
-      return faixas.map(function(f){
-        if(f.de===f.ate){return f.de+"h";}
-        return f.de+"h\u2013"+(f.ate+1)+"h";
-      }).join(", ");
-    };
-    var fmtPC=function(arr){return arr.map(function(p){return p.de===p.ate?f2c(p.de):f2c(p.de)+"\u2013"+f2c(p.ate+1);}).join(", ");};
-    var hasInv=invsH.length>0;
-    var hasOk=oksH.length>0||warnsH.length>0;
-
-    if(cg==="ok"){
-      conclHtml="<div class=\"concl-block s-ok\">"+
-        "<div class=\"concl-title s-ok\">\u2713 Interligação viável em todos os horários</div>"+
-        "<div class=\"concl-text\">A carga combinada permanece dentro do limite do doador ao longo de todo o dia.</div>"+
-      "</div>";
-    } else if(cg==="warn"&&!hasInv){
-      conclHtml="<div class=\"concl-block s-warn\">"+
-        "<div class=\"concl-title s-warn\">\u26a0 Viável, mas próxima ao limite</div>"+
-        "<div class=\"concl-text\">A interligação pode ser realizada. Monitore o carregamento — a margem é pequena no pico.</div>"+
-      "</div>";
-    } else if(hasInv&&hasOk){
-      var okList=mergeRanges(oksH.concat(warnsH));
-      var invList=mergeRanges(invsH);
-      conclHtml="<div class=\"concl-block s-partial\">"+
-        "<div class=\"concl-title s-partial\">\u26a0 Interligação parcialmente viável — atenção ao horário</div>"+
-        "<div class=\"concl-text\" style=\"margin-bottom:12px;\">A carga excede a capacidade do doador durante o pico. "+
-          "A interligação <strong style=\"color:var(--text)\">pode ser realizada nos demais horários</strong> "+
-          "e deve ser <strong style=\"color:var(--danger)\">evitada no período inviável</strong>.</div>"+
-        "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;\">"+
-          "<div style=\"padding:10px 12px;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);border-radius:8px;\">"+
-            "<div style=\"font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ok);margin-bottom:6px;\">Pode interligar</div>"+
-            "<div style=\"font-family:var(--mono);font-weight:700;color:var(--ok);font-size:13px;\">"+okList+"</div>"+
-          "</div>"+
-          "<div style=\"padding:10px 12px;background:rgba(255,77,77,.07);border:1px solid rgba(255,77,77,.2);border-radius:8px;\">"+
-            "<div style=\"font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--danger);margin-bottom:6px;\">Não interligar</div>"+
-            "<div style=\"font-family:var(--mono);font-weight:700;color:var(--danger);font-size:13px;\">"+invList+"</div>"+
-          "</div>"+
-        "</div>"+
-      "</div>";
-    } else if(hasInv&&!hasOk){
-      conclHtml="<div class=\"concl-block s-inv\">"+
-        "<div class=\"concl-title s-inv\">\u2717 Interligação inviável em todos os horários</div>"+
-        "<div class=\"concl-text\">A carga total excede a capacidade do doador mesmo nos horários de menor demanda.</div>"+
-      "</div>";
-    }
-  }
-
-  // Título unificado baseado em TUDO: carga + cabos + janelas
+  /* Título final único — abrange tudo */
   var titFinal,clsFinal;
   if(inv||rep.length){
     clsFinal="danger";
@@ -2021,21 +2519,107 @@ function calcular(){
       clsFinal="ok";titFinal="\u2713 Interligação aprovada";
     }
   } else {
-    clsFinal=cg;titFinal=tg;
+    clsFinal=cg;titFinal=cg==="ok"?"\u2713 Interligação aprovada":cg==="warn"?"\u26a0 Aprovada com atenção":"\u2717 Interligação reprovada";
   }
+
+  /* Cabos reprovados */
+  var detHtml="";
+  if(rep.length){
+    var repRows=rep.map(function(v){
+      var cab=CABOS[v.cabo];
+      return "<div style=\"font-family:var(--mono);color:var(--text2);font-size:12px;padding:3px 0;\">"+
+        "Vão "+(S.vaos.indexOf(v)+1)+" — "+cab.n+
+        ": limite <strong style=\"color:var(--danger)\">"+cab.i+" A</strong>"+
+        ", demanda <strong>"+iVao.toFixed(1)+" A</strong>"+
+      "</div>";
+    }).join("");
+    detHtml="<div style=\"margin-top:10px;padding:10px 12px;background:var(--danger-dim);border:1px solid rgba(255,77,77,.25);border-radius:8px;\">"+
+      "<strong style=\"color:var(--danger);font-size:12px;\">\u2717 Vãos com capacidade insuficiente:</strong>"+
+      "<div style=\"margin-top:6px;\">"+repRows+"</div>"+
+    "</div>";
+  }
+
+  /* Janelas horárias */
+  var conclHtml="";
+  if(!inv&&maxD>0){
+    var oksH=periodosHrs.filter(function(p){return p.s==="ok";});
+    var warnsH=periodosHrs.filter(function(p){return p.s==="warn";});
+    var invsH=periodosHrs.filter(function(p){return p.s==="inv";});
+    var hasInv=invsH.length>0;
+    var hasOk=oksH.length>0||warnsH.length>0;
+    var mergeRanges=function(periodos){
+      var horas=[];
+      periodos.forEach(function(p){for(var h=p.de;h<=p.ate;h++){horas.push(h);}});
+      horas.sort(function(a,b){return a-b;});
+      if(!horas.length){return "";}
+      var faixas=[],ini=horas[0],fim=horas[0];
+      for(var i=1;i<horas.length;i++){
+        if(horas[i]===fim+1){fim=horas[i];}
+        else{faixas.push({de:ini,ate:fim});ini=horas[i];fim=horas[i];}
+      }
+      faixas.push({de:ini,ate:fim});
+      return faixas.map(function(f){return f.de===f.ate?f.de+"h":f.de+"h\u2013"+(f.ate+1)+"h";}).join(", ");
+    };
+    if(clsFinal==="ok"){
+      conclHtml="<div class=\"concl-block s-ok\"><div class=\"concl-title s-ok\">\u2713 Viável em todos os horários</div>"+
+        "<div class=\"concl-text\">A carga combinada permanece dentro do limite ao longo de todo o dia.</div></div>";
+    } else if(clsFinal==="warn"&&!hasInv){
+      conclHtml="<div class=\"concl-block s-warn\"><div class=\"concl-title s-warn\">\u26a0 Próxima ao limite no pico</div>"+
+        "<div class=\"concl-text\">Interligação viável. Monitore o carregamento — margem pequena no pico.</div></div>";
+    } else if(hasInv&&hasOk){
+      var okList=mergeRanges(oksH.concat(warnsH));
+      var invList=mergeRanges(invsH);
+      conclHtml="<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;\">"+
+        "<div style=\"padding:10px 12px;background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.25);border-radius:8px;\">"+
+          "<div style=\"font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ok);margin-bottom:6px;\">\u2713 Pode interligar</div>"+
+          "<div style=\"font-family:var(--mono);font-weight:700;color:var(--ok);font-size:14px;\">"+okList+"</div>"+
+        "</div>"+
+        "<div style=\"padding:10px 12px;background:rgba(255,77,77,.07);border:1px solid rgba(255,77,77,.25);border-radius:8px;\">"+
+          "<div style=\"font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--danger);margin-bottom:6px;\">\u2717 Não interligar</div>"+
+          "<div style=\"font-family:var(--mono);font-weight:700;color:var(--danger);font-size:14px;\">"+invList+"</div>"+
+        "</div>"+
+      "</div>";
+    } else if(hasInv&&!hasOk){
+      conclHtml="<div class=\"concl-block s-inv\"><div class=\"concl-title s-inv\">\u2717 Inviável em todos os horários</div>"+
+        "<div class=\"concl-text\">A carga total excede a capacidade do doador mesmo nos horários de menor demanda.</div></div>";
+    }
+  }
+
+  /* Linha de cabos resumida */
+  var cabosResumoHtml=
+    "<div class=\"rb2-sep\"></div>"+
+    "<div class=\"res-detail-grid\" style=\"margin-bottom:8px;\">"+
+      "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Cabos verificados</span>"+
+        "<span class=\"res-detail-val\">"+S.vaos.length+" vão"+(S.vaos.length!==1?"s":"")+"</span></div>"+
+      "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Corrente no pico</span>"+
+        "<span class=\"res-detail-val\">"+iVao.toFixed(1)+" A</span></div>"+
+      "<div class=\"res-detail-item\"><span class=\"res-detail-lbl\">Reprovados</span>"+
+        "<span class=\"res-detail-val\" style=\"color:"+(rep.length?"var(--danger)":"var(--ok)")+"\">"+
+        (rep.length?rep.length+" vão"+(rep.length!==1?"s":""):"Todos aprovados")+"</span></div>"+
+    "</div>";
 
   document.getElementById("resultado-final").innerHTML=
     "<div class=\"rb2 "+clsFinal+"\">"+
-      "<div class=\"rb2-header\"><h3>"+titFinal+"</h3></div>"+
-      "<div class=\"res-metrics\">"+
-        mkMetric(rep.length+(rep.length!==1?" vãos":" vão"),"","Reprovados",rep.length?"var(--danger)":"var(--ok)")+
-        mkMetric(S.vaos.length+(S.vaos.length!==1?" vãos":" vão"),"","Verificados","")+
-        mkMetric(iVao.toFixed(1)," A","Corrente pico","")+
-        mkMetric(cQ.toFixed(1)," kVA","Carga interligada","")+
-      "</div>"+
+      "<div class=\"rb2-header\"><h3>"+titFinal+"</h3><p>"+msg+"</p></div>"+
+      metricsHtml+
+      "<div class=\"rb2-sep\"></div>"+
+      detFasesHtml+
+      cabosResumoHtml+
       conclHtml+
       detHtml+
     "</div>";
+
+  animateGauge();
+}
+
+function animateGauge(){
+  var gf=document.getElementById("gauge-fill");
+  if(!gf)return;
+  var target=parseFloat(gf.getAttribute("data-pct")||"0");
+  var cls2=target>100?"gf-danger":target>85?"gf-warn":"animate";
+  gf.className="gf "+cls2;
+  gf.style.cssText=gf.style.cssText;
+  setTimeout(function(){gf.style.width=Math.min(target,100).toFixed(1)+"%";},20);
 }
 
 /* G-DIS */
@@ -2047,47 +2631,29 @@ var CAIXA_KEYS=["CX","CAIXA","MOTO"];
 
 function gAtualizar(){
   var inp=document.getElementById("gin").value.trim();
-  var hasOut=GNOTAS.length>0;
-  /* Toggle empty state */
-  var emptyEl=document.getElementById("gdis-empty-state");
-  if(emptyEl){
-    if(inp){
-      emptyEl.style.display="none";
-    } else {
-      emptyEl.style.display="flex";
-    }
+  /* Auto-extract whenever there's content, otherwise reset */
+  if(inp){gExtrair();}
+  else{
+    GNOTAS=[];G_MAPA={};
+    var emptyEl=document.getElementById("gdis-empty-state");
+    if(emptyEl){emptyEl.style.display="flex";}
+    document.getElementById("gout").value="";
+    document.getElementById("gstat-total").textContent="—";
+    document.getElementById("gstat-dup").textContent="—";
+    gUpdateButtons();
   }
-  document.getElementById("gBtnEx").disabled=!inp;
-  document.getElementById("gBtnLp").disabled=!inp&&!hasOut;
-  document.getElementById("gBtnCp").disabled=!hasOut;
-  var nCx=GNOTAS.filter(function(os){return G_MAPA[os]==="caixa";}).length;
-  var nPst=GNOTAS.filter(function(os){return G_MAPA[os]==="poste";}).length;
-  document.getElementById("gBtnCx").disabled=!nCx;
-  document.getElementById("gBtnPst").disabled=!nPst;
-  // badges
-  var bT=document.getElementById("gBadgeTotal");
-  var bC=document.getElementById("gBadgeCx");
-  var bP=document.getElementById("gBadgePst");
-  if(bT)bT.textContent=hasOut?GNOTAS.length:"—";
-  if(bC)bC.textContent=nCx||"—";
-  if(bP)bP.textContent=nPst||"—";
-  /* Update KPI strip */
-  var kg1=document.getElementById("kpi-gd-total");
-  var kg2=document.getElementById("kpi-gd-cx");
-  var kg3=document.getElementById("kpi-gd-pst");
-  if(kg1) kg1.textContent=hasOut?GNOTAS.length:"—";
-  if(kg2) kg2.textContent=nCx||"—";
-  if(kg3) kg3.textContent=nPst||"—";
 }
-
 function gExtrair(){
   var txt=document.getElementById("gin").value.trim();
+  /* Toggle empty state */
+  var emptyEl=document.getElementById("gdis-empty-state");
+  if(emptyEl){emptyEl.style.display=txt?"none":"flex";}
   if(!txt){
     GNOTAS=[];G_MAPA={};
     document.getElementById("gout").value="";
     document.getElementById("gstat-total").textContent="—";
     document.getElementById("gstat-dup").textContent="—";
-    gAtualizar();return;
+    gUpdateButtons();return;
   }
   requestAnimationFrame(function(){
     var m=[...txt.matchAll(RNOTA)].map(function(x){return x[1];});
@@ -2112,8 +2678,33 @@ function gExtrair(){
       document.getElementById("gout").value=u.join(",");}
     else{
       document.getElementById("gout").value="";}
-    gAtualizar();
+    gUpdateButtons();
   });
+}
+
+function gUpdateButtons(){
+  var inp=document.getElementById("gin").value.trim();
+  var hasOut=GNOTAS.length>0;
+  var nCx=GNOTAS.filter(function(os){return G_MAPA[os]==="caixa";}).length;
+  var nPst=GNOTAS.filter(function(os){return G_MAPA[os]==="poste";}).length;
+  document.getElementById("gBtnLp").disabled=!inp&&!hasOut;
+  document.getElementById("gBtnCp").disabled=!hasOut;
+  document.getElementById("gBtnCx").disabled=!nCx;
+  document.getElementById("gBtnPst").disabled=!nPst;
+  // badges
+  var bT=document.getElementById("gBadgeTotal");
+  var bC=document.getElementById("gBadgeCx");
+  var bP=document.getElementById("gBadgePst");
+  if(bT)bT.textContent=hasOut?GNOTAS.length:"—";
+  if(bC)bC.textContent=nCx||"—";
+  if(bP)bP.textContent=nPst||"—";
+  /* Update KPI strip */
+  var kg1=document.getElementById("kpi-gd-total");
+  var kg2=document.getElementById("kpi-gd-cx");
+  var kg3=document.getElementById("kpi-gd-pst");
+  if(kg1) kg1.textContent=hasOut?GNOTAS.length:"—";
+  if(kg2) kg2.textContent=nCx||"—";
+  if(kg3) kg3.textContent=nPst||"—";
 }
 
 function copyText(txt){
@@ -2651,7 +3242,11 @@ function cvRenderTable(){
 }
 
 /* INIT */
-addVao();addVao();calcular();gAtualizar();cvRenderVoltageButtons();cvRenderTable();consultRender();
+gAtualizar();cvRenderVoltageButtons();cvRenderTable();consultRender();
+/* Interligação: inicia sem vãos e sem resultado */
+renderVaos();
+/* Editor de curva */
+requestAnimationFrame(function(){ceInit();ceUpdateInfo();});
 
 </script>
 <div id="chip-tooltip"></div>
