@@ -160,6 +160,108 @@
 
               <!-- HERO -->
               <div class="home-hero">
+                <div class="page-hero hero-home" style="margin-bottom:20px;">
+                  <div class="ph-svg-wrap">
+                    <svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                      <!-- grade de fundo -->
+                      <line x1="0" y1="30" x2="760" y2="30" class="hh-grid-line"/>
+                      <line x1="0" y1="60" x2="760" y2="60" class="hh-grid-line"/>
+                      <line x1="0" y1="90" x2="760" y2="90" class="hh-grid-line"/>
+                      <line x1="190" y1="0" x2="190" y2="120" class="hh-grid-line"/>
+                      <line x1="380" y1="0" x2="380" y2="120" class="hh-grid-line"/>
+                      <line x1="570" y1="0" x2="570" y2="120" class="hh-grid-line"/>
+
+                      <!-- MONITOR ESQUERDO -->
+                      <rect x="30" y="8" width="130" height="88" rx="5" class="hh-screen"/>
+                      <rect x="35" y="13" width="120" height="78" rx="3" class="hh-screen-inner"/>
+                      <!-- barra título -->
+                      <rect x="35" y="13" width="120" height="10" rx="3" fill="rgba(0,229,184,.08)"/>
+                      <circle cx="42" cy="18" r="2.5" fill="rgba(255,77,106,.5)"/>
+                      <circle cx="50" cy="18" r="2.5" fill="rgba(255,184,48,.5)"/>
+                      <circle cx="58" cy="18" r="2.5" fill="rgba(0,229,184,.5)"/>
+                      <text x="68" y="21" class="hh-label-accent">PAINEL OD/PI</text>
+                      <!-- gráfico de linha em tempo real -->
+                      <polyline points="40,85 55,72 65,78 78,58 90,65 103,48 115,52 128,38 143,44" class="hh-chart-line"/>
+                      <polyline points="40,90 55,84 65,88 78,80 90,85 103,74 115,78 128,70 143,75" class="hh-chart-line2"/>
+                      <!-- dot piscante no final -->
+                      <circle cx="143" cy="44" r="3" class="hh-dot hh-blink"/>
+                      <!-- scanline -->
+                      <rect x="35" y="23" width="120" height="2" fill="rgba(0,229,184,.06)" class="hh-scanline"/>
+                      <!-- labels eixo -->
+                      <text x="38" y="97" class="hh-label">00h</text>
+                      <text x="86" y="97" class="hh-label">12h</text>
+                      <text x="134" y="97" class="hh-label">24h</text>
+                      <!-- stand -->
+                      <rect x="87" y="96" width="6" height="8" class="hh-stand"/>
+                      <rect x="75" y="104" width="30" height="4" rx="2" class="hh-stand"/>
+
+                      <!-- MONITOR CENTRAL (maior) -->
+                      <rect x="290" y="4" width="180" height="102" rx="6" class="hh-screen" style="stroke-width:1.5"/>
+                      <rect x="296" y="10" width="168" height="88" rx="4" class="hh-screen-inner"/>
+                      <!-- barra -->
+                      <rect x="296" y="10" width="168" height="12" rx="4" fill="rgba(0,184,230,.08)"/>
+                      <circle cx="304" cy="16" r="2.5" fill="rgba(255,77,106,.5)"/>
+                      <circle cx="312" cy="16" r="2.5" fill="rgba(255,184,48,.5)"/>
+                      <circle cx="320" cy="16" r="2.5" fill="rgba(0,229,184,.5)"/>
+                      <text x="332" y="20" class="hh-label-accent">CENTRO DE OPERAÇÕES</text>
+                      <!-- barras de KPI -->
+                      <rect x="302" y="66" width="18" height="28" class="hh-chart-bar"/>
+                      <rect x="326" y="54" width="18" height="40" class="hh-chart-bar" style="fill:rgba(0,229,184,.45)"/>
+                      <rect x="350" y="60" width="18" height="34" class="hh-chart-bar"/>
+                      <rect x="374" y="44" width="18" height="50" class="hh-chart-bar" style="fill:rgba(0,229,184,.5)"/>
+                      <rect x="398" y="58" width="18" height="36" class="hh-chart-bar"/>
+                      <rect x="422" y="50" width="18" height="44" class="hh-chart-bar" style="fill:rgba(0,229,184,.4)"/>
+                      <rect x="446" y="62" width="16" height="32" class="hh-chart-bar"/>
+                      <!-- linha de tendência por cima -->
+                      <polyline points="311,64 335,52 359,58 383,42 407,56 431,48 455,60" class="hh-chart-line" style="stroke:var(--accent2);stroke-width:1.2;"/>
+                      <!-- labels -->
+                      <text x="305" y="100" class="hh-label">PMAL</text>
+                      <text x="328" y="100" class="hh-label">PMAR</text>
+                      <text x="350" y="100" class="hh-label">EMG</text>
+                      <text x="376" y="100" class="hh-label">PROG</text>
+                      <text x="400" y="100" class="hh-label">BT</text>
+                      <text x="425" y="100" class="hh-label">MT</text>
+                      <text x="448" y="100" class="hh-label">PI</text>
+                      <!-- scanline central -->
+                      <rect x="296" y="22" width="168" height="2" fill="rgba(0,184,230,.05)" class="hh-scanline"/>
+                      <!-- dot pulsante -->
+                      <circle cx="380" cy="42" r="3" class="hh-dot hh-blink"/>
+                      <circle cx="380" cy="42" r="7" class="hh-pulse-ring hh-pulse" style="animation-delay:.3s"/>
+                      <!-- stand -->
+                      <rect x="377" y="106" width="6" height="6" class="hh-stand"/>
+                      <rect x="360" y="112" width="40" height="4" rx="2" class="hh-stand"/>
+
+                      <!-- MONITOR DIREITO -->
+                      <rect x="600" y="8" width="130" height="88" rx="5" class="hh-screen"/>
+                      <rect x="605" y="13" width="120" height="78" rx="3" class="hh-screen-inner"/>
+                      <rect x="605" y="13" width="120" height="10" rx="3" fill="rgba(255,184,48,.07)"/>
+                      <circle cx="612" cy="18" r="2.5" fill="rgba(255,77,106,.5)"/>
+                      <circle cx="620" cy="18" r="2.5" fill="rgba(255,184,48,.5)"/>
+                      <circle cx="628" cy="18" r="2.5" fill="rgba(0,229,184,.5)"/>
+                      <text x="638" y="21" class="hh-label" style="fill:var(--warn);">ALERTAS ATIVOS</text>
+                      <!-- lista de alertas -->
+                      <circle cx="614" cy="33" r="3" class="hh-dot-danger hh-blink-slow"/>
+                      <rect x="620" y="30" width="70" height="5" rx="2" fill="rgba(255,77,106,.2)"/>
+                      <circle cx="614" cy="47" r="3" class="hh-dot-warn"/>
+                      <rect x="620" y="44" width="55" height="5" rx="2" fill="rgba(255,184,48,.2)"/>
+                      <circle cx="614" cy="61" r="3" class="hh-dot-warn"/>
+                      <rect x="620" y="58" width="65" height="5" rx="2" fill="rgba(255,184,48,.2)"/>
+                      <circle cx="614" cy="75" r="3" class="hh-dot" style="fill:var(--ok)"/>
+                      <rect x="620" y="72" width="45" height="5" rx="2" fill="rgba(0,229,184,.15)"/>
+                      <!-- stand -->
+                      <rect x="657" y="96" width="6" height="8" class="hh-stand"/>
+                      <rect x="645" y="104" width="30" height="4" rx="2" class="hh-stand"/>
+
+                      <!-- CABOS entre monitores -->
+                      <path d="M 160 52 Q 225 70 290 52" fill="none" stroke="var(--border2)" stroke-width="1" stroke-dasharray="3 4"/>
+                      <path d="M 470 52 Q 535 70 600 52" fill="none" stroke="var(--border2)" stroke-width="1" stroke-dasharray="3 4"/>
+                    </svg>
+                  </div>
+                  <div class="ph-info">
+                    <div class="ph-info-title">Centro de Operações — OD/PI</div>
+                    <div class="ph-info-sub">Ferramentas, dashboards e automações para o controle operacional da distribuição.</div>
+                  </div>
+                </div>
                 <div class="home-hero-inner">
                   <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
                   <div class="home-title">Ferramentas de<br><span>Operação e Controle</span></div>
@@ -718,7 +820,7 @@
                   <span style="font-size:10.5px;color:var(--muted);">Pico: <strong id="curva-pico-hora"
                       style="color:var(--accent);font-family:var(--mono);">19h</strong> — <strong id="curva-pico-pct"
                       style="color:var(--accent);font-family:var(--mono);">100%</strong></span>
-                  <span style="font-size:10px;color:var(--hint);margin-left:auto;font-style:italic;">Espelhe a curva do
+                  <span style="font-size:11px;color:var(--muted);margin-left:auto;font-style:italic;">Espelhe a curva do
                     Gemini ↗</span>
                 </div>
                 <div style="position:relative;width:100%;user-select:none;">
@@ -766,6 +868,102 @@
           <!-- ── G-DIS ── -->
           <div class="pg" id="page-gdis">
             <div class="pg-inner">
+              <!-- Hero G-Dis -->
+              <div class="page-hero hero-gdis" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 100" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+
+                    <!-- ── LADO ESQUERDO: tela G-Dis bruta ── -->
+                    <rect x="20" y="6" width="220" height="88" rx="8" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1.2"/>
+                    <!-- header -->
+                    <rect x="20" y="6" width="220" height="18" rx="8" fill="rgba(0,184,230,.12)"/>
+                    <rect x="20" y="16" width="220" height="8" fill="rgba(0,184,230,.06)"/>
+                    <circle cx="33" cy="15" r="3" fill="rgba(0,184,230,.5)"/>
+                    <text x="42" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">G-DIS · TEXTO BRUTO</text>
+                    <!-- linhas de dados misturados -->
+                    <rect x="32" y="30" width="110" height="4" rx="2" fill="var(--border3)" opacity=".7"/>
+                    <rect x="32" y="30" width="48"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
+                    <rect x="32" y="39" width="148" height="4" rx="2" fill="var(--border3)" opacity=".6"/>
+                    <rect x="32" y="48" width="62"  height="4" rx="2" fill="var(--accent2)" opacity=".45"/>
+                    <rect x="98" y="48" width="72"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
+                    <rect x="32" y="57" width="96"  height="4" rx="2" fill="var(--border3)" opacity=".6"/>
+                    <rect x="32" y="66" width="52"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
+                    <rect x="88" y="66" width="84"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
+                    <rect x="32" y="75" width="128" height="4" rx="2" fill="var(--border3)" opacity=".4"/>
+                    <rect x="32" y="84" width="76"  height="4" rx="2" fill="var(--border3)" opacity=".3"/>
+                    <!-- scanner -->
+                    <rect x="20" y="45" width="220" height="8" rx="0" fill="rgba(0,184,230,.06)" class="gg-scan-line"/>
+
+                    <!-- ── MEIO: processo ── -->
+                    <!-- kbd Ctrl+C -->
+                    <rect x="268" y="22" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
+                    <text x="275" y="32" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+C</text>
+                    <!-- seta para baixo -->
+                    <line x1="286" y1="36" x2="286" y2="48" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <!-- círculo central com seta -->
+                    <circle cx="286" cy="50" r="22" fill="rgba(0,229,184,.06)" stroke="rgba(0,229,184,.2)" stroke-width="1"/>
+                    <line x1="270" y1="50" x2="296" y2="50" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+                    <polygon points="296,46 304,50 296,54" fill="var(--accent)"/>
+                    <!-- seta para baixo -->
+                    <line x1="286" y1="72" x2="286" y2="60" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <!-- kbd Ctrl+V -->
+                    <rect x="268" y="72" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
+                    <text x="276" y="82" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+V</text>
+
+                    <!-- ── LADO DIREITO: resultado limpo ── -->
+                    <rect x="330" y="6" width="410" height="88" rx="8" fill="var(--surface2)" stroke="var(--accent2)" stroke-width="1.2"/>
+                    <!-- header -->
+                    <rect x="330" y="6" width="410" height="18" rx="8" fill="rgba(0,184,230,.15)"/>
+                    <rect x="330" y="16" width="410" height="8" fill="rgba(0,184,230,.08)"/>
+                    <circle cx="343" cy="15" r="3" fill="rgba(0,229,184,.7)"/>
+                    <text x="352" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">NOTAS EXTRAÍDAS · PRONTAS PARA COLAR</text>
+
+                    <!-- ROW 1: 5 chips -->
+                    <rect x="342" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="367" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">84521</text>
+                    <text x="395" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="400" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="425" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">91047</text>
+                    <text x="453" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="458" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="483" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">73812</text>
+                    <text x="511" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="516" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="541" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">55203</text>
+                    <text x="569" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="574" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="599" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">66543</text>
+
+                    <!-- ROW 2: 4 chips + cursor -->
+                    <rect x="342" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="367" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">22189</text>
+                    <text x="395" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="400" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="425" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">48830</text>
+                    <text x="453" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="458" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="483" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">10234</text>
+                    <text x="511" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="516" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="541" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">77651</text>
+                    <text x="569" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <!-- cursor piscante -->
+                    <rect x="574" y="50" width="3" height="14" rx="1" fill="var(--accent2)" class="gg-cursor-blink"/>
+
+                    <!-- badge total + botão copiar -->
+                    <rect x="342" y="72" width="116" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.35)" stroke-width=".9"/>
+                    <text x="400" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">✓  8 notas extraídas</text>
+                    <rect x="468" y="72" width="80" height="14" rx="5" fill="rgba(0,184,230,.12)" stroke="rgba(0,184,230,.35)" stroke-width=".9"/>
+                    <text x="508" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">Copiar tudo</text>
+                    <rect x="558" y="72" width="80" height="14" rx="5" fill="rgba(0,229,184,.08)" stroke="rgba(0,229,184,.25)" stroke-width=".9"/>
+                    <text x="598" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">Só na CX</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Extração automática de notas G-Dis</div>
+                  <div class="ph-info-sub">Cole o texto copiado da tela — as notas são separadas automaticamente por vírgula, prontas para uso.</div>
+                </div>
+              </div>
               <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
               </div>
               <div class="g2">
@@ -854,6 +1052,155 @@
           <!-- ── COORDENADAS ── -->
           <div class="pg" id="page-coord">
             <div class="pg-inner">
+              <!-- Hero Coordenadas -->
+              <div class="page-hero hero-coord" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <defs>
+                      <radialGradient id="globeGrad" cx="40%" cy="35%" r="60%">
+                        <stop offset="0%" stop-color="rgba(167,139,250,.18)"/>
+                        <stop offset="100%" stop-color="rgba(167,139,250,.03)"/>
+                      </radialGradient>
+                      <clipPath id="globeClip">
+                        <circle cx="115" cy="70" r="56"/>
+                      </clipPath>
+                      <marker id="carr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M0,0 L6,3 L0,6 Z" fill="#a78bfa"/>
+                      </marker>
+                    </defs>
+
+                    <!-- ── GLOBO ── -->
+                    <!-- sombra -->
+                    <ellipse cx="115" cy="132" rx="44" ry="6" fill="rgba(0,0,0,.15)"/>
+                    <!-- esfera base -->
+                    <circle cx="115" cy="70" r="56" fill="url(#globeGrad)" stroke="rgba(167,139,250,.4)" stroke-width="1.5"/>
+                    <!-- oceano interior -->
+                    <circle cx="115" cy="70" r="55" fill="rgba(0,184,230,.05)"/>
+
+                    <!-- grade geográfica — paralelos -->
+                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="52" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="88" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="35" rx="36" ry="7"  fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="105" rx="36" ry="7" fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
+
+                    <!-- grade geográfica — meridianos -->
+                    <path d="M115,14 Q138,70 115,126" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q92,70 115,126"  fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q155,57 115,126" fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q75,83 115,126"  fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <!-- linha do equador destaque -->
+                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.35)" stroke-width=".8" stroke-dasharray="3 2" clip-path="url(#globeClip)"/>
+
+                    <!-- continentes simplificados (Brasil + América do Sul) -->
+                    <path d="M105,33 Q118,30 126,37 Q136,47 134,61 Q132,75 126,85 Q118,95 108,97 Q96,95 90,85 Q84,73 87,59 Q90,45 105,33 Z"
+                          fill="rgba(167,139,250,.22)" stroke="rgba(167,139,250,.5)" stroke-width=".8" clip-path="url(#globeClip)"/>
+                    <path d="M88,43 Q98,35 105,33 Q100,40 92,47 Z"
+                          fill="rgba(167,139,250,.15)" clip-path="url(#globeClip)"/>
+                    <path d="M90,85 Q84,95 86,113 Q90,120 96,113 Q98,100 96,90 Z"
+                          fill="rgba(167,139,250,.18)" stroke="rgba(167,139,250,.4)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <!-- Minas Gerais highlight -->
+                    <path d="M112,57 Q120,55 124,61 Q126,67 122,73 Q116,77 110,73 Q106,67 108,61 Z"
+                          fill="rgba(0,229,184,.3)" stroke="rgba(0,229,184,.7)" stroke-width=".8" clip-path="url(#globeClip)"/>
+
+                    <!-- PIN animado sobre MG -->
+                    <g class="gc-pin-anim">
+                      <circle cx="117" cy="62" r="9" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.35)" stroke-width=".8"/>
+                      <path d="M117,49 Q123,49 123,55 Q123,63 117,69 Q111,63 111,55 Q111,49 117,49 Z" fill="#00e5b8" opacity=".9"/>
+                      <circle cx="117" cy="55" r="3.5" fill="rgba(0,0,0,.35)"/>
+                      <ellipse cx="117" cy="70" rx="4" ry="1.5" fill="rgba(0,0,0,.18)"/>
+                    </g>
+
+                    <!-- crosshair animado -->
+                    <line x1="117" y1="45" x2="117" y2="37" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+                    <line x1="109" y1="55" x2="101" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+                    <line x1="125" y1="55" x2="133" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+
+                    <!-- anel de radar -->
+                    <circle cx="117" cy="55" r="14" fill="none" stroke="rgba(0,229,184,.3)" stroke-width=".8" stroke-dasharray="4 3" class="gc-rotate-dash"/>
+                    <circle cx="117" cy="55" r="22" fill="none" stroke="rgba(0,229,184,.15)" stroke-width=".6"/>
+
+                    <!-- bússola -->
+                    <circle cx="115" cy="16" r="9" fill="var(--surface2)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
+                    <text x="115" y="13" style="font-size:5.5px;fill:#a78bfa;font-family:monospace;font-weight:700;text-anchor:middle;">N</text>
+                    <text x="115" y="23" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">S</text>
+                    <text x="107" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">O</text>
+                    <text x="123" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">L</text>
+                    <line x1="115" y1="9" x2="115" y2="15" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="115" y1="22" x2="115" y2="18" stroke="var(--muted)" stroke-width="1" stroke-linecap="round"/>
+
+                    <!-- ── PAINEL DIREITO — ANTES vs DEPOIS ── -->
+                    <rect x="196" y="6" width="550" height="118" rx="10" fill="var(--surface2)" stroke="rgba(167,139,250,.35)" stroke-width="1.5"/>
+                    <!-- header -->
+                    <rect x="196" y="6" width="550" height="24" rx="10" fill="rgba(167,139,250,.18)"/>
+                    <rect x="196" y="20" width="550" height="10" fill="rgba(167,139,250,.08)"/>
+                    <circle cx="213" cy="18" r="4" fill="rgba(167,139,250,.8)"/>
+                    <text x="224" y="23" style="font-size:8.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.12em;">CONVERSOR DE COORDENADAS GEOGRÁFICAS</text>
+
+                    <!-- divisor vertical central -->
+                    <line x1="468" y1="30" x2="468" y2="118" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4 3"/>
+
+                    <!-- ══ LADO ESQUERDO: ANTES ══ -->
+                    <text x="218" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#ff6b7a;letter-spacing:.1em;">✗  SEM A FERRAMENTA</text>
+
+                    <!-- balão de mensagem do eletricista -->
+                    <rect x="210" y="48" width="245" height="42" rx="8" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
+                    <path d="M222,90 L212,100 L236,90" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
+                    <!-- avatar eletricista -->
+                    <circle cx="223" cy="62" r="7" fill="rgba(255,184,48,.2)" stroke="rgba(255,184,48,.4)" stroke-width="1"/>
+                    <text x="223" y="66" style="font-size:8px;fill:var(--warn);text-anchor:middle;">⚡</text>
+                    <!-- texto da mensagem -->
+                    <text x="236" y="61" style="font-size:7.5px;font-family:monospace;fill:var(--muted);">Eletricista  14:32 ✓✓</text>
+                    <text x="236" y="74" style="font-size:9px;font-family:monospace;font-weight:700;fill:#ffcdd2;">REF1:-20.51524-43.4646341</text>
+                    <text x="236" y="84" style="font-size:7px;font-family:monospace;fill:var(--hint);">📍 localização obra</text>
+
+                    <!-- fluxo de dor -->
+                    <text x="218" y="108" style="font-size:7.5px;font-family:monospace;fill:var(--hint);">↓ abre bloco de notas, edita na mão...</text>
+
+                    <!-- bloco de notas simulado -->
+                    <rect x="210" y="112" width="245" height="0" rx="0" fill="none"/>
+                    <!-- label embaixo explicando o sofrimento -->
+                    <text x="214" y="117" style="font-size:7px;font-family:monospace;fill:rgba(255,77,106,.7);">separa lat · ajusta vírgula · copia · repete 😩</text>
+
+                    <!-- ══ SETA CENTRAL ══ -->
+                    <circle cx="468" cy="72" r="16" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.3)" stroke-width="1.2"/>
+                    <polygon points="460,72 464,66 464,70 476,70 476,66 480,72 476,78 476,74 464,74 464,78" fill="var(--accent)" opacity=".95"/>
+
+                    <!-- ══ LADO DIREITO: DEPOIS ══ -->
+                    <text x="482" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#00e5b8;letter-spacing:.1em;">✓  COM A FERRAMENTA</text>
+
+                    <!-- campo de entrada -->
+                    <text x="482" y="55" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">COLA QUALQUER COISA:</text>
+                    <rect x="482" y="58" width="252" height="16" rx="5" fill="var(--surface3)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
+                    <text x="490" y="70" style="font-size:9px;font-family:monospace;fill:var(--text2);">REF1:-20.51524-43.4646341</text>
+
+                    <!-- boxes de resultado -->
+                    <text x="482" y="83" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">RESULTADO IMEDIATO:</text>
+
+                    <!-- box LAT -->
+                    <rect x="482" y="86" width="114" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
+                    <text x="490" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LATITUDE</text>
+                    <text x="539" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-20,51524</text>
+                    <rect x="583" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
+                    <text x="589" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
+
+                    <!-- box LON -->
+                    <rect x="604" y="86" width="130" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
+                    <text x="612" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LONGITUDE</text>
+                    <text x="669" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-43,4646341</text>
+                    <rect x="721" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
+                    <text x="727" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
+
+                    <!-- botão copiar ambos -->
+                    <rect x="482" y="112" width="252" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.4)" stroke-width=".9"/>
+                    <text x="608" y="122" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:#00e5b8;text-anchor:middle;">⎘  Copiar lat + lon juntos  →</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Conversor de Coordenadas Geográficas</div>
+                  <div class="ph-info-sub">Cole em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha lat/lon padronizados.</div>
+                </div>
+              </div>
               <div class="g2">
                 <div class="card">
                   <div class="ct">Entrada</div>
@@ -900,7 +1247,7 @@
               <div class="card">
                 <div class="ct">Histórico de conversões</div>
                 <div id="coord-hist" style="min-height:48px;">
-                  <span style="font-size:12px;color:var(--hint);font-style:italic;">Nenhuma conversão ainda…</span>
+                  <span style="font-size:12px;color:var(--muted);font-style:italic;">Nenhuma conversão ainda…</span>
                 </div>
               </div>
             </div>
@@ -909,6 +1256,96 @@
           <!-- ── CONVERSOR ELÉTRICO ── -->
           <div class="pg" id="page-conv">
             <div class="pg-inner">
+
+              <!-- Hero Conversor Elétrico -->
+              <div class="page-hero hero-conv" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <!-- AMPERÍMETRO ANALÓGICO esquerdo -->
+                    <circle cx="130" cy="65" r="50" class="cv-meter-body" style="stroke-width:1.5"/>
+                    <circle cx="130" cy="65" r="42" class="cv-meter-face"/>
+                    <!-- arco de escala -->
+                    <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-bg" style="stroke-dasharray:none;stroke-width:4;"/>
+                    <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-val cv-arc-anim" style="stroke-dasharray:120;"/>
+                    <!-- marcações da escala -->
+                    <line x1="88" y1="65" x2="96" y2="65" stroke="var(--border3)" stroke-width="1"/>
+                    <line x1="130" y1="22" x2="130" y2="30" stroke="var(--border3)" stroke-width="1"/>
+                    <line x1="172" y1="65" x2="164" y2="65" stroke="var(--border3)" stroke-width="1"/>
+                    <line x1="96" y1="36" x2="101" y2="42" stroke="var(--border3)" stroke-width="1"/>
+                    <line x1="164" y1="36" x2="159" y2="42" stroke="var(--border3)" stroke-width="1"/>
+                    <!-- labels escala -->
+                    <text x="80" y="70" class="cv-label">0</text>
+                    <text x="124" y="20" class="cv-label">50%</text>
+                    <text x="168" y="70" class="cv-label">100%</text>
+                    <!-- agulha -->
+                    <line x1="130" y1="65" x2="130" y2="28" class="cv-needle cv-needle-anim"/>
+                    <circle cx="130" cy="65" r="4" fill="var(--warn)"/>
+                    <!-- label central -->
+                    <text x="130" y="80" class="cv-label" style="text-anchor:middle;">A</text>
+                    <text x="130" y="92" class="cv-label-big" style="text-anchor:middle;font-size:13px;">220V</text>
+                    <!-- parafusos do medidor -->
+                    <circle cx="94" cy="112" r="3" fill="var(--border3)"/>
+                    <circle cx="166" cy="112" r="3" fill="var(--border3)"/>
+
+                    <!-- CIRCUITO CENTRAL — fios e nós -->
+                    <!-- trilha horizontal superior -->
+                    <line x1="200" y1="30" x2="560" y2="30" class="cv-wire-live cv-flow"/>
+                    <!-- trilha horizontal inferior -->
+                    <line x1="200" y1="90" x2="560" y2="90" class="cv-wire"/>
+                    <!-- verticais nas extremidades -->
+                    <line x1="200" y1="30" x2="200" y2="90" class="cv-wire"/>
+                    <line x1="560" y1="30" x2="560" y2="90" class="cv-wire"/>
+
+                    <!-- nó 1 — fórmula kVA -->
+                    <rect x="260" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
+                    <text x="300" y="24" class="cv-formula" style="text-anchor:middle;">S = V · I · √3</text>
+                    <line x1="300" y1="30" x2="300" y2="30" class="cv-wire"/>
+                    <circle cx="300" cy="30" r="3" class="cv-node"/>
+
+                    <!-- nó 2 — fórmula kW -->
+                    <rect x="380" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
+                    <text x="420" y="24" class="cv-formula" style="text-anchor:middle;">P = S · FP</text>
+                    <circle cx="420" cy="30" r="3" class="cv-node"/>
+
+                    <!-- componente resistor simulado -->
+                    <rect x="455" y="24" width="50" height="12" rx="2" fill="var(--surface3)" stroke="var(--border2)" stroke-width=".8"/>
+                    <line x1="462" y1="30" x2="465" y2="24" stroke="var(--border3)" stroke-width=".8"/>
+                    <line x1="465" y1="24" x2="470" y2="36" stroke="var(--border3)" stroke-width=".8"/>
+                    <line x1="470" y1="36" x2="475" y2="24" stroke="var(--border3)" stroke-width=".8"/>
+                    <line x1="475" y1="24" x2="480" y2="36" stroke="var(--border3)" stroke-width=".8"/>
+                    <line x1="480" y1="36" x2="485" y2="30" stroke="var(--border3)" stroke-width=".8"/>
+                    <line x1="485" y1="30" x2="499" y2="30" stroke="var(--border3)" stroke-width=".8"/>
+                    <text x="470" y="46" class="cv-label">FP 0,85</text>
+
+                    <!-- raio / bolt decorativo -->
+                    <path d="M 232,18 L 226,30 L 232,28 L 226,42" class="cv-bolt-anim" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linejoin="round"/>
+
+                    <!-- PAINEL DE RESULTADO direito -->
+                    <rect x="580" y="10" width="165" height="95" rx="7" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                    <rect x="580" y="10" width="165" height="18" rx="7" fill="rgba(255,184,48,.1)"/>
+                    <text x="594" y="23" style="font-size:8px;fill:var(--warn);font-family:monospace;font-weight:700;">RESULTADO</text>
+
+                    <text x="594" y="42" class="cv-label">kVA</text>
+                    <text x="630" y="42" style="font-size:13px;fill:var(--warn);font-family:monospace;font-weight:700;text-anchor:end;">75,0</text>
+                    <line x1="590" y1="46" x2="738" y2="46" stroke="var(--border)" stroke-width=".7"/>
+
+                    <text x="594" y="60" class="cv-label">kW</text>
+                    <text x="630" y="60" style="font-size:13px;fill:var(--text);font-family:monospace;font-weight:700;text-anchor:end;">63,8</text>
+                    <line x1="590" y1="64" x2="738" y2="64" stroke="var(--border)" stroke-width=".7"/>
+
+                    <text x="594" y="78" class="cv-label">A (tri 220V)</text>
+                    <text x="738" y="78" style="font-size:13px;fill:var(--accent);font-family:monospace;font-weight:700;text-anchor:end;">196,8</text>
+                    <line x1="590" y1="82" x2="738" y2="82" stroke="var(--border)" stroke-width=".7"/>
+
+                    <text x="594" y="96" class="cv-label">A (mono)</text>
+                    <text x="738" y="96" style="font-size:12px;fill:var(--text2);font-family:monospace;font-weight:700;text-anchor:end;">340,9</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Conversor de Grandezas Elétricas</div>
+                  <div class="ph-info-sub">Converta kVA, kW e Amperes para qualquer tensão, fase e fator de potência — trifásico e monofásico.</div>
+                </div>
+              </div>
 
               <!-- KPI strip conversor -->
               <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;" id="kpi-conv">
@@ -999,6 +1436,89 @@
           <div class="pg" id="page-consult">
             <div class="pg-inner">
 
+              <!-- Hero Consultas -->
+              <div class="page-hero hero-consult" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <!-- BARRA DE BUSCA topo -->
+                    <rect x="160" y="8" width="440" height="24" rx="7" class="cs-search"/>
+                    <circle cx="178" cy="20" r="6" class="cs-search-icon" style="stroke:var(--accent);"/>
+                    <line x1="182" y1="24" x2="186" y2="28" class="cs-search-icon" style="stroke:var(--accent);"/>
+                    <rect x="192" y="14" width="180" height="12" rx="3" fill="var(--surface3)"/>
+                    <text x="196" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;">OSRL...</text>
+                    <rect x="566" y="12" width="24" height="16" rx="4" fill="rgba(0,229,184,.2)" stroke="rgba(0,229,184,.4)" stroke-width=".8"/>
+                    <text x="571" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;font-weight:700;">↵</text>
+
+                    <!-- CARD PMAL -->
+                    <rect x="30" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="30" y="40" width="168" height="18" rx="6" class="cs-header-pmal"/>
+                    <text x="42" y="53" style="font-size:9px;fill:var(--accent);font-family:monospace;font-weight:700;">PMAL</text>
+                    <text x="90" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção AT/BT</text>
+                    <!-- chips -->
+                    <rect x="38" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="41" y="71" class="cs-text cs-text-pmal">OSRL</text>
+                    <rect x="70" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="73" y="71" class="cs-text cs-text-pmal">RC81</text>
+                    <rect x="102" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="105" y="71" class="cs-text cs-text-pmal">RL11</text>
+                    <rect x="134" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="137" y="71" class="cs-text cs-text-pmal">RC83</text>
+                    <rect x="38" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="41" y="86" class="cs-text cs-text-pmal">RM51</text>
+                    <rect x="70" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="73" y="86" class="cs-text cs-text-pmal">RC85</text>
+                    <!-- highlight animado -->
+                    <rect x="98" y="76" width="32" height="15" rx="4" class="cs-highlight cs-highlight-anim"/>
+
+                    <!-- CARD PMAR -->
+                    <rect x="210" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="210" y="40" width="168" height="18" rx="6" class="cs-header-pmar"/>
+                    <text x="222" y="53" style="font-size:9px;fill:#a78bfa;font-family:monospace;font-weight:700;">PMAR</text>
+                    <text x="265" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção Rural</text>
+                    <rect x="218" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="221" y="71" class="cs-text cs-text-pmar">RL21</text>
+                    <rect x="250" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="253" y="71" class="cs-text cs-text-pmar">RC91</text>
+                    <rect x="282" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="285" y="71" class="cs-text cs-text-pmar">RM61</text>
+                    <rect x="314" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="317" y="71" class="cs-text cs-text-pmar">RC93</text>
+                    <rect x="218" y="78" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="221" y="86" class="cs-text cs-text-pmar">RM63</text>
+
+                    <!-- CARD EMERG BT -->
+                    <rect x="390" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="390" y="40" width="168" height="18" rx="6" class="cs-header-emerg"/>
+                    <text x="402" y="53" style="font-size:9px;fill:var(--warn);font-family:monospace;font-weight:700;">EMERG·BT</text>
+                    <text x="460" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Emergência BT</text>
+                    <rect x="398" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="401" y="71" class="cs-text cs-text-emerg">EM01</text>
+                    <rect x="430" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="433" y="71" class="cs-text cs-text-emerg">EM02</text>
+                    <rect x="462" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="465" y="71" class="cs-text cs-text-emerg">EM11</text>
+                    <rect x="494" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="497" y="71" class="cs-text cs-text-emerg">EM12</text>
+                    <rect x="398" y="78" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="401" y="86" class="cs-text cs-text-emerg">EM21</text>
+
+                    <!-- CARD PLACEHOLDER -->
+                    <rect x="570" y="40" width="160" height="62" rx="6" class="cs-card" style="opacity:.5;"/>
+                    <rect x="570" y="40" width="160" height="18" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="582" y="53" style="font-size:9px;fill:#38bdf8;font-family:monospace;font-weight:700;">PMAG</text>
+                    <rect x="578" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
+                    <text x="581" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG01</text>
+                    <rect x="610" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
+                    <text x="613" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG02</text>
+                    <text x="578" y="86" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">+ mais indicadores...</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Referência de Indicadores Operacionais</div>
+                  <div class="ph-info-sub">Busque qualquer tipo de serviço por código — PMAL, PMAR, EMERG·BT, EMERG·MT e PMAG classificados.</div>
+                </div>
+              </div>
+
               <div class="info" style="margin-bottom:16px;">
                 Referência de classificação de serviços por indicador operacional CEMIG. Use o campo de busca para
                 localizar um tipo de serviço rapidamente.
@@ -1029,7 +1549,80 @@
 
           <!-- ── AUTOMAÇÕES ── -->
           <div class="pg" id="page-automacoes">
-            <div style="max-width:760px;">
+            <div class="pg-inner" style="max-width:760px;">
+
+              <!-- Hero Automações -->
+              <div class="page-hero hero-auto" style="margin-bottom:22px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <!-- JANELA DO NAVEGADOR -->
+                    <rect x="80" y="5" width="600" height="105" rx="8" class="au-browser" style="stroke-width:1.5"/>
+                    <!-- barra do navegador -->
+                    <rect x="80" y="5" width="600" height="22" rx="8" class="au-bar"/>
+                    <rect x="80" y="18" width="600" height="9" rx="0" class="au-bar"/>
+                    <!-- dots da janela -->
+                    <circle cx="96" cy="16" r="4" class="au-dot-r"/>
+                    <circle cx="110" cy="16" r="4" class="au-dot-y"/>
+                    <circle cx="124" cy="16" r="4" class="au-dot-g"/>
+                    <!-- barra de URL -->
+                    <rect x="140" y="9" width="320" height="14" rx="4" class="au-url"/>
+                    <text x="152" y="20" style="font-size:7px;fill:var(--muted);font-family:monospace;">digiteam.cemig.com.br/despacho</text>
+                    <!-- BARRA DE FAVORITOS -->
+                    <rect x="80" y="27" width="600" height="16" rx="0" fill="var(--surface3)" style="opacity:.7"/>
+                    <!-- estrela favorito normal -->
+                    <rect x="88" y="30" width="44" height="10" rx="3" class="au-star"/>
+                    <text x="91" y="38" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Inbox</text>
+                    <rect x="136" y="30" width="50" height="10" rx="3" class="au-star"/>
+                    <text x="139" y="38" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Digiteam</text>
+                    <!-- bookmarklet ativo com destaque -->
+                    <rect x="190" y="29" width="82" height="12" rx="4" fill="rgba(167,139,250,.3)" stroke="#a78bfa" stroke-width="1"/>
+                    <text x="197" y="38" style="font-size:7px;fill:#a78bfa;font-family:monospace;font-weight:700;">📅 6 meses</text>
+
+                    <!-- CONTEÚDO DA PÁGINA (Digiteam simulado) -->
+                    <rect x="86" y="49" width="588" height="55" rx="4" class="au-content"/>
+                    <!-- header da tabela -->
+                    <rect x="90" y="52" width="580" height="12" rx="2" fill="rgba(0,0,0,.15)"/>
+                    <text x="96" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">OS</text>
+                    <text x="140" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Tipo</text>
+                    <text x="240" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Equipe</text>
+                    <text x="380" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Status</text>
+                    <text x="490" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Data</text>
+                    <!-- linhas de dados -->
+                    <line x1="90" y1="66" x2="670" y2="66" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="68" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="68" width="55" height="7" rx="2" fill="rgba(0,229,184,.08)"/>
+                    <rect x="238" y="68" width="75" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <line x1="90" y1="78" x2="670" y2="78" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="80" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="80" width="45" height="7" rx="2" fill="rgba(255,184,48,.08)"/>
+                    <rect x="238" y="80" width="65" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <line x1="90" y1="90" x2="670" y2="90" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="92" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="92" width="60" height="7" rx="2" fill="rgba(167,139,250,.08)"/>
+                    <rect x="238" y="92" width="70" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+
+                    <!-- CURSOR animado -->
+                    <g class="au-cursor-anim">
+                      <polygon points="190,29 185,42 188,40 190,46 192,40 195,42" class="au-cursor" style="transform-origin:190px 37px;"/>
+                    </g>
+                    <!-- ripple do clique -->
+                    <circle cx="231" cy="35" r="0" fill="none" stroke="#a78bfa" stroke-width="1.5" class="au-ripple"/>
+
+                    <!-- BARRA DE PROGRESSO aparece após clique -->
+                    <rect x="460" y="52" width="100" height="8" rx="4" class="au-content" style="fill:var(--surface3);"/>
+                    <rect x="460" y="52" width="4" height="8" rx="4" class="au-progress au-prog-fill"/>
+                    <text x="565" y="59" style="font-size:6.5px;fill:var(--accent);font-family:monospace;" class="au-check-anim">✓ Pronto!</text>
+
+                    <!-- badge resultado -->
+                    <rect x="430" y="29" width="105" height="12" rx="4" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.3)" stroke-width=".8" class="au-check-anim"/>
+                    <text x="436" y="38" style="font-size:7px;fill:var(--accent);font-family:monospace;font-weight:700;" class="au-check-anim">✓ Intervalo: 6 meses · 1min</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Automações com Bookmarklets</div>
+                  <div class="ph-info-sub">Arraste uma vez para os favoritos — clique com o Digiteam aberto e tudo configura sozinho.</div>
+                </div>
+              </div>
 
               <!-- Hero -->
               <div class="home-hero" style="margin-bottom:22px;">
@@ -1103,7 +1696,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Abre o painel
                         de filtro</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Clica automaticamente no botão
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Clica automaticamente no botão
                         de filtro da tela.</div>
                     </div>
                   </div>
@@ -1113,7 +1706,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ativa Tempo
                         Real</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Liga o toggle de atualização em
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Liga o toggle de atualização em
                         tempo real.</div>
                     </div>
                   </div>
@@ -1123,7 +1716,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Define 6 meses
                         de intervalo</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Seleciona "Intervalo" e preenche
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Seleciona "Intervalo" e preenche
                         de hoje até 6 meses atrás.</div>
                     </div>
                   </div>
@@ -1133,7 +1726,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Refresh a cada
                         1 min</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Define o intervalo de
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Define o intervalo de
                         atualização automática para 1 minuto.</div>
                     </div>
                   </div>
@@ -1171,7 +1764,7 @@
                     Intervalo 6 meses
                   </a>
                 </div>
-                <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ segure e arraste ·
+                <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ segure e arraste ·
                   depois clique com o Digiteam aberto</div>
               </div>
 
@@ -1339,7 +1932,98 @@
 
           <!-- ── RENOMEADOR DE EQUIPES ── -->
           <div class="pg" id="page-renomeador">
-            <div style="max-width:760px;">
+            <div class="pg-inner" style="max-width:760px;">
+
+              <!-- Hero Renomeador -->
+              <div class="page-hero hero-rename" style="margin-bottom:22px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <defs>
+                      <marker id="rnarr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                        <path d="M0,0 L5,2.5 L0,5 Z" fill="var(--accent)"/>
+                      </marker>
+                    </defs>
+
+                    <!-- CSV INPUT esquerdo -->
+                    <rect x="30" y="8" width="170" height="98" rx="6" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                    <rect x="30" y="8" width="170" height="16" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="42" y="20" style="font-size:7.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">equipes.csv</text>
+                    <!-- header CSV -->
+                    <text x="40" y="34" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">veiculo,localdecadastro,termino</text>
+                    <line x1="36" y1="37" x2="194" y2="37" stroke="var(--border2)" stroke-width=".7"/>
+                    <!-- rows CSV -->
+                    <text x="40" y="48" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1023</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">BOM DESPACHO</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">17H</tspan>
+                    </text>
+                    <text x="40" y="60" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1047</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">DIVINOPOLIS</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">16H</tspan>
+                    </text>
+                    <text x="40" y="72" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1088</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">PARA DE MINAS</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">17H</tspan>
+                    </text>
+                    <text x="40" y="84" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1102</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">ITAUNA</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">18H</tspan>
+                    </text>
+                    <text x="40" y="96" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">+ mais linhas...</text>
+
+                    <!-- SETA processo -->
+                    <line x1="205" y1="57" x2="255" y2="57" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" marker-end="url(#rnarr)"/>
+                    <!-- ícone caneta -->
+                    <g class="rn-pen-anim">
+                      <path d="M218,48 L228,38 L234,44 L224,54 Z" class="rn-pen" style="stroke:#38bdf8;fill:rgba(56,189,248,.1);"/>
+                      <line x1="222" y1="52" x2="214" y2="60" class="rn-pen"/>
+                    </g>
+
+                    <!-- RESULTADO — tabela Digiteam -->
+                    <rect x="262" y="8" width="468" height="98" rx="6" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                    <rect x="262" y="8" width="468" height="16" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="274" y="20" style="font-size:7.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">DIGITEAM · EQUIPES</text>
+                    <!-- barra de progresso -->
+                    <rect x="580" y="11" width="140" height="10" rx="3" class="rn-progress-bg"/>
+                    <rect x="580" y="11" width="4" height="10" rx="3" class="rn-progress-fill rn-prog-anim"/>
+                    <!-- header tabela -->
+                    <rect x="266" y="26" width="460" height="10" rx="2" fill="rgba(0,0,0,.15)"/>
+                    <text x="272" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">VEÍCULO</text>
+                    <text x="330" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">NOME ATUAL</text>
+                    <text x="490" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">NOVO NOME</text>
+                    <text x="660" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">STATUS</text>
+
+                    <!-- ROW 1 — renomeado OK -->
+                    <rect x="266" y="38" width="460" height="14" rx="2" class="rn-row-active rn-highlight-anim"/>
+                    <text x="272" y="48" style="font-size:7.5px;fill:var(--accent);font-family:monospace;font-weight:700;">1023</text>
+                    <text x="330" y="48" class="rn-text-old">VEICULO-1023</text>
+                    <text x="490" y="48" class="rn-text-new">BOM DESPACHO-1023-17H</text>
+                    <rect x="658" y="40" width="28" height="10" rx="3" class="rn-badge-ok"/>
+                    <text x="662" y="48" class="rn-badge-text-ok">✓ OK</text>
+
+                    <!-- ROW 2 — já correto, skip -->
+                    <rect x="266" y="54" width="460" height="14" rx="2" class="rn-row"/>
+                    <text x="272" y="64" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1047</text>
+                    <text x="330" y="64" class="rn-text-new" style="fill:var(--muted);">DIVINOPOLIS-1047-16H</text>
+                    <text x="490" y="64" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">sem alteração</text>
+                    <rect x="658" y="56" width="36" height="10" rx="3" class="rn-badge-skip"/>
+                    <text x="661" y="64" class="rn-badge-text-skip">⏭ SKIP</text>
+
+                    <!-- ROW 3 — bloqueado -->
+                    <rect x="266" y="70" width="460" height="14" rx="2" class="rn-row"/>
+                    <text x="272" y="80" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1088</text>
+                    <text x="330" y="80" class="rn-text-old">EQUIPE-1088</text>
+                    <text x="490" y="80" style="font-size:7px;fill:var(--danger);font-family:monospace;">🔒 Bloqueada</text>
+                    <rect x="658" y="72" width="42" height="10" rx="3" class="rn-badge-lock"/>
+                    <text x="661" y="80" class="rn-badge-text-lock">🔒 LOCK</text>
+
+                    <!-- ROW 4 — processando -->
+                    <rect x="266" y="86" width="460" height="14" rx="2" class="rn-row-active" style="opacity:.4;"/>
+                    <text x="272" y="96" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1102</text>
+                    <text x="330" y="96" class="rn-text-old">VEICULO-1102</text>
+                    <text x="490" y="96" style="font-size:7px;fill:#38bdf8;font-family:monospace;font-style:italic;">processando...</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Renomeador de Equipes em Lote</div>
+                  <div class="ph-info-sub">Carregue o CSV, clique no bookmarklet e o Digiteam é renomeado automaticamente — pulando bloqueadas e já atualizadas.</div>
+                </div>
+              </div>
 
               <!-- Hero -->
               <div class="home-hero" style="margin-bottom:22px;">
@@ -1425,7 +2109,7 @@
                       Coluna A</div>
                     <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);">veiculo
                     </div>
-                    <div style="font-size:10px;color:var(--hint);margin-top:4px;">Número do veículo (4 dígitos)</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Número do veículo (4 dígitos)</div>
                   </div>
                   <div
                     style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
@@ -1434,7 +2118,7 @@
                       Coluna B</div>
                     <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent2);">
                       localdecadastro</div>
-                    <div style="font-size:10px;color:var(--hint);margin-top:4px;">Local / bairro / regional</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Local / bairro / regional</div>
                   </div>
                   <div
                     style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
@@ -1442,7 +2126,7 @@
                       style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">
                       Coluna C</div>
                     <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:#a78bfa;">termino</div>
-                    <div style="font-size:10px;color:var(--hint);margin-top:4px;">Horário de término (ex: 17H)</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Horário de término (ex: 17H)</div>
                   </div>
                 </div>
 
@@ -1458,7 +2142,7 @@
                   <div
                     style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);">
                   </div>
-                  <div style="color:var(--hint);">veiculo,localdecadastro,termino</div>
+                  <div style="color:var(--muted);opacity:.85;">veiculo,localdecadastro,termino</div>
                   <div><span style="color:var(--accent);">1023</span><span style="color:var(--muted);">,</span><span
                       style="color:var(--accent2);">BOM DESPACHO</span><span style="color:var(--muted);">,</span><span
                       style="color:#a78bfa;">17H</span></div>
@@ -1472,7 +2156,7 @@
                       style="color:var(--accent2);">ITAUNA</span><span style="color:var(--muted);">,</span><span
                       style="color:#a78bfa;">18H</span></div>
                 </div>
-                <div style="font-size:10.5px;color:var(--hint);margin-top:8px;line-height:1.6;">
+                <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6;">
                   💡 O script vai gerar o nome no formato <span
                     style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span>, ex: <span
                     style="font-family:var(--mono);color:var(--accent);">BOM DESPACHO-1023-17H</span>. Acentos são
@@ -1534,7 +2218,7 @@
                     Conectar CSV
                   </a>
                 </div>
-                <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ arraste para os
+                <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
                   favoritos · clique com o Digiteam aberto</div>
               </div>
 
@@ -1570,7 +2254,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Renomeia em
                         lote</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Percorre todas as equipes
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Percorre todas as equipes
                         visíveis e aplica o nome do CSV.</div>
                     </div>
                   </div>
@@ -1580,7 +2264,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pula
                         bloqueadas</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Equipes com cadeado são
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Equipes com cadeado são
                         ignoradas sem interromper o processo.</div>
                     </div>
                   </div>
@@ -1590,7 +2274,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ignora já
                         renomeadas</div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Se o nome já está correto, a
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Se o nome já está correto, a
                         equipe é pulada sem modificação.</div>
                     </div>
                   </div>
@@ -1600,7 +2284,7 @@
                     <div>
                       <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pausar / Parar
                       </div>
-                      <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Barra de progresso com botões de
+                      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Barra de progresso com botões de
                         controle em tempo real.</div>
                     </div>
                   </div>
@@ -1629,7 +2313,7 @@
                     Renomear Equipes
                   </a>
                 </div>
-                <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ arraste para os
+                <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
                   favoritos · execute com o Digiteam aberto após carregar o CSV</div>
               </div>
 
