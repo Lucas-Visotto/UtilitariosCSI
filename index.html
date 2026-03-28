@@ -634,6 +634,10 @@ body.light .ih-wire-sag{stroke:var(--border3);}
 #topbar-page-icon[data-page="conv"] svg{stroke:var(--warn);}
 #topbar-page-icon[data-page="consult"]{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.22);}
 #topbar-page-icon[data-page="consult"] svg{stroke:#38bdf8;}
+#topbar-page-icon[data-page="automacoes"]{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.22);}
+#topbar-page-icon[data-page="automacoes"] svg{stroke:#a78bfa;}
+#topbar-page-icon[data-page="renomeador"]{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.22);}
+#topbar-page-icon[data-page="renomeador"] svg{stroke:#38bdf8;}
 
 /* ── LIGHT MODE FIXES ── */
 body.light .bok{background:linear-gradient(135deg,var(--accent),#005e48);}
@@ -649,6 +653,10 @@ body.light #topbar-page-icon[data-page="gdis"]{background:rgba(0,100,140,.1);bor
 body.light #topbar-page-icon[data-page="coord"]{background:rgba(100,60,200,.1);border-color:rgba(100,60,200,.2);}
 body.light #topbar-page-icon[data-page="conv"]{background:rgba(122,68,0,.1);border-color:rgba(122,68,0,.2);}
 body.light #topbar-page-icon[data-page="consult"]{background:rgba(0,100,160,.1);border-color:rgba(0,100,160,.2);}
+body.light #topbar-page-icon[data-page="automacoes"]{background:rgba(100,60,200,.1);border-color:rgba(100,60,200,.2);}
+body.light #topbar-page-icon[data-page="automacoes"] svg{stroke:#7c3aed;}
+body.light #topbar-page-icon[data-page="renomeador"]{background:rgba(0,100,160,.1);border-color:rgba(0,100,160,.2);}
+body.light #topbar-page-icon[data-page="renomeador"] svg{stroke:#0369a1;}
 body.light .tbadge{box-shadow:none;}
 body.light .bm-link{box-shadow:none;}
 
@@ -966,6 +974,33 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
 
 /* Garante que a transição do SVG não conflite */
 .ni.active svg { transition: none; }
+
+/* AUTOMAÇÕES — camadas deslizando como stack */
+@keyframes anim-auto-top {
+  0%,100% { transform: translateY(0); }
+  40%     { transform: translateY(-2px); }
+  70%     { transform: translateY(-1px); }
+}
+@keyframes anim-auto-mid {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(1px); }
+}
+#nav-automacoes.active svg path:first-child { animation: anim-auto-top 1.8s ease-in-out infinite; transform-origin: 12px 7px; }
+#nav-automacoes.active svg path:nth-child(2) { animation: anim-auto-mid 1.8s ease-in-out 0.2s infinite; transform-origin: 12px 17px; }
+#nav-automacoes.active svg path:nth-child(3) { animation: anim-auto-mid 1.8s ease-in-out 0.4s infinite; transform-origin: 12px 12px; }
+
+/* RENOMEADOR — caneta desliza ao escrever */
+@keyframes anim-rename-pen {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  25%     { transform: translate(-1px, 1px) rotate(-3deg); }
+  75%     { transform: translate(1px, -1px) rotate(3deg); }
+}
+@keyframes anim-rename-line {
+  0%,100% { transform: scaleX(1); }
+  50%     { transform: scaleX(1.1); }
+}
+#nav-renomeador.active svg path:nth-child(2) { animation: anim-rename-pen 1.6s ease-in-out infinite; transform-origin: 18px 5px; }
+#nav-renomeador.active svg path:first-child  { animation: anim-rename-line 1.6s ease-in-out 0.2s infinite; transform-origin: 12px 20px; }
 </style>
 </head>
 <body>
@@ -1004,9 +1039,17 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
     <div class="ni" id="nav-dashboards" onclick="navToSection('home','home-dashboards-section')" style="font-size:12.5px;">
       <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Dashboards OD/PI
     </div>
+    <div class="snav-sep"></div>
+    <div class="snav-lbl">Automações</div>
+    <div class="ni" id="nav-automacoes" onclick="navTo('automacoes')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Seletor de Intervalo
+    </div>
+    <div class="ni" id="nav-renomeador" onclick="navTo('renomeador')">
+      <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Renomeador de Equipes
+    </div>
   </div>
   <div class="sbot">
-    <div class="bm-box">
+    <div class="bm-box" style="display:none;">
       <span class="bm-label">Bookmarklet — Digiteam</span>
 <a class="bm-link" href="javascript:(async function(){try{const s=m=&gt;new Promise(r=&gt;setTimeout(r,m)),waitFor=async(fn,max=5000)=&gt;{const start=Date.now();while(Date.now()-start&lt;max){if(fn())return true;await s(50)}return false};const f=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi.pi-filter&quot;));if(!f){alert(&quot;Botão de filtro não encontrado&quot;);return}f.click();await s(150);const t=[...document.querySelectorAll(&quot;input[type=&#x27;checkbox&#x27;][role=&#x27;switch&#x27;]&quot;)].filter(x=&gt;x.offsetParent!==null);if(t.length&lt;3){alert(&quot;Toggle &#x27;Tempo real&#x27; não encontrado&quot;);return}if(!t[2].checked){t[2].click()}await s(250);const ch=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;));if(ch){const ic=ch.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;);if(ic&amp;&amp;ic.classList.contains(&quot;pi-chevron-left&quot;)){ch.click();await s(400);const ok=await waitFor(()=&gt;{const labels=[...document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)].filter(e=&gt;e.offsetParent!==null);return labels.length&gt;=2},3000);if(!ok)await s(500)}}let ps=null;for(const l of document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(!b)continue;ps=p;b.click();await s(80);const hOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);if(hOpt){hOpt.click();await s(80)}b.click();await s(80);const iOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(iOpt){iOpt.click();await s(80);break}document.body.click();await s(80)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}await s(100);let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(40);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(15);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();await s(200);const allSelects=[...document.querySelectorAll(&quot;p-select&quot;)].filter(sel=&gt;sel!==ps&amp;&amp;sel.offsetParent!==null);for(const pSel of allSelects){const lbl=pSel.querySelector(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;);if(!lbl)continue;const ariaLbl=lbl.getAttribute(&quot;aria-label&quot;);if(ariaLbl&amp;&amp;(ariaLbl.includes(&quot;min&quot;)||ariaLbl.includes(&quot;Não Atualizar&quot;))){const dropBtn=pSel.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(dropBtn){dropBtn.click();await s(250);const minOpt=[...document.querySelectorAll(&quot;li[role=&#x27;option&#x27;]&quot;)].find(e=&gt;{const span=e.querySelector(&quot;span.ng-star-inserted&quot;);return span&amp;&amp;span.textContent.trim()===&quot;1 min&quot;});if(minOpt){minOpt.click();await s(100);break}}}}}catch(e){alert(&quot;Erro: &quot;+e.message)}})();void 0;"
    title="Arraste para a barra de favoritos do navegador">
@@ -1057,7 +1100,7 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
             <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
             <div class="home-title">Ferramentas de<br><span>Operação e Controle</span></div>
             <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do setor. Desenvolvido internamente pelo CSI para agilizar decisões e processos diários.</div>
-            <span class="home-ver-badge">2.2 &nbsp;·&nbsp; Março 2026</span>
+            <span class="home-ver-badge">2.4 &nbsp;·&nbsp; Março 2026</span>
           </div>
         </div>
 
@@ -1117,6 +1160,28 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
               <div>
                 <div class="home-tool-name">Consultas</div>
                 <div class="home-tool-desc">Referência de tipos de serviço por indicador operacional CEMIG — PMAL, EMERG, PMAG.</div>
+              </div>
+              <div class="home-tool-arrow">Abrir →</div>
+            </div>
+
+            <div class="home-tool-card" onclick="navTo('automacoes')">
+              <div class="home-tool-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);">
+                <svg viewBox="0 0 24 24" style="stroke:#a78bfa;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <div class="home-tool-name">Seletor de Intervalo</div>
+                <div class="home-tool-desc">Bookmarklet que configura filtro, tempo real e 6 meses de intervalo no Digiteam com um clique.</div>
+              </div>
+              <div class="home-tool-arrow">Abrir →</div>
+            </div>
+
+            <div class="home-tool-card" onclick="navTo('renomeador')">
+              <div class="home-tool-icon" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2);">
+                <svg viewBox="0 0 24 24" style="stroke:#38bdf8;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </div>
+              <div>
+                <div class="home-tool-name">Renomeador de Equipes</div>
+                <div class="home-tool-desc">Lê um CSV e renomeia equipes no Digiteam em lote — pula bloqueadas e já renomeadas.</div>
               </div>
               <div class="home-tool-arrow">Abrir →</div>
             </div>
@@ -1202,7 +1267,21 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
             <div class="ct">Histórico de versões</div>
             <div class="home-changelog">
               <div class="home-cl-item">
-                <div class="home-cl-ver cl-new">v2.2</div>
+                <div class="home-cl-ver cl-new">v2.4</div>
+                <div class="home-cl-body">
+                  <div class="home-cl-title">Renomeador de Equipes · CSV + bookmarklet em lote · sidebar Automações</div>
+                  <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span class="home-cl-tag t-ui">UI</span></div>
+                </div>
+              </div>
+              <div class="home-cl-item">
+                <div class="home-cl-ver cl-mid">v2.3</div>
+                <div class="home-cl-body">
+                  <div class="home-cl-title">Página de Automações · Bookmarklet Digiteam com tutorial</div>
+                  <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span class="home-cl-tag t-ui">UI</span></div>
+                </div>
+              </div>
+              <div class="home-cl-item">
+                <div class="home-cl-ver cl-mid">v2.2</div>
                 <div class="home-cl-body">
                   <div class="home-cl-title">Interligação step-by-step · G-Dis auto-extração · Bookmarklet v2</div>
                   <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span class="home-cl-tag t-ui">UI</span><span class="home-cl-tag t-fix">FIX</span></div>
@@ -1335,7 +1414,7 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
               <!-- Fio saída direita -->
               <line x1="620" y1="38" x2="760" y2="38" class="ih-wire"/>
               <!-- Labels -->
-              <text x="70" y="25" class="ih-label">AT</text>
+              <text x="70" y="25" class="ih-label">MT</text>
               <text x="688" y="25" class="ih-label">BT</text>
               <text x="346" y="118" class="ih-label-main">Transformador Doador</text>
               <!-- Raios animados -->
@@ -1716,6 +1795,448 @@ body.light .home-title span{background:linear-gradient(90deg,var(--accent),var(-
       </div>
     </div>
 
+
+    <!-- ── AUTOMAÇÕES ── -->
+    <div class="pg" id="page-automacoes">
+      <div style="max-width:760px;">
+
+        <!-- Hero -->
+        <div class="home-hero" style="margin-bottom:22px;">
+          <div class="home-hero-inner">
+            <div class="home-eyebrow">DIGITEAM · AUTOMAÇÃO</div>
+            <div class="home-title" style="font-size:22px;">Automações <span>com Bookmarklets</span></div>
+            <div class="home-sub">Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada.</div>
+          </div>
+        </div>
+
+        <!-- O QUE É UM BOOKMARKLET -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">O que é um bookmarklet?</div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:13px;color:var(--text2);font-weight:600;margin-bottom:4px;">Um favorito que executa código</div>
+              <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">É um favorito normal do navegador, mas em vez de guardar uma URL, ele executa um script JavaScript na página aberta. Roda localmente no seu navegador, sem enviar dados pra fora, sem instalar extensão.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOOKMARKLET: INTERVALO 6 MESES -->
+        <div class="card" style="margin-bottom:16px;border-color:rgba(167,139,250,.22);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;"></div>
+
+          <!-- Header -->
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.01em;">Digiteam — Intervalo 6 meses</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Aba Despacho · Automação de filtros, datas e refresh</div>
+            </div>
+            <span style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(0,229,184,.1);border:1px solid rgba(0,229,184,.22);color:var(--accent);font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">v2</span>
+          </div>
+
+          <!-- O que faz -->
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;box-shadow:0 0 5px var(--accent);flex-shrink:0;"></span>O que ele faz automaticamente
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔽</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Abre o painel de filtro</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Clica automaticamente no botão de filtro da tela.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔄</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ativa Tempo Real</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Liga o toggle de atualização em tempo real.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:15px;flex-shrink:0;margin-top:1px;">📅</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Define 6 meses de intervalo</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Seleciona "Intervalo" e preenche de hoje até 6 meses atrás.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:15px;flex-shrink:0;margin-top:1px;">⏱️</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Refresh a cada 1 min</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Define o intervalo de atualização automática para 1 minuto.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÁREA DE ARRASTAR -->
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:#a78bfa;border-radius:2px;display:inline-block;flex-shrink:0;"></span>Arraste para a barra de favoritos
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(167,139,250,.06);border:1.5px dashed rgba(167,139,250,.35);border-radius:10px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;"><path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/><path d="M9 3v4m6-4v4M3 11h18"/></svg>
+            <div style="font-size:11px;color:#a78bfa;font-weight:600;">Segure e arraste o botão abaixo até a barra de favoritos do navegador</div>
+          </div>
+          <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+            <a class="bm-link" style="font-size:13px;padding:13px 22px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 18px rgba(167,139,250,.1);"
+href="javascript:(async function(){try{const s=m=&gt;new Promise(r=&gt;setTimeout(r,m)),waitFor=async(fn,max=5000)=&gt;{const start=Date.now();while(Date.now()-start&lt;max){if(fn())return true;await s(50)}return false};const f=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi.pi-filter&quot;));if(!f){alert(&quot;Botão de filtro não encontrado&quot;);return}f.click();await s(150);const t=[...document.querySelectorAll(&quot;input[type=&#x27;checkbox&#x27;][role=&#x27;switch&#x27;]&quot;)].filter(x=&gt;x.offsetParent!==null);if(t.length&lt;3){alert(&quot;Toggle &#x27;Tempo real&#x27; não encontrado&quot;);return}if(!t[2].checked){t[2].click()}await s(250);const ch=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;));if(ch){const ic=ch.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;);if(ic&amp;&amp;ic.classList.contains(&quot;pi-chevron-left&quot;)){ch.click();await s(400);const ok=await waitFor(()=&gt;{const labels=[...document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)].filter(e=&gt;e.offsetParent!==null);return labels.length&gt;=2},3000);if(!ok)await s(500)}}let ps=null;for(const l of document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(!b)continue;ps=p;b.click();await s(80);const hOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);if(hOpt){hOpt.click();await s(80)}b.click();await s(80);const iOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(iOpt){iOpt.click();await s(80);break}document.body.click();await s(80)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}await s(100);let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(40);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(15);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();await s(200);const allSelects=[...document.querySelectorAll(&quot;p-select&quot;)].filter(sel=&gt;sel!==ps&amp;&amp;sel.offsetParent!==null);for(const pSel of allSelects){const lbl=pSel.querySelector(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;);if(!lbl)continue;const ariaLbl=lbl.getAttribute(&quot;aria-label&quot;);if(ariaLbl&amp;&amp;(ariaLbl.includes(&quot;min&quot;)||ariaLbl.includes(&quot;Não Atualizar&quot;))){const dropBtn=pSel.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(dropBtn){dropBtn.click();await s(250);const minOpt=[...document.querySelectorAll(&quot;li[role=&#x27;option&#x27;]&quot;)].find(e=&gt;{const span=e.querySelector(&quot;span.ng-star-inserted&quot;);return span&amp;&amp;span.textContent.trim()===&quot;1 min&quot;});if(minOpt){minOpt.click();await s(100);break}}}}}catch(e){alert(&quot;Erro: &quot;+e.message)}})();void 0;"
+              title="Arraste para a barra de favoritos">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ⭐ Intervalo 6 meses — Digiteam
+            </a>
+          </div>
+          <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ segure e arraste · depois clique com o Digiteam aberto</div>
+        </div>
+
+        <!-- TUTORIAL PASSO A PASSO -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">Como usar — passo a passo</div>
+
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte 1 · Instalar (só uma vez)
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">1</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Exiba a barra de favoritos</div>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Pressione <span style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 7px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span> para mostrar a barra de favoritos, caso ela esteja oculta.</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">2</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Arraste o botão roxo para os favoritos</div>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Segure o botão <strong style="color:#a78bfa;">⭐ Intervalo 6 meses</strong> acima e arraste até a barra de favoritos do navegador. Solte quando aparecer o indicador de posição. Feito — está instalado!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte 2 · Usar no dia a dia
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">1</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Abra o Digiteam na aba Despacho</div>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Navegue até a tela de Despacho normalmente. O script precisa que a página esteja carregada.</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">2</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Selecione seu filtro de equipe / setor</div>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Aplique o filtro que você usa normalmente (equipe, regional, tipo de serviço…) <strong style="color:var(--text2);">antes</strong> de acionar o bookmarklet.</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">3</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">✨ Clique no favorito "Intervalo 6 meses"</div>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Clique no favorito instalado na barra. O script roda sozinho — abre o filtro, ativa tempo real, preenche as datas (6 meses) e configura atualização de 1 min. Aguarde uns 3 segundos e tá pronto.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DICAS -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">Dicas e observações</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O bookmarklet funciona <strong>somente no Digiteam</strong>. Em outras páginas ele não vai encontrar os elementos e pode exibir um alerta.</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Se a tela do Digiteam mudar de layout em uma atualização futura, o script pode parar de funcionar. Nesse caso, chama o Lucas.</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Você pode instalar o bookmarklet em mais de um navegador. Basta repetir o processo de arrastar em cada um.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIS EM BREVE -->
+        <div class="card" style="opacity:.7;border-style:dashed;margin-bottom:0;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:9px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:var(--text2);">Mais automações chegando</div>
+              <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">Novos bookmarklets para outras telas e fluxos do Digiteam serão adicionados aqui conforme forem desenvolvidos.</div>
+            </div>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;padding:3px 9px;border-radius:4px;background:rgba(255,184,48,.1);border:1px solid rgba(255,184,48,.22);color:var(--warn);font-family:var(--mono);letter-spacing:.05em;white-space:nowrap;flex-shrink:0;">EM BREVE</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIM AUTOMAÇÕES -->
+
+    <!-- ── RENOMEADOR DE EQUIPES ── -->
+    <div class="pg" id="page-renomeador">
+      <div style="max-width:760px;">
+
+        <!-- Hero -->
+        <div class="home-hero" style="margin-bottom:22px;">
+          <div class="home-hero-inner">
+            <div class="home-eyebrow" style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.2);color:#38bdf8;">DIGITEAM · EQUIPES · LOTE</div>
+            <div class="home-title" style="font-size:22px;">Renomeador de <span style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Equipes</span></div>
+            <div class="home-sub">Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas.</div>
+          </div>
+        </div>
+
+        <!-- COMO FUNCIONA -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">Como funciona</div>
+          <div style="display:flex;gap:0;flex-wrap:wrap;gap:8px;">
+            <div style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <span style="font-size:13px;">1️⃣</span>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Preparar o CSV</div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.5;">Monte o arquivo com veículo, local e término.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">→</div>
+            <div style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <span style="font-size:13px;">2️⃣</span>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Bookmarklet: Conectar CSV</div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.5;">Abre seletor de arquivo e salva os dados no navegador.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">→</div>
+            <div style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <span style="font-size:13px;">3️⃣</span>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:3px;">Bookmarklet: Renomear</div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.5;">Percorre o Digiteam e renomeia tudo em lote.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASSO 1: CSV -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">Passo 1 — Preparar o CSV</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+            Crie um arquivo <span style="font-family:var(--mono);font-size:12px;background:var(--surface3);border:1px solid var(--border2);padding:1px 7px;border-radius:4px;color:var(--text);">.csv</span> separado por vírgulas com exatamente três colunas nessa ordem:
+          </div>
+
+          <!-- Estrutura da coluna -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+            <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna A</div>
+              <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);">veiculo</div>
+              <div style="font-size:10px;color:var(--hint);margin-top:4px;">Número do veículo (4 dígitos)</div>
+            </div>
+            <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna B</div>
+              <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent2);">localdecadastro</div>
+              <div style="font-size:10px;color:var(--hint);margin-top:4px;">Local / bairro / regional</div>
+            </div>
+            <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna C</div>
+              <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:#a78bfa;">termino</div>
+              <div style="font-size:10px;color:var(--hint);margin-top:4px;">Horário de término (ex: 17H)</div>
+            </div>
+          </div>
+
+          <!-- Exemplo CSV -->
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;"></span>Exemplo de arquivo CSV
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--border2);border-radius:9px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);"></div>
+            <div style="color:var(--hint);">veiculo,localdecadastro,termino</div>
+            <div><span style="color:var(--accent);">1023</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">BOM DESPACHO</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
+            <div><span style="color:var(--accent);">1047</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">DIVINOPOLIS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">16H</span></div>
+            <div><span style="color:var(--accent);">1088</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">PARA DE MINAS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
+            <div><span style="color:var(--accent);">1102</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">ITAUNA</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">18H</span></div>
+          </div>
+          <div style="font-size:10.5px;color:var(--hint);margin-top:8px;line-height:1.6;">
+            💡 O script vai gerar o nome no formato <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span>, ex: <span style="font-family:var(--mono);color:var(--accent);">BOM DESPACHO-1023-17H</span>. Acentos são removidos automaticamente.
+          </div>
+        </div>
+
+        <!-- PASSO 2: BOOKMARKLET CONECTAR CSV -->
+        <div class="card" style="margin-bottom:16px;border-color:rgba(167,139,250,.2);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 2 — Conectar CSV</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Abre o arquivo e salva os dados no navegador para o Renomeador usar</div>
+            </div>
+            <span style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:#a78bfa;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO 1/2</span>
+          </div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+            Com o Digiteam aberto, clique neste favorito. Ele vai abrir uma janela para você selecionar o arquivo <span style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span> — após selecionar, os dados ficam salvos no navegador até você fechar a aba.
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(167,139,250,.05);border:1.5px dashed rgba(167,139,250,.3);border-radius:10px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;"><path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/><path d="M9 3v4m6-4v4M3 11h18"/></svg>
+            <div style="font-size:11px;color:#a78bfa;font-weight:600;">Arraste o botão abaixo para a barra de favoritos</div>
+          </div>
+          <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+            <a class="bm-link" style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 14px rgba(167,139,250,.1);"
+href="javascript:(function(){const i=document.createElement('input');i.type='file';i.accept='.csv';i.onchange=e=>{const f=e.target.files[0];const r=new FileReader();r.onload=evt=>{const linhas=evt.target.result.split('\n');const dados={};linhas.slice(1).forEach(linha=>{const partes=linha.split(',');if(partes[0]){const veiculo=partes[0].trim();const local=partes[1].trim();const termino=partes[2].trim();dados[veiculo]={local,termino};}});localStorage.setItem('equipes_csv',JSON.stringify(dados));alert('✓ Dados carregados! '+Object.keys(dados).length+' veículos');console.log('Dados:',dados);};r.readAsText(f);};i.click();})();"
+              title="Arraste para a barra de favoritos">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              📂 Conectar CSV — Equipes
+            </a>
+          </div>
+          <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ arraste para os favoritos · clique com o Digiteam aberto</div>
+        </div>
+
+        <!-- PASSO 3: BOOKMARKLET RENOMEAR -->
+        <div class="card" style="margin-bottom:16px;border-color:rgba(56,189,248,.2);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#38bdf8,transparent);pointer-events:none;"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(56,189,248,.12);border:1.5px solid rgba(56,189,248,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#38bdf8;fill:none;stroke-width:2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 3 — Renomear em Lote</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Percorre o Digiteam e aplica os novos nomes automaticamente</div>
+            </div>
+            <span style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.22);color:#38bdf8;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO 2/2</span>
+          </div>
+
+          <!-- O que faz -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:14px;flex-shrink:0;margin-top:1px;">✅</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Renomeia em lote</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Percorre todas as equipes visíveis e aplica o nome do CSV.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔒</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pula bloqueadas</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Equipes com cadeado são ignoradas sem interromper o processo.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏭️</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ignora já renomeadas</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Se o nome já está correto, a equipe é pulada sem modificação.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏸️</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pausar / Parar</div>
+                <div style="font-size:10.5px;color:var(--muted);line-height:1.5;">Barra de progresso com botões de controle em tempo real.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(56,189,248,.05);border:1.5px dashed rgba(56,189,248,.3);border-radius:10px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#38bdf8;fill:none;stroke-width:2;flex-shrink:0;"><path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/><path d="M9 3v4m6-4v4M3 11h18"/></svg>
+            <div style="font-size:11px;color:#38bdf8;font-weight:600;">Arraste o botão abaixo para a barra de favoritos</div>
+          </div>
+          <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+            <a class="bm-link" style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(56,189,248,.55);background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(56,189,248,.07));color:#38bdf8;box-shadow:0 0 14px rgba(56,189,248,.1);"
+href="javascript:(function(){const dadosStr=localStorage.getItem('equipes_csv');if(!dadosStr){alert('⚠️ Carregue o CSV primeiro!');return;}const dados=JSON.parse(dadosStr);const removerAcentos=str=>str.normalize('NFD').replace(/[\u0300-\u036f]/g,'');let PARAR=false;let PAUSADO=false;let bloqueadas=0;const veiculosProcessados=new Set();const progDiv=document.createElement('div');progDiv.style.cssText='position:fixed;top:10px;right:10px;background:#333;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-family:monospace;min-width:280px;box-shadow:0 4px 6px rgba(0,0,0,0.3)';progDiv.innerHTML='<div style=&quot;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px&quot;><div style=&quot;font-weight:bold&quot;>🔄 Renomeando</div><div><button id=&quot;btn-pausar&quot; style=&quot;background:#ff9800;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:bold;margin-right:4px&quot;>PAUSAR</button><button id=&quot;btn-parar&quot; style=&quot;background:#f44336;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:bold&quot;>PARAR</button></div></div><div id=&quot;prog-status&quot;>Preparando...</div><div style=&quot;background:#555;height:20px;border-radius:4px;margin-top:8px;overflow:hidden&quot;><div id=&quot;prog-bar&quot; style=&quot;background:#4caf50;height:100%;width:0%;transition:width 0.3s&quot;></div></div>';document.body.appendChild(progDiv);const statusDiv=progDiv.querySelector('#prog-status');const barDiv=progDiv.querySelector('#prog-bar');const btnPausar=progDiv.querySelector('#btn-pausar');const btnParar=progDiv.querySelector('#btn-parar');btnPausar.addEventListener('click',()=>{PAUSADO=!PAUSADO;if(PAUSADO){btnPausar.textContent='RETOMAR';btnPausar.style.background='#4caf50';statusDiv.innerHTML='⏸️ PAUSADO';}else{btnPausar.textContent='PAUSAR';btnPausar.style.background='#ff9800';renomearProxima();}});btnParar.addEventListener('click',()=>{if(confirm('⚠️ Deseja realmente parar?')){PARAR=true;btnParar.textContent='PARANDO...';btnParar.disabled=true;btnParar.style.background='#999';btnPausar.disabled=true;}});let processadas=0;let sucesso=0;let falhas=0;let total=0;function atualizarProgresso(){if(total>0){const perc=Math.round((processadas/total)*100);barDiv.style.width=perc+'%';}if(!PAUSADO)statusDiv.innerHTML=processadas+'/'+total+' | ✓'+sucesso+' | ✗'+falhas+(bloqueadas>0?' | 🔒'+bloqueadas:'');}function normalizarNome(nome){return removerAcentos(nome.toUpperCase().trim()).replace(/\s+/g,' ');}function estaBloqueada(spanVeiculo){let elemento=spanVeiculo;while(elemento&amp;&amp;elemento.tagName!=='TR'){elemento=elemento.parentElement;}if(!elemento)return false;const cadeado=elemento.querySelector('td i.pi.pi-lock');if(cadeado){return true;}return false;}function buscarEquipesParaRenomear(){const equipesSpans=document.querySelectorAll('span[style*=&quot;font-size: x-small&quot;][style*=&quot;font-weight:bold&quot;]');const equipes=[];equipesSpans.forEach(span=>{const texto=span.textContent.trim();const match=texto.match(/^(\d{4})\s*-/);if(match){const veiculo=match[1];if(veiculosProcessados.has(veiculo)){return;}let nomeAtualSpan=null;let parent=span.parentElement;for(let i=0;i&lt;8;i++){if(!parent)break;nomeAtualSpan=parent.querySelector('span[style*=&quot;font-weight: bold&quot;][style*=&quot;display: block&quot;]');if(nomeAtualSpan)break;parent=parent.parentElement;}const nomeAtual=nomeAtualSpan?nomeAtualSpan.textContent.trim():'';if(dados[veiculo]){const d=dados[veiculo];const localLimpo=removerAcentos(d.local.toUpperCase().replace(/,.*$/,'').trim());const nomeEsperado=localLimpo+'-'+veiculo+'-'+d.termino.toUpperCase();const nomeAtualNorm=normalizarNome(nomeAtual);const nomeEsperadoNorm=normalizarNome(nomeEsperado);if(nomeAtualNorm!==nomeEsperadoNorm){equipes.push({veiculo:veiculo,nomeAtual:nomeAtual,nomeEsperado:nomeEsperado,elemento:span});}}}});return equipes;}function scrollParaElemento(elemento,callback){const rect=elemento.getBoundingClientRect();const elementoVisivel=rect.top>=0&amp;&amp;rect.bottom&lt;=(window.innerHeight||document.documentElement.clientHeight);if(!elementoVisivel){elemento.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(callback,600);}else{callback();}}function aguardarEFecharToast(callback){let tentativas=0;const intervalo=setInterval(()=>{tentativas++;const toast=document.querySelector('.p-toast')||document.querySelector('[role=&quot;alert&quot;]');if(toast){const btnFecharToast=toast.querySelector('button');if(btnFecharToast){btnFecharToast.click();}clearInterval(intervalo);setTimeout(callback,300);return;}if(tentativas>=10){clearInterval(intervalo);callback();}},200);}function fecharModalPrincipal(callback){setTimeout(()=>{const btnFecharModal=document.querySelector('.p-dialog-footer button');if(btnFecharModal){btnFecharModal.click();setTimeout(callback,500);return;}const btnX=document.querySelectorAll('.p-dialog-close-button');for(let btn of btnX){if(!btn.closest('.p-inplace')){btn.click();setTimeout(callback,500);return;}}callback();},400);}function renomearProxima(){if(PARAR){console.log('🛑 PARADO');setTimeout(()=>{progDiv.remove();alert('⚠️ PARADO!\n\nTotal: '+processadas+'\n✓ Sucesso: '+sucesso+'\n✗ Falhas: '+falhas+(bloqueadas>0?'\n🔒 Bloqueadas: '+bloqueadas:''));},500);return;}if(PAUSADO){setTimeout(renomearProxima,500);return;}const equipesRestantes=buscarEquipesParaRenomear();total=processadas+equipesRestantes.length;atualizarProgresso();if(equipesRestantes.length===0){setTimeout(()=>{progDiv.remove();alert('✅ Concluído!\n\nTotal: '+processadas+'\n✓ Sucesso: '+sucesso+'\n✗ Falhas: '+falhas+(bloqueadas>0?'\n🔒 Bloqueadas (ignoradas): '+bloqueadas:''));},500);return;}const eq=equipesRestantes[0];if(estaBloqueada(eq.elemento)){console.log('🔒 Equipe bloqueada, pulando:',eq.veiculo);veiculosProcessados.add(eq.veiculo);bloqueadas++;atualizarProgresso();setTimeout(renomearProxima,300);return;}veiculosProcessados.add(eq.veiculo);processadas++;atualizarProgresso();console.log('['+(processadas)+'/'+total+'] '+eq.veiculo);scrollParaElemento(eq.elemento,()=>{const rect=eq.elemento.getBoundingClientRect();if(rect.width===0||rect.height===0){console.log('⚠️ Elemento não visível');falhas++;setTimeout(renomearProxima,300);return;}eq.elemento.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,view:window,button:2,clientX:rect.left+10,clientY:rect.top+10}));setTimeout(()=>{const menuLinks=document.querySelectorAll('a.p-contextmenu-item-link');let clicouInfo=false;for(let link of menuLinks){const label=link.querySelector('.p-contextmenu-item-label');if(label&amp;&amp;label.textContent.trim()==='Informações'){link.click();clicouInfo=true;break;}}if(!clicouInfo){console.error('❌ Menu não encontrado');falhas++;atualizarProgresso();setTimeout(renomearProxima,500);return;}setTimeout(()=>{const inplaceDisplay=document.querySelector('.p-inplace-display');if(!inplaceDisplay){console.error('❌ p-inplace-display não encontrado');falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inplaceDisplay.click();setTimeout(()=>{const inputNome=document.querySelector('input[type=&quot;text&quot;]:focus')||document.querySelector('.p-inplace-content input');if(!inputNome){console.error('❌ Input não encontrado');falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inputNome.value=eq.nomeEsperado;inputNome.dispatchEvent(new Event('input',{bubbles:true}));inputNome.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{const btnCheck1=document.querySelector('button .pi-check')?document.querySelector('button .pi-check').closest('button'):null;if(btnCheck1){btnCheck1.click();setTimeout(()=>{const btnCheck2=document.querySelector('button .pi-check')?document.querySelector('button .pi-check').closest('button'):null;if(btnCheck2)btnCheck2.click();setTimeout(()=>{const btnFechar=document.querySelector('.p-dialog-close-button');if(btnFechar)btnFechar.click();console.log('✓ Sucesso');sucesso++;atualizarProgresso();aguardarEFecharToast(()=>{fecharModalPrincipal(()=>{setTimeout(renomearProxima,800);});});},500);},600);}else{console.error('❌ Botão confirmar não encontrado');falhas++;atualizarProgresso();fecharModalPrincipal(()=>{setTimeout(renomearProxima,800);});}},300);},700);},1200);},600);});}renomearProxima();})();"
+              title="Arraste para a barra de favoritos">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              ✏️ Renomear Equipes — Digiteam
+            </a>
+          </div>
+          <div style="text-align:center;font-size:10.5px;color:var(--hint);margin-top:6px;">↔ arraste para os favoritos · execute com o Digiteam aberto após carregar o CSV</div>
+        </div>
+
+        <!-- TUTORIAL COMPLETO -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="ct">Tutorial — do zero ao renomeado</div>
+
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Preparação (uma vez)
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">1</div>
+              <div><div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Monte o CSV com os dados das equipes</div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Três colunas: <span style="font-family:var(--mono);color:var(--accent);">veiculo</span>, <span style="font-family:var(--mono);color:var(--accent2);">localdecadastro</span>, <span style="font-family:var(--mono);color:#a78bfa;">termino</span>. Salve como <span style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span>.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">2</div>
+              <div><div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Instale os dois bookmarklets</div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Arraste <strong style="color:#a78bfa;">📂 Conectar CSV</strong> e <strong style="color:#38bdf8;">✏️ Renomear Equipes</strong> para a barra de favoritos (<span style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span> para exibir).</div></div>
+            </div>
+          </div>
+
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>No dia de renomear
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">3</div>
+              <div><div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">Abra o Digiteam e clique em 📂 Conectar CSV</div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Selecione o arquivo .csv. Uma confirmação vai aparecer com o total de veículos carregados.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,.15);border:1.5px solid rgba(56,189,248,.4);color:#38bdf8;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">4</div>
+              <div><div style="font-size:12.5px;font-weight:700;color:#38bdf8;margin-bottom:3px;">✨ Clique em ✏️ Renomear Equipes — aguarde</div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Uma barra de progresso vai aparecer no canto da tela. Você pode <strong>pausar</strong> ou <strong>parar</strong> a qualquer momento. Ao final, um resumo mostra sucesso, falhas e equipes bloqueadas.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DICAS -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="ct">Dicas e comportamentos</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O CSV precisa ser carregado a cada nova sessão — os dados não sobrevivem se você fechar e reabrir a aba.</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com o nome já correto são detectadas e ignoradas — seguro de rodar mais de uma vez.</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com 🔒 cadeado são puladas automaticamente e contadas separado no resumo final.</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">O formato do nome gerado é sempre <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span> em maiúsculas sem acentos, ex: <span style="font-family:var(--mono);color:var(--accent);">PARA DE MINAS-1088-17H</span>.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- FIM RENOMEADOR -->
+
   </div><!-- #pages -->
 
   <div id="footer">
@@ -2028,6 +2549,8 @@ var PICONS={
   coord:'<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>',
   conv:'<path d="M13 2L3 14h7l-2 8 10-12h-7l2-8z" stroke-linejoin="round" stroke-linecap="round"/>',
   consult:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>',
+  automacoes:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  renomeador:'<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
 };
 var PTITLES={
   home:{t:"Início",s:"Ferramentas CSI · CEMIG Operação · OD/PI"},
@@ -2035,7 +2558,9 @@ var PTITLES={
   gdis:{t:"Copiar G-Dis",s:"Extrai e organiza notas de OS do texto copiado do G-Dis"},
   coord:{t:"Corrigir Coordenadas",s:"Converte e padroniza coordenadas geográficas — histórico de sessão"},
   conv:{t:"Conversor Elétrico",s:"kVA · kW · Amperes — trifásico e monofásico para qualquer tensão e FP"},
-  consult:{t:"Consultas",s:"Referência de tipos de serviço por indicador operacional"}
+  consult:{t:"Consultas",s:"Referência de tipos de serviço por indicador operacional"},
+  automacoes:{t:"Seletor de Intervalo",s:"Automação · Digiteam · Bookmarklet"},
+  renomeador:{t:"Renomeador de Equipes",s:"Automação · Digiteam · CSV + Bookmarklet"},
 };
 
 function openSb(){document.getElementById("sb").classList.add("open");document.getElementById("overlay").classList.add("on");}
@@ -2274,10 +2799,6 @@ function calcular(){
     var kpiMarg=document.getElementById("kpi-card-margem");
     if(kpiMarg){kpiMarg.className="kpi-card "+(sobra<0?"kpi-danger":sobra<maxD*0.15?"kpi-warn":"kpi-ok");}
   }
-
-  /* ── Esconde o hero quando resultado aparece ── */
-  var hero=document.getElementById("interlig-hero");
-  if(hero)hero.style.display="none";
 
   /* ── CARD DE RESULTADO UNIFICADO ── escrito em resultado-final no final da função ── */
   var _rt1=document.getElementById("resultado-trafo");if(_rt1)_rt1.innerHTML=""; /* limpo — não usado mais */
