@@ -1,0 +1,3367 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CEMIG · Inteligência Operacional MG</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Exo+2:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap');
+:root{
+  --bg:#060a10; --s1:#0b1320; --s2:#101c2e; --s3:#152236; --s4:#1a2a42;
+  --b1:#1c2e4a; --b2:#253d5c; --b3:#2f506e;
+  --ac:#00e8b8; --ab:#47b8ff; --ay:#ffcc5c; --ar:#ff6080; --ag:#5cf58e; --ap:#a888ff;
+  --t1:#eef4ff;  /* branco frio — máximo contraste */
+  --t2:#c4d8f0;  /* cinza bem claro — legível */
+  --t3:#8ba8c8;  /* cinza médio — bom contraste */
+  --t4:#506880;  /* hint — visível no escuro */
+  --fm:'DM Mono',monospace; --fe:'Exo 2',sans-serif; --fr:'Rajdhani',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--t1);font-family:var(--fe);display:flex;flex-direction:column;}
+
+/* ─ TOPBAR ─ */
+#topbar{height:46px;flex-shrink:0;background:var(--s1);border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:1001;position:relative;overflow:hidden;}
+#topbar::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,232,184,.014) 2px,rgba(0,232,184,.014) 4px);
+  pointer-events:none;z-index:0;}
+#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--ac) 30%,var(--ab) 70%,transparent 100%);opacity:.7;}
+#topbar>*{position:relative;z-index:1;}
+.service-banner{
+  max-height:0;overflow:hidden;padding:0 14px;
+  background:linear-gradient(90deg,rgba(255,204,92,.14),rgba(71,184,255,.1));
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:max-height .2s ease,padding .2s ease;
+}
+.service-banner.show{max-height:64px;padding:10px 14px;}
+.service-banner-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--fm);font-size:10px;color:var(--t1);}
+.service-banner-text{line-height:1.5;color:var(--t2);}
+.service-banner-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.service-banner-btn{
+  background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:4px;
+  color:var(--t1);cursor:pointer;padding:5px 9px;font-family:var(--fm);font-size:9px;letter-spacing:.6px;
+  transition:all .15s;
+}
+.service-banner-btn:hover{border-color:var(--b3);background:rgba(255,255,255,.1);}
+.tb-sep{width:1px;height:24px;background:var(--b2);}
+.tbs{text-align:center;cursor:default;}
+.tbs:hover .tbs-v{opacity:.75;}
+.tbs:hover .tbs-l{color:var(--t2);}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-hex{width:28px;height:28px;background:linear-gradient(135deg,var(--ac),var(--ab));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.tb-name{font-family:var(--fm);font-size:11px;color:var(--ac);letter-spacing:3px;line-height:1.3;}
+.tb-sub{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:1.5px;}
+.tb-stats{display:flex;align-items:center;gap:22px;}
+.tbs{text-align:center;}
+.tbs-v{font-family:var(--fm);font-size:14px;line-height:1;}
+.tbs-l{font-family:var(--fr);font-size:8px;color:var(--t3);letter-spacing:1px;font-weight:600;margin-top:2px;}
+.tb-right{display:flex;align-items:center;gap:14px;}
+.live{display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:9px;color:var(--ac);letter-spacing:1px;}
+.ldot{width:5px;height:5px;background:var(--ac);border-radius:50%;animation:lp 2s ease-in-out infinite;}
+@keyframes lp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,200,.4)}60%{opacity:.4;box-shadow:0 0 0 5px transparent}}
+#clk{font-family:var(--fm);font-size:12px;color:var(--t1);}
+
+/* ─ LAYOUT ─ */
+/* left sidebar shifts floating panels - search and layers handled by JS */
+#body{display:flex;flex:1;overflow:hidden;}
+
+/* ─ FLOATING PANELS (draggable) ─ */
+.fp{position:absolute;z-index:500;background:rgba(11,19,32,.95);border:1px solid var(--b2);
+  border-radius:7px;backdrop-filter:blur(14px);box-shadow:0 8px 32px rgba(0,0,0,.55);
+  min-width:160px;user-select:none;}
+.fp-head{display:flex;align-items:center;justify-content:space-between;
+  padding:7px 10px;border-bottom:1px solid var(--b1);cursor:grab;
+  border-radius:7px 7px 0 0;}
+.fp-head:active{cursor:grabbing;}
+.fp-htitle{font-family:var(--fm);font-size:8px;letter-spacing:2.5px;color:var(--ac);
+  display:flex;align-items:center;gap:5px;}
+.fp-htitle::before{content:'';width:8px;height:1px;background:linear-gradient(90deg,var(--ac),transparent);}
+.fp-actions{display:flex;gap:4px;}
+.fp-btn{background:none;border:1px solid var(--b2);border-radius:2px;color:var(--t3);
+  font-size:10px;line-height:1;padding:1px 6px;cursor:pointer;font-family:var(--fm);
+  transition:all .12s;}
+.fp-btn:hover{color:var(--t1);border-color:var(--b3);}
+.fp-body{padding:10px;}
+.fp-body.collapsed{display:none;}
+
+/* Filter panel */
+#flt-panel{top:60px;left:10px;}
+.mf-row{display:flex;flex-wrap:wrap;gap:4px;}
+.mfb{padding:3px 9px;border-radius:3px;border:1px solid var(--b2);background:transparent;
+  color:var(--t2);font-family:var(--fr);font-size:10px;font-weight:600;cursor:pointer;
+  transition:all .12s;letter-spacing:.3px;display:inline-flex;align-items:center;gap:0;}
+.mfb:hover{color:var(--t1);border-color:var(--b3);}
+.mfb.on{font-weight:700;border-color:transparent;color:var(--bg);}
+.flt-counts{margin-top:8px;padding-top:7px;border-top:1px solid var(--b1);
+  display:flex;flex-wrap:wrap;gap:3px;}
+.flt-cnt{font-family:var(--fm);font-size:8px;color:var(--t4);letter-spacing:.3px;}
+
+/* Chips */
+.chip{font-family:var(--fm);font-size:8px;padding:2px 8px;border-radius:2px;border:1px solid;letter-spacing:.5px;}
+
+/* ─ RAIN OUTLOOK (horário) ─ */
+/* ─ RAIN OUTLOOK ─ */
+.ro-wrap{
+  background:linear-gradient(135deg,rgba(16,28,46,.95),rgba(11,19,32,.98));
+  border:1px solid rgba(71,184,255,.18);border-radius:7px;
+  padding:11px 12px;margin-bottom:12px;
+  box-shadow:0 0 24px rgba(71,184,255,.06),inset 0 1px 0 rgba(71,184,255,.08);
+  position:relative;overflow:hidden;
+}
+.ro-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(71,184,255,.4),rgba(0,232,184,.3),transparent);
+}
+.ro-sum{font-family:var(--fm);font-size:9px;color:var(--t2);margin-bottom:10px;
+  letter-spacing:.3px;line-height:1.5;display:flex;align-items:center;gap:6px;}
+.ro-sum-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;animation:roDotPulse 2s ease-in-out infinite;}
+@keyframes roDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.ro-bars{display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:4px;}
+.ro-slot{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;height:100%;cursor:default;}
+.ro-slot:hover .ro-bar{filter:brightness(1.3);}
+.ro-slot:hover .ro-bar-wrap{background:rgba(255,255,255,.06);}
+.ro-bar-wrap{flex:1;width:100%;display:flex;align-items:flex-end;
+  background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden;
+  transition:background .2s;}
+.ro-bar{width:100%;min-height:2px;border-radius:3px 3px 0 0;
+  transition:height .5s cubic-bezier(.34,1.56,.64,1),filter .2s;
+  position:relative;}
+.ro-bar::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent);
+  border-radius:inherit;}
+.ro-h{font-family:var(--fm);font-size:7.5px;color:var(--t4);letter-spacing:.3px;}
+.ro-p{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.2px;}
+.ro-mm{font-family:var(--fm);font-size:7px;color:var(--t4);}
+
+/* ─ MAP ─ */
+#mw{flex:1;position:relative;}
+#map{width:100%;height:100%;}
+
+/* CartoDB Dark Matter — já é dark nativo, sem filtro necessário */
+.leaflet-tile-pane{filter:none;}
+
+/* ─ FILTRO MULTI-MALHA (sidebar alertas) ─ */
+#malha-filter-wrap{padding:8px 10px 6px;border-bottom:1px solid var(--b1);flex-shrink:0;background:var(--s2);}
+.mf-title{font-family:var(--fm);font-size:7px;letter-spacing:2px;color:var(--t4);margin-bottom:5px;}
+.mf-chips{display:flex;flex-wrap:wrap;gap:3px;}
+.mfc{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--fm);font-size:8px;letter-spacing:.5px;font-weight:600;
+  padding:2px 7px;border-radius:2px;border:1px solid var(--b2);
+  background:transparent;color:var(--t3);cursor:pointer;transition:all .15s;
+}
+.mfc .mfc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.mfc.active{color:var(--bg);border-color:transparent;}
+.mfc:not(.active):hover{color:var(--t1);border-color:var(--b3);}
+
+/* ─ POLO MARKERS — hierarquia visual e glow ─ */
+.polo-mk{display:flex;align-items:center;gap:4px;cursor:pointer;position:relative;}
+.polo-mk-dot{border-radius:50%;border:2px solid color-mix(in srgb,var(--pc) 80%,#fff);
+  background:color-mix(in srgb,var(--pc) 40%,var(--s1));
+  box-shadow:0 0 10px var(--pc),0 0 0 3px color-mix(in srgb,var(--pc) 20%,transparent);
+  transition:transform .15s,box-shadow .15s,opacity .25s;}
+.polo-mk:hover .polo-mk-dot{transform:scale(1.5);box-shadow:0 0 18px var(--pc),0 0 0 5px color-mix(in srgb,var(--pc) 30%,transparent);}
+.polo-mk-lbl{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--t1);
+  background:rgba(6,9,15,.92);padding:1px 5px;border-radius:2px;
+  white-space:nowrap;letter-spacing:1px;border:1px solid color-mix(in srgb,var(--pc) 30%,var(--b2));
+  text-shadow:0 0 6px var(--pc);transition:opacity .25s;}
+/* Polo atenuado quando outra malha está selecionada */
+.polo-mk.dimmed .polo-mk-dot{opacity:.2;box-shadow:none;}
+.polo-mk.dimmed .polo-mk-lbl{opacity:.15;}
+/* Polo com alerta ativo — glow pulsante */
+.polo-mk.has-alert .polo-mk-dot{animation:poloAlertPulse 1.8s ease-in-out infinite;}
+@keyframes poloAlertPulse{
+  0%,100%{box-shadow:0 0 10px var(--pc),0 0 0 3px color-mix(in srgb,var(--pc) 20%,transparent);}
+  50%{box-shadow:0 0 22px var(--pc),0 0 0 7px color-mix(in srgb,var(--pc) 35%,transparent);}
+}
+
+/* ─ INDICADORES DE ATUALIZAÇÃO na topbar ─ */
+#tbs-upd .tbs-v{letter-spacing:.5px;}
+.upd-fresh{color:var(--ag)!important;}
+.upd-stale{color:var(--ay)!important;}
+
+/* ─ FIX: Leaflet default div-icon white background ─ */
+.leaflet-div-icon{background:transparent!important;border:none!important;box-shadow:none!important;}
+
+/* ─ RIGHT ─ */
+#right{width:270px;flex-shrink:0;background:var(--s1);border-left:1px solid var(--b1);
+  display:flex;flex-direction:column;overflow:hidden;transition:width .2s,opacity .2s;}
+#right.hidden{width:0;opacity:0;pointer-events:none;}
+/* Colored accent top bar */
+#rp-accent{height:2px;flex-shrink:0;background:var(--ac);
+  transition:background .3s;opacity:.85;}
+.rp-head{padding:9px 13px 9px;border-bottom:1px solid var(--b1);
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.rp-ttl{font-family:var(--fm);font-size:8px;letter-spacing:3px;color:var(--ac);}
+.rp-close{background:none;border:1px solid var(--b2);color:var(--t2);cursor:pointer;
+  font-size:10px;padding:2px 8px;border-radius:2px;transition:all .15s;font-family:var(--fr);font-weight:600;letter-spacing:.5px;}
+.rp-close:hover{color:var(--t1);border-color:var(--b3);}
+#rcont{flex:1;overflow-y:auto;padding:12px 13px;}
+#rcont::-webkit-scrollbar{width:3px;}
+#rcont::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+
+/* Clima right panel */
+.rp-name{font-family:var(--fr);font-size:18px;font-weight:700;margin-bottom:4px;line-height:1.2;}
+.rp-meta{font-family:var(--fm);font-size:9px;color:var(--t2);letter-spacing:1px;margin-bottom:13px;opacity:.7;}
+.clima-card{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:14px;margin-bottom:12px;}
+.cc-hero{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--b1);}
+.cc-icon{font-size:38px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,255,255,.12));}
+.cc-temp{font-family:var(--fm);font-size:38px;font-weight:200;color:var(--t1);line-height:1;letter-spacing:-1px;}
+.cc-info{flex:1;}
+.cc-desc{font-family:var(--fr);font-size:13px;font-weight:600;color:var(--t1);margin-bottom:2px;}
+.cc-feel{font-family:var(--fm);font-size:10px;color:var(--t2);opacity:.75;}
+.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
+.ccs{background:rgba(21,34,54,.7);border:1px solid var(--b2);border-radius:5px;padding:8px 10px;}
+.ccs-v{font-family:var(--fm);font-size:13px;color:var(--t1);font-weight:500;}
+.ccs-v.blue{color:#67c8ff}.ccs-v.yel{color:#ffd166}
+.ccs-l{font-family:var(--fr);font-size:9px;font-weight:600;color:var(--t2);letter-spacing:.3px;margin-top:3px;opacity:.7;}
+.cc-fore-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);
+  margin:12px 0 8px;display:flex;align-items:center;gap:8px;}
+.cc-fore-ttl::before{content:'';width:14px;height:1px;background:linear-gradient(90deg,var(--ac),transparent);}
+.cc-fore{display:flex;gap:3px;}
+.cf{flex:1;background:rgba(21,34,54,.8);border:1px solid rgba(71,184,255,.1);
+  border-radius:5px;padding:6px 3px;text-align:center;
+  transition:all .2s;cursor:default;position:relative;overflow:hidden;}
+.cf::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(71,184,255,.25),transparent);
+  opacity:0;transition:opacity .2s;}
+.cf:hover{background:rgba(26,42,66,.9);border-color:rgba(71,184,255,.25);transform:translateY(-2px);}
+.cf:hover::before{opacity:1;}
+.cf-h{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.5px;}
+.cf-i{font-size:15px;margin:4px 0 3px;line-height:1;}
+.cf-t{font-family:var(--fm);font-size:12px;color:var(--t1);font-weight:500;}
+.cf-r{font-family:var(--fm);font-size:8px;color:var(--ab);margin-top:2px;}
+.clima-alert{background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.35);
+  border-radius:4px;padding:8px 10px;font-family:var(--fm);font-size:9px;color:var(--ay);
+  margin-bottom:10px;display:flex;gap:7px;align-items:flex-start;line-height:1.6;}
+.rp-muni-ttl{font-family:var(--fm);font-size:8px;letter-spacing:3px;color:var(--ac);
+  margin:12px 0 7px;display:flex;align-items:center;gap:7px;}
+.rp-muni-ttl::before{content:'';width:12px;height:1px;background:linear-gradient(90deg,var(--ac),transparent);}
+.muni-item{display:flex;align-items:center;gap:7px;padding:5px 8px;
+  background:var(--s2);border:1px solid var(--b1);border-radius:3px;
+  font-family:var(--fr);font-size:11px;font-weight:600;color:var(--t1);
+  cursor:pointer;transition:all .12s;margin-bottom:3px;}
+.muni-item:hover{background:var(--s3);border-color:var(--b2);color:var(--ac);}
+.muni-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.muni-cnt{font-family:var(--fm);font-size:8px;color:var(--t3);margin-left:auto;}
+
+/* ─ FLOATING CARD MUNICÍPIO ─ */
+#mcard{
+  position:absolute;z-index:700;
+  background:var(--s1);border:1px solid var(--b3);
+  border-radius:8px;padding:0;
+  box-shadow:0 12px 40px rgba(0,0,0,.8);
+  min-width:260px;max-width:300px;
+  display:none;
+  animation:fadeIn .15s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.mc-head{padding:11px 13px 9px;border-bottom:1px solid var(--b1);}
+.mc-name{font-family:var(--fr);font-size:16px;font-weight:700;color:var(--t1);margin-bottom:1px;}
+.mc-sub{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:1px;}
+.mc-close{position:absolute;top:8px;right:10px;background:none;border:none;
+  color:var(--t3);cursor:pointer;font-size:14px;line-height:1;padding:2px 4px;}
+.mc-close:hover{color:var(--t1);}
+.mc-body{padding:10px 13px 13px;}
+.mc-clima{display:flex;align-items:center;gap:10px;margin-bottom:10px;
+  background:var(--s2);border:1px solid var(--b1);border-radius:5px;padding:9px;}
+.mc-icon{font-size:28px;}
+.mc-temp{font-family:var(--fm);font-size:28px;font-weight:300;color:var(--ac);line-height:1;}
+.mc-cr{flex:1;}
+.mc-desc{font-family:var(--fr);font-size:12px;font-weight:600;color:var(--t1);}
+.mc-row{display:flex;gap:8px;margin-top:3px;flex-wrap:wrap;}
+.mc-pill{font-family:var(--fm);font-size:9px;color:var(--ab);}
+.mc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:9px;}
+.mc-stat{background:var(--s2);border:1px solid var(--b2);border-radius:4px;padding:6px 7px;}
+.mc-sv{font-family:var(--fm);font-size:12px;color:var(--t1);font-weight:500;}
+.mc-sl{font-family:var(--fr);font-size:7px;color:var(--t3);font-weight:600;letter-spacing:.6px;margin-top:2px;}
+@keyframes mcpulse{0%,100%{opacity:.3}50%{opacity:.9}}
+.mc-loading{animation:mcpulse 1.2s ease-in-out infinite;font-size:11px;color:var(--t4);}
+.mc-news{margin-top:8px;}
+.mc-news-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);margin-bottom:5px;
+  display:flex;align-items:center;gap:6px;}
+.mc-news-ttl::before{content:'';width:10px;height:1px;background:linear-gradient(90deg,var(--ac),transparent);}
+.mc-article{padding:5px 0;border-bottom:1px solid var(--b1);cursor:pointer;transition:opacity .15s;}
+.mc-article:last-child{border:none;}
+.mc-article:hover{opacity:.75;}
+.mc-art-title{font-family:var(--fr);font-size:10px;font-weight:600;color:var(--t1);line-height:1.4;margin-bottom:2px;}
+.mc-art-src{font-family:var(--fm);font-size:8px;color:var(--t3);}
+.mc-locais-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);margin:8px 0 5px;
+  display:flex;align-items:center;gap:6px;}
+.mc-locais-ttl::before{content:'';width:10px;height:1px;background:linear-gradient(90deg,var(--ac),transparent);}
+.mc-loc{display:flex;gap:6px;padding:2px 0;border-bottom:1px solid var(--b1);font-family:var(--fm);font-size:9px;color:var(--t2);}
+.mc-loc:last-child{border:none;}
+.mc-lc{color:var(--ab);min-width:34px;}
+
+/* ─ LAYERS HUD (now a floating panel) ─ */
+#layers{top:10px;right:12px;min-width:175px;transition:right .2s;}
+#layers.rp-open{right:282px;}
+.lt-t{font-family:var(--fm);font-size:7.5px;letter-spacing:2px;color:var(--ac);opacity:.7;}
+.lt{display:flex;align-items:center;gap:7px;font-family:var(--fr);font-size:10px;
+  font-weight:600;color:var(--t2);cursor:pointer;user-select:none;letter-spacing:.3px;
+  padding:2px 0;}
+.lt:hover{color:var(--t1);}
+.lt input{display:none;}
+.pill{width:24px;height:12px;background:var(--b2);border-radius:6px;position:relative;transition:background .15s;flex-shrink:0;}
+.pill::after{content:'';position:absolute;width:8px;height:8px;background:var(--t3);border-radius:50%;top:2px;left:2px;transition:all .15s;}
+.lt input:checked~.pill{background:rgba(0,255,200,.22);}
+.lt input:checked~.pill::after{left:14px;background:var(--ac);}
+.lt-sep{border-top:1px solid var(--b2);margin:1px 0;}
+
+/* ─ SEARCH ─ */
+#sw{position:absolute;top:10px;left:10px;z-index:500;}
+.sw-wrap{position:relative;}
+#srch{background:rgba(12,20,34,.92);border:1px solid var(--b2);border-radius:4px;
+  padding:7px 38px 7px 12px;color:var(--t1);font-family:var(--fr);font-size:11px;font-weight:600;
+  width:235px;outline:none;transition:border-color .15s,box-shadow .15s;backdrop-filter:blur(8px);letter-spacing:.3px;}
+#srch:focus{border-color:var(--ac);box-shadow:0 0 0 2px rgba(0,232,184,.10);}
+#srch::placeholder{color:var(--t4);}
+.sw-kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-family:var(--fm);font-size:8px;color:var(--t4);background:var(--s3);
+  border:1px solid var(--b2);border-radius:2px;padding:1px 5px;pointer-events:none;
+  transition:opacity .15s;}
+#srch:focus~.sw-kbd{opacity:0;}
+#sr{position:absolute;top:calc(100% + 4px);left:0;width:100%;background:var(--s1);
+  border:1px solid var(--b2);border-radius:5px;overflow:hidden;display:none;
+  max-height:300px;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,.7);}
+#sr::-webkit-scrollbar{width:3px;}
+#sr::-webkit-scrollbar-thumb{background:var(--b3);border-radius:2px;}
+.sri{padding:7px 11px;font-family:var(--fr);font-size:11px;font-weight:600;color:var(--t1);
+  cursor:pointer;border-bottom:1px solid var(--b1);transition:background .1s,color .1s;letter-spacing:.3px;}
+.sri:last-child{border:none;}
+.sri:hover,.sri.sri-active{background:var(--s2);color:var(--t1);}
+.sri-s{font-family:var(--fm);font-size:8px;color:var(--t3);font-weight:400;margin-top:2px;letter-spacing:.3px;}
+/* Search type badges */
+.sri-type{display:inline-block;font-family:var(--fm);font-size:7px;letter-spacing:1.5px;
+  padding:1px 5px;border-radius:2px;margin-right:6px;vertical-align:middle;position:relative;top:-1px;}
+.sri-type.polo{background:rgba(0,232,184,.12);color:var(--ac);border:1px solid rgba(0,232,184,.3);}
+.sri-type.muni{background:rgba(71,184,255,.12);color:var(--ab);border:1px solid rgba(71,184,255,.3);}
+.sri-type.local{background:rgba(255,204,92,.12);color:var(--ay);border:1px solid rgba(255,204,92,.3);}
+/* No results state */
+.sr-empty{padding:12px 11px;font-family:var(--fm);font-size:9px;color:var(--t4);letter-spacing:.5px;}
+
+/* ─ LEGEND ─ */
+#leg{position:absolute;bottom:24px;left:10px;z-index:500;
+  background:rgba(11,19,32,.94);border:1px solid var(--b2);
+  border-radius:6px;padding:9px 12px;backdrop-filter:blur(10px);
+  transition:opacity .3s;max-height:380px;overflow-y:auto;min-width:110px;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);}
+#leg::-webkit-scrollbar{width:3px;}
+#leg::-webkit-scrollbar-thumb{background:var(--b3);border-radius:2px;}
+#leg.hidden-leg{opacity:0;pointer-events:none;}
+.leg-ttl{font-family:var(--fm);font-size:7.5px;letter-spacing:2.5px;color:var(--ac);
+  margin-bottom:6px;text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid var(--b1);}
+.li{display:flex;align-items:center;gap:6px;font-family:var(--fr);font-size:9.5px;
+  font-weight:600;color:var(--t2);margin-bottom:3px;letter-spacing:.4px;line-height:1.4;}
+.li:last-child{margin:0;}
+.ld{width:7px;height:7px;border-radius:50%;flex-shrink:0;box-shadow:0 0 4px currentColor;}
+.leg-ci{cursor:pointer;border-radius:3px;padding:1px 4px 1px 2px;margin-left:-4px;transition:all .12s;}
+.leg-ci:hover{color:var(--ac);background:rgba(0,232,184,.08);}
+
+/* ─ RAIN LEGEND ─ */
+#rain-leg{position:absolute;bottom:24px;right:12px;z-index:500;
+  background:rgba(12,20,34,.88);border:1px solid var(--b2);
+  border-radius:5px;padding:7px 10px;backdrop-filter:blur(6px);display:none;
+  transition:right .2s;}
+#rain-leg.rp-open{right:282px;}
+.rl-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);margin-bottom:5px;}
+.rl-bar{height:8px;width:140px;border-radius:2px;margin-bottom:3px;
+  background:linear-gradient(90deg,rgba(61,184,255,.3),#3db8ff,#00ffc8,#ffd166,#ff5a78);}
+.rl-labels{display:flex;justify-content:space-between;font-family:var(--fm);font-size:8px;color:var(--t3);}
+/* ─ PRECIPITATION PIN ─ */
+/* ─ PRECIPITATION PIN — premium radar style ─ */
+.pr-pin{position:relative;display:flex;align-items:center;justify-content:center;}
+
+/* Ripple rings */
+.pr-ring{position:absolute;border-radius:50%;border:1px solid var(--pc);pointer-events:none;}
+.pr-r1{animation:prRipple 2.8s ease-out infinite;}
+.pr-r2{animation:prRipple 2.8s ease-out infinite .93s;}
+.pr-r3{animation:prRipple 2.8s ease-out infinite 1.86s;}
+@keyframes prRipple{
+  0%{opacity:.9;transform:scale(.15);box-shadow:0 0 0 0 var(--pc);}
+  60%{opacity:.3;}
+  100%{opacity:0;transform:scale(1);box-shadow:0 0 12px 4px transparent;}
+}
+
+/* Filled radar sweep */
+.pr-sweep{
+  position:absolute;border-radius:50%;
+  background:conic-gradient(from -30deg, transparent 0deg, color-mix(in srgb,var(--pc) 18%,transparent) 60deg, transparent 90deg);
+  animation:prSweep 3s linear infinite;
+  pointer-events:none;
+}
+@keyframes prSweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* Core dot */
+.pr-core{
+  border-radius:50%;background:var(--pc);
+  box-shadow:0 0 20px var(--pc),0 0 40px color-mix(in srgb,var(--pc) 35%,transparent),0 0 6px rgba(0,0,0,.8);
+  z-index:3;position:relative;flex-shrink:0;
+  animation:prCorePulse 2.8s ease-in-out infinite;
+}
+@keyframes prCorePulse{0%,100%{box-shadow:0 0 20px var(--pc),0 0 40px color-mix(in srgb,var(--pc) 35%,transparent)}50%{box-shadow:0 0 28px var(--pc),0 0 56px color-mix(in srgb,var(--pc) 50%,transparent)}}
+
+/* Rain drops inside circle */
+.pr-drops{position:absolute;border-radius:50%;overflow:hidden;pointer-events:none;z-index:1;}
+.pr-drop{
+  position:absolute;width:1.5px;border-radius:1px;
+  background:linear-gradient(to bottom,transparent,var(--pc));
+  animation:prDrop linear infinite;
+  opacity:.6;
+}
+@keyframes prDrop{from{transform:translateY(-100%)}to{transform:translateY(200%)}}
+
+/* Lightning flash */
+.pr-lightning{
+  position:absolute;z-index:4;pointer-events:none;
+  font-size:16px;filter:drop-shadow(0 0 6px #ffdd44);
+  animation:prLightning 4s ease-in-out infinite;
+  opacity:0;
+}
+@keyframes prLightning{
+  0%,85%,90%,95%,100%{opacity:0;}
+  87%{opacity:1;transform:scale(1.3);}
+  92%{opacity:.7;}
+}
+
+/* Info badge */
+.pr-info{
+  position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);
+  font-family:'DM Mono',monospace;font-size:8px;font-weight:500;color:var(--pc);
+  background:rgba(6,9,15,.92);padding:2px 7px;border-radius:3px;white-space:nowrap;
+  border:1px solid color-mix(in srgb,var(--pc) 30%,transparent);
+  letter-spacing:.4px;text-shadow:0 0 8px var(--pc);pointer-events:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+
+/* Hover card */
+.pr-card{
+  position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  background:rgba(6,9,15,.95);border:1px solid color-mix(in srgb,var(--pc) 35%,transparent);
+  border-radius:6px;padding:8px 10px;min-width:140px;
+  font-family:'DM Mono',monospace;font-size:8px;color:var(--t2);
+  pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;
+  transform:translateX(-50%) translateY(4px);
+  box-shadow:0 8px 24px rgba(0,0,0,.7),0 0 20px color-mix(in srgb,var(--pc) 12%,transparent);
+  z-index:10;white-space:nowrap;
+}
+.pr-pin:hover .pr-card{opacity:1;transform:translateX(-50%) translateY(0);}
+.pr-card-name{font-size:9.5px;font-weight:500;color:var(--pc);margin-bottom:5px;letter-spacing:.5px;}
+.pr-card-row{display:flex;justify-content:space-between;gap:12px;margin-top:2px;line-height:1.7;}
+.pr-card-k{color:var(--t4);}
+.pr-card-v{color:var(--t1);}
+
+@keyframes rainPulse{0%,100%{opacity:.7}50%{opacity:1}}
+
+/* ─ POPUP ─ */
+.leaflet-popup-content-wrapper{background:var(--s1)!important;border:1px solid var(--b3)!important;
+  border-radius:7px!important;box-shadow:0 16px 48px rgba(0,0,0,.85)!important;padding:0!important;}
+.leaflet-popup-tip{background:var(--s1)!important;}
+.leaflet-popup-content{margin:0!important;}
+.leaflet-control-zoom a{background:var(--s1)!important;color:var(--t1)!important;border-color:var(--b2)!important;}
+.leaflet-control-attribution{background:rgba(6,9,15,.85)!important;color:var(--t4)!important;font-size:8px!important;}
+.leaflet-control-attribution a{color:var(--t4)!important;}
+.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:transparent!important;border:none!important;}
+.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:transparent!important;}
+
+/* Popup */
+.pu{padding:12px 14px;min-width:225px;}
+.pu-n{font-family:var(--fr);font-size:16px;font-weight:700;letter-spacing:.3px;margin-bottom:2px;}
+.pu-m{font-family:var(--fm);font-size:8.5px;color:var(--t3);letter-spacing:1.2px;margin-bottom:9px;}
+.pu-g{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px;}
+.pu-s{background:var(--s2);border-radius:4px;padding:7px 9px;border:1px solid var(--b2);}
+.pu-sv{font-family:var(--fm);font-size:15px;color:var(--t1);}
+.pu-sl{font-family:var(--fr);font-size:8.5px;color:var(--t3);letter-spacing:.5px;font-weight:600;}
+.pu-btn{width:100%;padding:7px 0;background:rgba(0,232,184,.08);
+  border:1px solid rgba(0,232,184,.3);border-radius:4px;color:var(--ac);
+  font-family:var(--fr);font-size:10px;font-weight:700;letter-spacing:1.2px;cursor:pointer;transition:all .18s;}
+.pu-btn:hover{background:rgba(0,232,184,.18);border-color:var(--ac);transform:translateY(-1px);}
+
+/* ─ GEO POLYGON HIGHLIGHT ─ */
+.leaflet-interactive.muni-geo{transition:fill-opacity .2s;}
+.leaflet-interactive.muni-geo:hover{fill-opacity:.28!important;cursor:pointer;}
+
+/* Tooltip escuro flutuante para polígonos — sem usar Leaflet bindTooltip */
+#geo-tip{
+  position:absolute;z-index:800;display:none;pointer-events:none;
+  background:rgba(6,9,15,.93);border:1px solid var(--b3);
+  border-radius:4px;color:var(--t1);
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:.8px;padding:3px 10px;
+  box-shadow:0 4px 16px rgba(0,0,0,.6);
+  white-space:nowrap;
+}
+
+/* ─ POLO MARKERS (main map dots with base code) ─ */
+.polo-mk{display:flex;align-items:center;gap:3px;cursor:pointer;}
+.polo-mk-dot{border-radius:50%;flex-shrink:0;background:var(--pc);
+  border:1.5px solid rgba(255,255,255,.2);
+  box-shadow:0 0 12px color-mix(in srgb,var(--pc) 50%,transparent);transition:transform .15s;}
+.polo-mk:hover .polo-mk-dot{transform:scale(1.35);}
+.polo-mk-lbl{font-family:'DM Mono',monospace;font-size:8.5px;font-weight:500;
+  color:var(--pc);letter-spacing:.8px;white-space:nowrap;
+  text-shadow:0 0 6px rgba(0,0,0,.9),0 1px 2px rgba(0,0,0,.8);}
+
+/* ─ MUNICIPALITY MARKERS (expanded polo) ─ */
+.muni-mk{display:flex;align-items:center;gap:4px;cursor:pointer;}
+.muni-mk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;
+  box-shadow:0 0 8px currentColor;transition:transform .15s;
+  border:1px solid rgba(255,255,255,.15);}
+.muni-mk:hover .muni-mk-dot{transform:scale(1.5);}
+.muni-mk-lbl{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--t1);
+  background:rgba(6,9,15,.88);padding:1px 5px;border-radius:2px;
+  white-space:nowrap;letter-spacing:.5px;border:1px solid rgba(255,255,255,.1);
+  text-shadow:0 0 3px rgba(0,0,0,.5);}
+
+/* ─ ALERT MARKERS ─ */
+.alert-pin{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;}
+.alert-ico{font-size:18px;filter:drop-shadow(0 0 6px rgba(255,90,120,.8));animation:alertPulse 2s ease-in-out infinite;}
+@keyframes alertPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.alert-lbl{font-family:'DM Mono',monospace;font-size:8px;color:#ff5a78;background:rgba(255,90,120,.12);
+  border:1px solid rgba(255,90,120,.4);border-radius:2px;padding:1px 4px;white-space:nowrap;letter-spacing:.5px;}
+
+/* ─ MUNICIPALITY PANEL (right sidebar) ─ */
+.mp-breadcrumb{display:flex;align-items:center;gap:5px;margin-bottom:10px;flex-wrap:wrap;}
+.mp-bc-polo{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:1.2px;
+  cursor:pointer;padding:3px 8px;border-radius:3px;border:1px solid var(--b2);
+  background:var(--s2);transition:all .15s;display:inline-flex;align-items:center;gap:4px;}
+.mp-bc-polo:hover{color:var(--ac);border-color:rgba(0,232,184,.35);background:rgba(0,232,184,.06);}
+.mp-bc-sep{color:var(--t4);font-size:9px;}
+.mp-bc-cur{font-family:var(--fm);font-size:8px;color:var(--t2);letter-spacing:.8px;}
+.mp-back{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:1.5px;
+  cursor:pointer;padding:2px 0 10px;display:inline-flex;align-items:center;gap:4px;
+  transition:color .15s;}
+.mp-back:hover{color:var(--ac);}
+.mp-title{font-family:var(--fr);font-size:18px;font-weight:700;line-height:1.2;margin-bottom:4px;}
+.mp-meta{font-family:var(--fm);font-size:9px;color:var(--t2);letter-spacing:.8px;margin-bottom:13px;opacity:.7;}
+.mp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;}
+.mp-stat{background:rgba(21,34,54,.7);border:1px solid var(--b2);border-radius:5px;padding:8px 9px;}
+.mp-sv{font-family:var(--fm);font-size:14px;color:var(--t1);font-weight:600;}
+.mp-sl{font-family:var(--fr);font-size:9px;color:var(--t2);font-weight:600;letter-spacing:.3px;margin-top:3px;opacity:.7;}
+.mp-ibge{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.5px;
+  padding:4px 8px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;
+  margin-bottom:12px;display:inline-block;}
+
+/* Wikipedia box */
+.mp-wiki-loading{display:flex;align-items:center;gap:8px;padding:14px 0;
+  font-family:var(--fm);font-size:9px;color:var(--t4);letter-spacing:.5px;}
+.mp-wiki-spinner{width:14px;height:14px;border:2px solid var(--b2);border-top-color:var(--ac);
+  border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+.mp-wiki-box{background:var(--s2);border:1px solid var(--b2);border-radius:6px;
+  overflow:hidden;margin-bottom:14px;}
+.mp-wiki-photo{width:100%;height:140px;object-fit:cover;display:block;opacity:.9;
+  transition:opacity .2s;}
+.mp-wiki-photo:hover{opacity:1;}
+.mp-wiki-header{padding:10px 12px 6px;}
+.mp-wiki-badge{font-family:var(--fm);font-size:7px;letter-spacing:2px;color:var(--ac);
+  margin-bottom:4px;}
+.mp-wiki-title{font-family:var(--fr);font-size:14px;font-weight:700;color:var(--t1);
+  margin-bottom:0;}
+.mp-wiki-text{padding:0 12px 10px;max-height:320px;overflow-y:auto;}
+.mp-wiki-text::-webkit-scrollbar{width:3px;}
+.mp-wiki-text::-webkit-scrollbar-thumb{background:var(--b3);border-radius:2px;}
+.mp-wiki-p{font-family:var(--fe);font-size:11px;color:var(--t1);line-height:1.8;
+  margin-bottom:10px;opacity:.9;}
+.mp-wiki-p:last-child{margin-bottom:0;}
+.mp-wiki-link{display:block;padding:8px 12px;font-family:var(--fm);font-size:8px;
+  color:var(--ab);letter-spacing:.5px;border-top:1px solid var(--b1);
+  text-decoration:none;transition:color .15s;background:rgba(71,184,255,.04);}
+.mp-wiki-link:hover{color:var(--t1);background:rgba(71,184,255,.08);}
+.mp-wiki-empty{padding:14px 0;font-family:var(--fm);font-size:9px;color:var(--t4);
+  display:flex;flex-direction:column;gap:6px;}
+.mp-section-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);
+  margin:14px 0 8px;display:flex;align-items:center;gap:8px;padding-bottom:5px;
+  border-bottom:1px solid rgba(0,229,184,.08);}
+.mp-section-ttl::before{content:'';width:10px;height:1px;
+  background:linear-gradient(90deg,var(--ac),transparent);}
+.mp-section-placeholder{font-family:var(--fm);font-size:9px;color:var(--t4);padding:6px 0;}
+.mp-locs{margin-bottom:8px;}
+.mp-loc{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1);
+  font-family:var(--fm);font-size:10px;color:var(--t1);opacity:.85;}
+.mp-loc:last-child{border:none;}
+.mp-lc{color:var(--ab);min-width:36px;flex-shrink:0;}
+.mp-loc-more{font-family:var(--fm);font-size:8px;color:var(--t4);padding-top:4px;}
+
+/* ─ ALERT BADGES — INMET + OWM ─ */
+.mp-alerts-wrap{margin-bottom:12px;display:flex;flex-direction:column;gap:6px;}
+.mp-alert{
+  background:rgba(11,19,32,.95);
+  border-left:3px solid var(--ac2,var(--ay));
+  border-radius:0 5px 5px 0;
+  padding:8px 10px;
+  border-top:1px solid rgba(255,255,255,.05);
+  border-right:1px solid rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  animation:alertSlide .3s ease;
+}
+@keyframes alertSlide{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.mp-alert-head{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.mp-alert-ico{font-size:13px;line-height:1;}
+.mp-alert-badge{
+  font-family:var(--fm);font-size:7.5px;letter-spacing:1.2px;
+  padding:1px 6px;border-radius:2px;border:1px solid;font-weight:600;
+}
+.mp-alert-src{
+  font-family:var(--fm);font-size:7px;color:var(--t4);letter-spacing:1.5px;
+  margin-left:auto;padding:1px 5px;border-radius:2px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+}
+.mp-alert-evt{font-family:var(--fe);font-size:10px;font-weight:600;color:var(--t1);margin-bottom:3px;}
+.mp-alert-time{font-family:var(--fm);font-size:7.5px;color:var(--t3);letter-spacing:.3px;margin-bottom:3px;}
+.mp-alert-desc{font-family:var(--fe);font-size:9px;color:var(--t3);line-height:1.5;margin-top:3px;}
+
+/* Alert source badges on map pins */
+.alert-src-badge{
+  font-family:var(--fm);font-size:7px;letter-spacing:1px;
+  padding:1px 5px;border-radius:2px;margin-top:2px;
+  font-weight:600;text-align:center;
+}
+/* badge INMET removido */
+.alert-src-badge.owm{background:rgba(168,136,255,.15);color:#a888ff;border:1px solid rgba(168,136,255,.3);}
+
+/* Alert glow behind pin */
+.alert-glow{
+  position:absolute;width:44px;height:44px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--ag) 30%,transparent) 0%,transparent 70%);
+  animation:alertGlowPulse 2s ease-in-out infinite;
+  top:50%;left:50%;transform:translate(-50%,-70%);
+  pointer-events:none;
+}
+@keyframes alertGlowPulse{0%,100%{opacity:.5;transform:translate(-50%,-70%) scale(1)}50%{opacity:1;transform:translate(-50%,-70%) scale(1.3)}}
+
+/* Alert tooltip dark */
+.alert-tip .leaflet-tooltip{
+  background:rgba(6,9,15,.95)!important;
+  border:1px solid var(--b3)!important;
+  color:var(--t1)!important;
+  font-family:var(--fm)!important;
+  font-size:9px!important;
+}
+
+/* ─ OWM HOURLY FORECAST ─ */
+.owm-hourly{
+  display:flex;gap:3px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;
+  scrollbar-width:thin;scrollbar-color:var(--b2) transparent;
+}
+.owm-hourly::-webkit-scrollbar{height:3px;}
+.owm-hourly::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.owm-slot{
+  flex-shrink:0;min-width:44px;
+  background:rgba(26,42,66,.7);border:1px solid rgba(71,184,255,.1);
+  border-radius:5px;padding:6px 4px;text-align:center;
+  transition:all .2s;cursor:default;
+}
+.owm-slot:hover{background:rgba(30,50,80,.9);border-color:rgba(71,184,255,.25);transform:translateY(-2px);}
+.owm-h{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.5px;margin-bottom:2px;}
+.owm-i{font-size:15px;margin:3px 0;}
+.owm-t{font-family:var(--fm);font-size:11px;color:var(--t1);font-weight:500;}
+.owm-p{font-family:var(--fm);font-size:8px;margin-top:2px;}
+.owm-mm{font-family:var(--fm);font-size:7px;color:var(--t4);margin-top:1px;}
+
+/* ─ INTERVALO 1h/3h/12h/24h ─ */
+.interval-card{
+  background:linear-gradient(135deg,rgba(11,19,32,.98),rgba(16,28,46,.95));
+  border:1px solid rgba(71,184,255,.15);border-radius:7px;
+  padding:11px 12px;margin-top:10px;
+  box-shadow:0 0 20px rgba(71,184,255,.05),inset 0 1px 0 rgba(71,184,255,.08);
+  position:relative;overflow:hidden;
+}
+.interval-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,232,184,.35),rgba(71,184,255,.3),transparent);
+}
+.interval-ttl{
+  font-family:var(--fm);font-size:8px;letter-spacing:2px;color:var(--ac);
+  margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;
+}
+.interval-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.iv-slot{
+  background:rgba(21,34,54,.85);border:1px solid rgba(71,184,255,.1);
+  border-radius:5px;padding:8px 4px;text-align:center;
+  transition:all .2s;cursor:default;position:relative;overflow:hidden;
+}
+.iv-slot::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(71,184,255,.2),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.iv-slot:hover{background:rgba(26,42,66,.9);border-color:rgba(71,184,255,.3);transform:translateY(-2px);}
+.iv-slot:hover::after{opacity:1;}
+.iv-label{font-family:var(--fm);font-size:9px;font-weight:500;color:var(--ac);letter-spacing:1px;margin-bottom:5px;}
+.iv-ico{font-size:16px;margin-bottom:4px;line-height:1;}
+.iv-temp{font-family:var(--fm);font-size:12px;color:var(--t1);font-weight:500;margin-bottom:3px;}
+.iv-prob{font-family:var(--fm);font-size:8.5px;margin-bottom:2px;}
+.iv-mm{font-family:var(--fm);font-size:7.5px;color:var(--t3);}
+
+/* ─ SOURCE LABELS ─ */
+.data-src{
+  font-family:var(--fm);font-size:7px;letter-spacing:1px;color:var(--t4);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:2px;padding:1px 5px;margin-left:auto;
+}
+.data-src-row{
+  font-family:var(--fm);font-size:7.5px;color:var(--t4);
+  text-align:right;margin-top:6px;letter-spacing:.4px;
+  padding-top:5px;border-top:1px solid rgba(255,255,255,.05);
+}
+
+/* ─ FALLBACK VAZIO ─ */
+.fore-empty{
+  font-family:var(--fm);font-size:9px;color:var(--t4);
+  padding:10px 0;text-align:center;letter-spacing:.5px;
+}
+
+/* ─ RAIN LEGEND nova escala ─ */
+.rl-scale{display:flex;flex-direction:column;gap:4px;margin-bottom:5px;}
+.rl-item{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:8px;color:var(--t2);}
+.rl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.rl-note{font-family:var(--fm);font-size:7px;color:var(--t4);padding-top:4px;border-top:1px solid rgba(255,255,255,.06);}
+
+/* ─ ALERT KPI PANEL ─ */
+.alert-kpi-item{
+  background:rgba(11,19,32,.9);border-left:2px solid var(--aic,#ff6080);
+  border-radius:0 4px 4px 0;padding:6px 8px;margin-bottom:5px;
+  border-top:1px solid rgba(255,255,255,.04);
+  border-right:1px solid rgba(255,255,255,.03);
+  animation:alertSlide .25s ease;
+}
+.aki-head{display:flex;align-items:center;gap:5px;margin-bottom:3px;flex-wrap:wrap;}
+.aki-sev{font-family:var(--fm);font-size:7px;letter-spacing:1px;padding:1px 5px;border-radius:2px;border:1px solid;font-weight:600;flex-shrink:0;}
+.aki-polo{font-family:var(--fr);font-size:10px;font-weight:700;color:var(--t1);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.aki-src{font-family:var(--fm);font-size:6.5px;color:var(--t4);padding:1px 4px;background:rgba(255,255,255,.04);border-radius:2px;flex-shrink:0;}
+.aki-evt{font-family:var(--fe);font-size:9px;color:var(--t2);margin-bottom:2px;line-height:1.4;}
+.aki-time{font-family:var(--fm);font-size:7px;color:var(--t4);}
+#alert-kpi-body::-webkit-scrollbar{width:3px;}
+#alert-kpi-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+
+/* ─ ZOOM CONTROLS — removidos (usar scroll do mouse) ─ */
+.leaflet-control-zoom{display:none!important;}
+.leaflet-top.leaflet-left{display:none!important;}
+
+/* ─ LEFT SIDEBAR — Alertas Meteorológicos ─ */
+#left{
+  width:0;flex-shrink:0;background:var(--s1);border-right:1px solid var(--b1);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:width .25s cubic-bezier(.4,0,.2,1),opacity .25s;
+  opacity:0;pointer-events:none;
+}
+#left.open{width:280px;opacity:1;pointer-events:all;}
+#left-accent{height:2px;flex-shrink:0;background:var(--ar);opacity:.85;}
+#left-head{padding:9px 13px;border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+#left-ttl{font-family:var(--fm);font-size:8px;letter-spacing:2.5px;color:var(--ar);
+  display:flex;align-items:center;gap:6px;}
+#left-count{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--ar);
+  background:rgba(255,96,128,.1);border:1px solid rgba(255,96,128,.25);
+  border-radius:10px;padding:0 8px;line-height:20px;margin-left:6px;}
+#left-retract{background:none;border:1px solid var(--b2);color:var(--t3);cursor:pointer;
+  font-size:11px;padding:2px 8px;border-radius:2px;transition:all .15s;
+  font-family:var(--fr);font-weight:600;flex-shrink:0;}
+#left-retract:hover{color:var(--t1);border-color:var(--b3);}
+/* Tab visible only when sidebar is retracted */
+#left-tab{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:22px;background:var(--s1);border:1px solid var(--b2);
+  border-left:none;border-radius:0 5px 5px 0;
+  display:none;flex-direction:column;align-items:center;
+  padding:10px 3px;gap:6px;cursor:pointer;z-index:501;
+  transition:background .15s;
+}
+#left-tab:hover{background:var(--s2);}
+#left-tab span{font-size:10px;color:var(--ar);writing-mode:vertical-rl;}
+#left-tab #left-tab-count{font-family:var(--fm);font-size:9px;font-weight:700;color:var(--ar);}
+#left.retracted{width:0;opacity:0;pointer-events:none;}
+#left.retracted + #left-tab{display:flex;}
+#left-legend{padding:8px 13px 7px;border-bottom:1px solid var(--b1);flex-shrink:0;background:var(--s2);}
+.ll-title{font-family:var(--fm);font-size:7px;letter-spacing:2px;color:var(--t4);margin-bottom:5px;}
+.ll-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;}
+.ll-row{display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:7.5px;color:var(--t3);}
+.ll-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+#left-list{flex:1;overflow-y:auto;padding:8px 10px;}
+#left-list::-webkit-scrollbar{width:3px;}
+#left-list::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.al-card{
+  border-left:2px solid var(--alc,#ff6080);
+  background:rgba(11,19,32,.85);border-radius:0 5px 5px 0;
+  padding:8px 10px;margin-bottom:5px;cursor:pointer;
+  border-top:1px solid rgba(255,255,255,.04);
+  border-right:1px solid rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(255,255,255,.03);
+  transition:background .15s,transform .15s;animation:alertSlide .2s ease;
+}
+.al-card:hover{background:rgba(21,34,54,.95);transform:translateX(3px);}
+.al-card:hover .al-polo{color:var(--alc,#ff6080);}
+.al-head{display:flex;align-items:center;gap:5px;margin-bottom:4px;flex-wrap:wrap;}
+.al-sev{font-family:var(--fm);font-size:7px;letter-spacing:1px;font-weight:700;
+  padding:1px 6px;border-radius:2px;border:1px solid;flex-shrink:0;}
+.al-polo{font-family:var(--fr);font-size:11px;font-weight:700;color:var(--t1);flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s;}
+.al-src{font-family:var(--fm);font-size:6.5px;color:var(--t4);padding:1px 4px;
+  background:rgba(255,255,255,.05);border-radius:2px;flex-shrink:0;}
+.al-evt{font-family:var(--fe);font-size:9px;color:var(--t2);line-height:1.4;margin-bottom:3px;}
+.al-time{font-family:var(--fm);font-size:7px;color:var(--t4);}
+.al-empty{font-family:var(--fm);font-size:9px;color:var(--t4);text-align:center;padding:24px 0;}
+
+#loading{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;gap:12px;transition:opacity .5s;}
+#loading.out{opacity:0;pointer-events:none;}
+.lr{width:40px;height:40px;border:2px solid var(--b2);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lt2{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:3px;}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-hex">⚡</div>
+    <div><div class="tb-name">CEMIG · CSI</div><div class="tb-sub">INTELIGÊNCIA OPERACIONAL — MINAS GERAIS</div></div>
+  </div>
+  <div class="tb-stats">
+    <div class="tbs"><div class="tbs-v" style="color:var(--ac)">47</div><div class="tbs-l">POLOS</div></div>
+    <div class="tb-sep"></div>
+    <div class="tbs"><div class="tbs-v" style="color:var(--ab)">850</div><div class="tbs-l">MUNICÍPIOS</div></div>
+    <div class="tb-sep"></div>
+    <div class="tbs"><div class="tbs-v" style="color:var(--ay)">1099</div><div class="tbs-l">LOCAIS</div></div>
+    <div class="tb-sep"></div>
+    <div class="tbs"><div class="tbs-v" style="color:var(--t2)" id="tb-temp">--°C</div><div class="tbs-l">TEMP·BH</div></div>
+    <div class="tb-sep"></div>
+    <div class="tbs"><div class="tbs-v" style="color:var(--ar)" id="tb-alr">0</div><div class="tbs-l">ALERTAS</div></div>
+    <div class="tb-sep"></div>
+    <div class="tbs" id="tbs-upd" style="cursor:default;min-width:90px" title="Horário do dado meteorológico (Open-Meteo current.time)">
+      <div class="tbs-v" style="color:var(--t3);font-size:10px" id="tb-upd-meteo">--:--</div>
+      <div class="tbs-l">DADOS MET.</div>
+    </div>
+
+  </div>
+  <div class="tb-right">
+    <!-- Botão aparece quando há polo ou malha ativa -->
+    <button id="btn-limpar-filtro"
+      onclick="limparTodosFiltros()"
+      title="Remover filtro de polo/malha e mostrar todos os alertas"
+      style="display:none;background:rgba(255,96,128,.12);border:1px solid rgba(255,96,128,.4);
+             border-radius:3px;color:#ff6080;font-family:var(--fm);font-size:9px;
+             letter-spacing:1px;padding:3px 10px;cursor:pointer;transition:all .15s;">
+      ✕ LIMPAR FILTRO
+    </button>
+    <div class="live"><div class="ldot"></div>TEMPO REAL</div>
+    <span id="clk">--:--:--</span>
+  </div>
+</div>
+<div id="service-banner" class="service-banner" aria-live="polite">
+  <div class="service-banner-inner">
+    <div id="service-banner-text" class="service-banner-text"></div>
+    <div class="service-banner-actions">
+      <button id="service-banner-action" class="service-banner-btn" type="button" style="display:none"></button>
+      <button class="service-banner-btn" type="button" onclick="dismissServiceBanner()">Fechar</button>
+    </div>
+  </div>
+</div>
+<div id="body">
+  <!-- LEFT: Painel de Alertas Meteorológicos (sidebar fixa) -->
+  <div id="left">
+    <div id="left-accent"></div>
+    <div id="left-head">
+      <div id="left-ttl">⚡ ALERTAS MET.<span id="left-count">0</span></div>
+      <button id="left-retract" onclick="retractLeftAlerts()" title="Retrair painel">◀</button>
+    </div>
+    <!-- Tab to re-expand when retracted -->
+    <div id="left-tab" onclick="expandLeftAlerts()" title="Expandir alertas">
+      <span>⚡</span><span id="left-tab-count">0</span>
+    </div>
+    <div id="malha-filter-wrap">
+      <div class="mf-title">FILTRAR POR MALHA</div>
+      <div class="mf-chips" id="malha-filter-chips">
+        <!-- gerado por buildMalhaFilter() -->
+      </div>
+    </div>
+    <div id="left-legend">
+      <div class="ll-title">ESCALA DE PRECIPITAÇÃO</div>
+      <div class="ll-grid">
+        <div class="ll-row"><span class="ll-dot" style="background:#2a7aaa"></span>Possível (&lt;50%)</div>
+        <div class="ll-row"><span class="ll-dot" style="background:#47b8ff"></span>Provável (≥50%)</div>
+        <div class="ll-row"><span class="ll-dot" style="background:#40e090"></span>Fraca (≥1mm/h)</div>
+        <div class="ll-row"><span class="ll-dot" style="background:#ffcc30"></span>Moderada (≥5mm/h)</div>
+        <div class="ll-row"><span class="ll-dot" style="background:#ff6030"></span>Forte (≥15mm/h)</div>
+        <div class="ll-row"><span class="ll-dot" style="background:#ff2050"></span>⛈ Tempestade</div>
+      </div>
+    </div>
+    <div id="left-list"><div class="al-empty">Carregando alertas…</div></div>
+  </div>
+  <div id="mw">
+    <div id="loading"><div class="lr"></div><div class="lt2">CARREGANDO</div></div>
+    <div id="map"></div>
+    <div id="geo-tip"></div>
+    <div id="mcard">
+      <div class="mc-head">
+        <div class="mc-name" id="mc-name">-</div>
+        <div class="mc-sub" id="mc-sub">-</div>
+        <button class="mc-close" onclick="closeMCard()">✕</button>
+      </div>
+      <div class="mc-body" id="mc-body"></div>
+    </div>
+    <div id="rain-leg">
+      <div class="rl-ttl">PRECIPITAÇÃO · CÍRCULOS</div>
+      <div class="rl-scale">
+        <div class="rl-item"><span class="rl-dot" style="background:#2a7aaa"></span><span>Possível (&lt;50%)</span></div>
+        <div class="rl-item"><span class="rl-dot" style="background:#47b8ff"></span><span>Provável (≥50%)</span></div>
+        <div class="rl-item"><span class="rl-dot" style="background:#40e090"></span><span>Chuva fraca (≥1mm/h)</span></div>
+        <div class="rl-item"><span class="rl-dot" style="background:#ffcc30"></span><span>Moderada (≥5mm/h)</span></div>
+        <div class="rl-item"><span class="rl-dot" style="background:#ff6030"></span><span>Forte (≥15mm/h)</span></div>
+        <div class="rl-item"><span class="rl-dot" style="background:#ff2050"></span><span>⛈ Tempestade</span></div>
+      </div>
+      <div class="rl-note">Tamanho do círculo = área de abrangência</div>
+    </div>
+    <div id="sw"><div class="sw-wrap"><input id="srch" placeholder="⌕  Polo, município ou código..."><span class="sw-kbd">/</span></div><div id="sr"></div></div>
+
+    <!-- Floating filter panel -->
+    <div class="fp" id="flt-panel">
+      <div class="fp-head" id="flt-handle">
+        <div class="fp-htitle">MALHA</div>
+        <div class="fp-actions">
+          <button class="fp-btn" onclick="fpToggle('flt-panel')" title="Minimizar">−</button>
+        </div>
+      </div>
+      <div class="fp-body" id="flt-body">
+        <div class="mf-row" id="mfr"></div>
+        <div class="flt-counts" id="flt-counts"></div>
+      </div>
+    </div>
+
+    <!-- Floating layers panel -->
+    <div class="fp" id="layers">
+      <div class="fp-head" id="layers-handle">
+        <div class="fp-htitle">CAMADAS</div>
+        <div class="fp-actions">
+          <button class="fp-btn" onclick="fpToggle('layers')" title="Minimizar">−</button>
+        </div>
+      </div>
+      <div class="fp-body" id="layers-body">
+        <div class="lt-t" style="margin-bottom:5px">MAPA</div>
+        <label class="lt"><input type="checkbox" id="tg-cluster" checked><div class="pill"></div>Clustering</label>
+        <label class="lt"><input type="checkbox" id="tg-muni"><div class="pill"></div>Municípios</label>
+        <div class="lt-sep"></div>
+        <div class="lt-t" style="margin-bottom:5px">METEOROLOGIA</div>
+        <label class="lt"><input type="checkbox" id="tg-meteo"><div class="pill"></div>⚡ Precipitação + Alertas</label>
+      </div>
+    </div>
+
+    <div id="leg"></div>
+  </div>
+  <div id="right" class="hidden">
+    <div id="rp-accent"></div>
+    <div class="rp-head">
+      <div class="rp-ttl">POLO · CLIMA</div>
+      <button class="rp-close" onclick="closeRight()">← VOLTAR AO MAPA</button>
+    </div>
+    <div id="rcont"></div>
+  </div>
+</div>
+<script src="polo-data.js"></script>
+<script>
+const MALHA_COLORS={
+  'Sul':'#00ffc8','Triangulo':'#3db8ff','Norte':'#ffd166',
+  'Leste':'#b088ff','Centro':'#44eeff','Mantiqueira':'#ff6688'
+};
+// Pop municípios MG (censo IBGE 2022, estimativas)
+const MG_CITY_POPULATION={
+  "BELO HORIZONTE":2315560,"UBERLANDIA":706597,"CONTAGEM":668390,"JUIZ DE FORA":577867,
+  "BETIM":430788,"MONTES CLAROS":414649,"RIBEIRAO DAS NEVES":340376,"UBERABA":338085,
+  "GOVERNADOR VALADARES":281046,"IPATINGA":257474,"SETE LAGOAS":247487,"DIVINOPOLIS":236019,
+  "SANTA LUZIA":220430,"VARGINHA":143073,"POCOS DE CALDAS":166551,"POUSO ALEGRE":155384,
+  "TEOFILO OTONI":161085,"PATOS DE MINAS":152290,"LAVRAS":107208,"PASSOS":115592,
+  "ARAGUARI":121499,"ARAXA":107506,"ALFENAS":80800,"BARBACENA":140500,"CARATINGA":91000,
+  "CURVELO":83000,"ITUIUTABA":105000,"JANAUBA":76000,"JANUARIA":71000,"JOAO MONLEVADE":80000,
+  "ITABIRA":122695,"ITAJUBA":100600,"PATROCINIO":107000,"PARACATU":102000,"PARA DE MINAS":87000,
+  "PONTE NOVA":60000,"PIRAPORA":60000,"SAO JOAO DEL REI":90000,"TRES CORACOES":82000,
+  "UNAI":92000,"CONSELHEIRO LAFAIETE":130000,"OURO PRETO":76000,"FORMIGA":68000,
+  "CORONEL FABRICIANO":108000,"MURIAE":112000,"VIÇOSA":80000,"NOVA LIMA":95000,
+  "DIVINOPOLIS":236019,"SALINAS":45000,"FRUTAL":59000
+};
+
+let map,clusterLayersByMalha={},municipalityMarkerLayer,municipalityGeoJsonLayer=null;
+// Multi-seleção de malhas no filtro lateral (Set vazio = todas)
+let selectedMalhas=new Set();
+// Timestamps das últimas atualizações bem-sucedidas das APIs
+const apiLastUpdate={meteo:null,owm:null};
+let precipitationTileLayer=null,precipitationMarkerGroup=null,isPrecipitationLoading=false,weatherAlertLayerGroup=null;
+let selectedMalha=null,allPoloMarkers=[],activePoloName=null;
+let weatherCacheByCoord={},rainViewerRadarFrames=[],minasMunicipalityGeoJson=null,minasMunicipalityCodeMap=null,minasMunicipalityCentroids={},minasMunicipalityNameToCode=null;
+let municipalitiesVisible=false;
+const APP_CONFIG=window.CEMIG_MAP_CONFIG||{};
+const OPENWEATHER_API_STORAGE_KEY='cemig.openweather.apiKey';
+let dismissedBannerMessage='';
+
+// Banner simples para avisos de dependências externas e configuração local.
+function renderServiceBanner(message='',actionLabel='',actionHandlerName=''){
+  const banner=document.getElementById('service-banner');
+  const text=document.getElementById('service-banner-text');
+  const action=document.getElementById('service-banner-action');
+  if(!banner||!text||!action)return;
+  if(!message||message===dismissedBannerMessage){
+    banner.classList.remove('show');
+    text.textContent='';
+    action.style.display='none';
+    action.textContent='';
+    action.onclick=null;
+    return;
+  }
+  text.textContent=message;
+  if(actionLabel&&actionHandlerName&&typeof window[actionHandlerName]==='function'){
+    action.style.display='inline-flex';
+    action.textContent=actionLabel;
+    action.onclick=()=>window[actionHandlerName]();
+  }else{
+    action.style.display='none';
+    action.textContent='';
+    action.onclick=null;
+  }
+  banner.classList.add('show');
+}
+
+function dismissServiceBanner(){
+  dismissedBannerMessage=document.getElementById('service-banner-text')?.textContent||'';
+  renderServiceBanner('');
+}
+
+function getOpenWeatherApiKey(){
+  return APP_CONFIG.openWeatherApiKey||localStorage.getItem(OPENWEATHER_API_STORAGE_KEY)||'';
+}
+
+function hasOpenWeatherApiKey(){
+  return Boolean(getOpenWeatherApiKey());
+}
+
+function promptForOpenWeatherApiKey(){
+  const currentKey=getOpenWeatherApiKey();
+  const nextKey=window.prompt(
+    'Informe sua chave da OpenWeatherMap. Ela será salva apenas neste navegador para habilitar vento, nuvens e alertas premium.',
+    currentKey
+  );
+  if(nextKey===null)return;
+  const sanitizedKey=nextKey.trim();
+  if(!sanitizedKey){
+    localStorage.removeItem(OPENWEATHER_API_STORAGE_KEY);
+    renderServiceBanner('A chave da OpenWeatherMap foi removida. As camadas premium ficarão desabilitadas até uma nova configuração.','Configurar chave','promptForOpenWeatherApiKey');
+    return;
+  }
+  localStorage.setItem(OPENWEATHER_API_STORAGE_KEY,sanitizedKey);
+  dismissedBannerMessage='';
+  renderServiceBanner('');
+}
+
+function requireOpenWeatherApiKey(featureLabel){
+  const apiKey=getOpenWeatherApiKey();
+  if(apiKey)return apiKey;
+  renderServiceBanner(`${featureLabel} depende de uma chave da OpenWeatherMap configurada no navegador.`,'Configurar chave','promptForOpenWeatherApiKey');
+  return null;
+}
+
+function getServiceKeyFromUrl(url){
+  try{return new URL(url).hostname.replace(/^www\./,'');}
+  catch{return 'serviço externo';}
+}
+
+function reportDependencyFailure(url,errorMessage){
+  renderServiceBanner(`Falha ao acessar ${getServiceKeyFromUrl(url)}. O mapa continua ativo, mas alguns dados externos podem ficar indisponíveis. ${errorMessage||''}`.trim());
+}
+
+function initializeRuntimeWarnings(){
+  if(location.protocol==='file:'){
+    renderServiceBanner('Este HTML está aberto como arquivo local. Algumas APIs podem bloquear CORS no modo file://; se notar falhas, abra por um servidor local.','Configurar chave','promptForOpenWeatherApiKey');
+    return;
+  }
+  if(!hasOpenWeatherApiKey()){
+    renderServiceBanner('Camadas premium de vento, nuvens e alertas OpenWeather estão desabilitadas até você informar uma chave da OpenWeatherMap.','Configurar chave','promptForOpenWeatherApiKey');
+  }
+}
+
+// clock
+setInterval(()=>{
+  document.getElementById('clk').textContent=
+    new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+},1000);
+
+// ── WEATHER (Open-Meteo) ──────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+// ── CAMADA DE DADOS — versão refatorada e validada ────────────────
+// Fontes: Open-Meteo (clima/previsão) · INMET (alertas MG) · OWM (alertas/tiles)
+// ══════════════════════════════════════════════════════════════════
+
+// ── Utilitário: fetch com timeout e retry ────────────────────────
+// ── Registra horário de atualização de uma API na topbar ─────────────────
+// ── registrarHorarioDadoMeteo ─────────────────────────────────────────────
+// Exibe na topbar o horário do dado meteorológico (current.time do Open-Meteo).
+// Ex: "2024-01-15T14:00" → exibe "14:00".
+// É o horário em que a estação mediu os dados, não quando fizemos o fetch.
+function registrarHorarioDadoMeteo(currentTime){
+  const el=document.getElementById('tb-upd-meteo');
+  if(!el)return;
+  let hhmm='--:--';
+  if(currentTime){
+    // current.time vem como "2024-01-15T14:00" (sem timezone, já é hora local de SP)
+    const partes=String(currentTime).split('T');
+    if(partes[1])hhmm=partes[1].substring(0,5);
+    apiLastUpdate.meteo=new Date(currentTime);
+  }
+  el.textContent=hhmm;
+  el.classList.remove('upd-stale');
+  el.classList.add('upd-fresh');
+  setTimeout(()=>{el.classList.remove('upd-fresh');el.classList.add('upd-stale');},3600000); // stale após 1h
+}
+
+// registrarAtualizacaoApi removida (INMET desativado)
+
+async function fetchWithRetry(url,opts={},retries=2,timeoutMs=8000){
+  for(let attempt=0;attempt<=retries;attempt++){
+    try{
+      const ctrl=new AbortController();
+      const tid=setTimeout(()=>ctrl.abort(),timeoutMs);
+      const r=await fetch(url,{...opts,signal:ctrl.signal});
+      clearTimeout(tid);
+      if(!r.ok)throw new Error(`HTTP ${r.status} ${r.statusText}`);
+      if(dismissedBannerMessage)dismissedBannerMessage='';
+      return r;
+    }catch(e){
+      const isLast=attempt===retries;
+      console.warn(`[API] ${url.split('?')[0].slice(-60)} tentativa ${attempt+1}/${retries+1}:`,e.message);
+      if(isLast)reportDependencyFailure(url,e.message);
+      if(isLast)throw e;
+      await new Promise(res=>setTimeout(res,700*(attempt+1)));
+    }
+  }
+}
+
+// ── Open-Meteo: clima atual + previsão horária 48h ───────────────
+// Fonte: open-meteo.com · Gratuito · Sem chave de API
+async function fetchWeatherSnapshot(lat,lng){
+  const k=`${lat.toFixed(2)},${lng.toFixed(2)}`;
+  if(weatherCacheByCoord[k])return weatherCacheByCoord[k];
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast`
+      +`?latitude=${lat}&longitude=${lng}`
+      +`&current=temperature_2m,precipitation_probability,wind_speed_10m,`
+      +`wind_direction_10m,weather_code,relative_humidity_2m,apparent_temperature,precipitation`
+      +`&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,precipitation,apparent_temperature`
+      +`&timezone=America%2FSao_Paulo&forecast_days=2`;
+    const r=await fetchWithRetry(url,{},1,7000);
+    const d=await r.json();
+    if(!d?.current||typeof d.current.temperature_2m!=='number'){
+      console.warn('[Open-Meteo] Estrutura inválida para',k);
+      return null;
+    }
+    weatherCacheByCoord[k]=d;
+    // Usa o horário do dado em si (current.time = horário da medição da estação),
+    // não o horário do fetch. Muito mais preciso e honesto para o operador.
+    registrarHorarioDadoMeteo(d.current?.time);
+    return d;
+  }catch(e){
+    console.error('[Open-Meteo] Falha para',k,':',e.message);
+    return null;
+  }
+}
+
+// ── Helpers WMO → ícone / descrição ──────────────────────────────
+const getWeatherIcon=c=>c===0?'☀️':c<=2?'🌤️':c<=3?'☁️':c<=49?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=79?'❄️':c<=99?'⛈️':'🌡️';
+const getWeatherDescription=c=>c===0?'Céu limpo':c<=2?'Parcialmente nublado':c<=3?'Nublado':c<=49?'Névoa':c<=57?'Garoa':c<=67?'Chuva':c<=79?'Neve':c<=82?'Chuva intensa':c<=99?'Tempestade':'';
+const getWindDirectionLabel=d=>['N','NE','L','SE','S','SO','O','NO'][Math.round((d||0)/45)%8];
+const getRainAccentColor=p=>p>=70?'var(--ar)':p>=40?'var(--ay)':'var(--ab)';
+
+// ── Agregação horária → intervalos 1h / 3h / 12h / 24h ───────────
+// Retorna objetos com: p (prob%), mm (volume acumulado), t (temp média), code
+function buildIntervalForecast(hourly){
+  if(!hourly?.time?.length)return null;
+  const now=new Date();
+  const future=[];
+  for(let i=0;i<hourly.time.length;i++){
+    const dt=new Date(hourly.time[i]);
+    if(dt<=now)continue;
+    future.push({
+      dt,
+      t:   hourly.temperature_2m?.[i]??null,
+      p:   hourly.precipitation_probability?.[i]??0,
+      mm:  hourly.precipitation?.[i]??0,
+      w:   hourly.wind_speed_10m?.[i]??0,
+      code:hourly.weather_code?.[i]??0,
+    });
+  }
+  if(!future.length)return null;
+  function slotAt(h){return future[Math.min(h-1,future.length-1)]||future[0];}
+  function agg(from,to){
+    const s=future.slice(from,Math.min(to,future.length));
+    if(!s.length)return null;
+    return{
+      dt:s[0].dt,
+      t: s.reduce((a,x)=>a+(x.t??0),0)/s.length,
+      p: Math.max(...s.map(x=>x.p)),
+      mm:s.reduce((a,x)=>a+(x.mm??0),0),
+      w: s.reduce((a,x)=>a+(x.w??0),0)/s.length,
+      code:s.find(x=>x.code>=51)?.code||s[0].code,
+    };
+  }
+  return{h1:slotAt(1),h3:agg(0,3),h12:agg(0,12),h24:agg(0,24)};
+}
+
+// ── Card de intervalos 1h/3h/12h/24h ─────────────────────────────
+function buildIntervalCard(intervals){
+  if(!intervals)return'';
+  const slots=[
+    {label:'1h', d:intervals.h1},
+    {label:'3h', d:intervals.h3},
+    {label:'12h',d:intervals.h12},
+    {label:'24h',d:intervals.h24},
+  ].filter(s=>s.d);
+  if(!slots.length)return'';
+  return`<div class="interval-card">
+    <div class="interval-ttl">🕒 PREVISÃO POR INTERVALO <span class="data-src">Open-Meteo</span></div>
+    <div class="interval-slots">${slots.map(s=>{
+      const col=getRainAccentColor(s.d.p);
+      return`<div class="iv-slot">
+        <div class="iv-label">${s.label}</div>
+        <div class="iv-ico">${getWeatherIcon(s.d.code)}</div>
+        <div class="iv-temp">${s.d.t!=null?s.d.t.toFixed(0)+'°':'--'}</div>
+        <div class="iv-prob" style="color:${col}">💧${s.d.p}%</div>
+        <div class="iv-mm">${s.d.mm>=0.1?s.d.mm.toFixed(1)+'mm':'&lt;0.1mm'}</div>
+      </div>`;
+    }).join('')}</div>
+  </div>`;
+}
+
+// ── buildFore: cards horários para sidebar (até 8 horas) ──────────
+function buildFore(hourly){
+  if(!hourly?.time)return'';
+  const now=new Date(),sl=[];
+  for(let i=0;i<hourly.time.length&&sl.length<8;i++){
+    const dt=new Date(hourly.time[i]);
+    if(dt<=now)continue;
+    sl.push({
+      h:dt.getHours()+'h',
+      t:hourly.temperature_2m?.[i]?.toFixed(0)?? '--',
+      p:hourly.precipitation_probability?.[i]??0,
+      mm:hourly.precipitation?.[i]??0,
+      code:hourly.weather_code?.[i]??0,
+    });
+  }
+  if(!sl.length)return'<div class="fore-empty">Previsão horária indisponível</div>';
+  return`<div class="cc-fore">${sl.map(s=>`
+    <div class="cf">
+      <div class="cf-h">${s.h}</div>
+      <div class="cf-i">${getWeatherIcon(s.code)}</div>
+      <div class="cf-t">${s.t}°</div>
+      <div class="cf-r" style="color:${getRainAccentColor(s.p)}">💧${s.p}%</div>
+      ${s.mm>=0.1?`<div class="cf-r" style="color:var(--t4);font-size:7px">${s.mm.toFixed(1)}mm</div>`:''}
+    </div>`).join('')}</div>`;
+}
+
+// ── buildRainOutlook: barras de probabilidade de chuva ────────────
+function buildRainOutlook(hourly){
+  if(!hourly?.time)return'';
+  const now=new Date(),slots=[];
+  for(let i=0;i<hourly.time.length&&slots.length<7;i++){
+    const dt=new Date(hourly.time[i]);
+    if(dt<=now)continue;
+    slots.push({
+      h:dt.getHours()+'h',
+      p:hourly.precipitation_probability?.[i]??0,
+      mm:hourly.precipitation?.[i]??0,
+    });
+  }
+  if(!slots.length)return'';
+  const maxP=Math.max(...slots.map(s=>s.p));
+  const col=p=>p>=70?'var(--ar)':p>=40?'var(--ay)':'var(--ab)';
+  const dotCol=maxP>=70?'#ff6080':maxP>=40?'#ffcc5c':'#47b8ff';
+  const firstHigh=slots.find(s=>s.p>=40);
+  let sumText;
+  if(maxP<20)       sumText='✓ Sem chuva prevista nas próximas horas';
+  else if(firstHigh)sumText=`${firstHigh.p}% às ${firstHigh.h} · pico ${maxP}%`;
+  else              sumText=`${maxP}% de chance de chuva`;
+  return`<div class="ro-wrap">
+    <div class="ro-sum">
+      <span class="ro-sum-dot" style="background:${dotCol};box-shadow:0 0 6px ${dotCol}"></span>
+      <span style="color:${col(maxP)}">${sumText}</span>
+    </div>
+    <div class="ro-bars">${slots.map(s=>`
+      <div class="ro-slot" title="${s.h}: ${s.p}% chuva${s.mm>=0.1?' · '+s.mm.toFixed(1)+'mm':''}">
+        <div class="ro-bar-wrap">
+          <div class="ro-bar" style="height:${Math.max(3,s.p)}%;background:linear-gradient(to top,${col(s.p)},color-mix(in srgb,${col(s.p)} 60%,#fff));opacity:${0.35+s.p/110}"></div>
+        </div>
+        <div class="ro-h">${s.h}</div>
+        <div class="ro-p" style="color:${col(s.p)}">${s.p}%</div>
+        ${s.mm>=0.5?`<div class="ro-mm">${s.mm.toFixed(1)}</div>`:''}
+      </div>`).join('')}
+    </div>
+    <div class="data-src-row">Fonte: Open-Meteo · ECMWF</div>
+  </div>`;
+}
+
+// ── NOTÍCIAS — fontes com CORS nativo (sem proxy) ─────────────────
+const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+// fetchWithRetry definida em CAMADA DE DADOS acima
+
+// Wikipedia PT — busca à prova de falhas com 2 estratégias + validação de cidade
+const wikipediaSummaryCache={};
+async function fetchWikipediaSummary(cidade){
+  if(wikipediaSummaryCache[cidade]!==undefined)return wikipediaSummaryCache[cidade];
+
+  // Normalização: remove acentos
+  const stripAcc=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  // Title-case: cada palavra com inicial maiúscula → "Conceicao Da Barra De Minas"
+  const toTitle=s=>stripAcc(s).toLowerCase().replace(/(?:^|[\s_])\S/g,c=>c.toUpperCase()).replace(/\s+/g,'_');
+  // Sentence-case: só primeira letra maiúscula → "Conceicao da barra de minas"
+  const toSent=s=>{const n=stripAcc(s).toLowerCase();return n.charAt(0).toUpperCase()+n.slice(1).replace(/\s+/g,'_');};
+
+  const tc=toTitle(cidade);   // Conceicao_Da_Barra_De_Minas
+  const sc=toSent(cidade);    // Conceicao_da_barra_de_minas
+  const uc=cidade.replace(/\s+/g,'_'); // CONCEICAO_DA_BARRA_DE_MINAS
+
+  // Slugs do mais provável ao menos provável (title-case primeiro — padrão Wikipedia PT)
+  const dedup=[...new Set([
+    tc+'_(Minas_Gerais)', tc+'_(município)', tc,
+    sc+'_(Minas_Gerais)', sc+'_(município)', sc,
+    uc+'_(Minas_Gerais)', uc
+  ])];
+
+  // Palavras-chave da cidade para validar que o resultado é correto
+  const stopWords=new Set(['de','da','do','das','dos','e','a','o','sao','nossa','bom','boa','alto','baixo']);
+  const normLow=s=>stripAcc(s||'').toLowerCase();
+  const cidadeWords=normLow(cidade).split(/[\s_]+/).filter(w=>w.length>2&&!stopWords.has(w));
+
+  function resultMatchesCidade(title){
+    if(!title)return false;
+    const t=normLow(title);
+    const matches=cidadeWords.filter(w=>t.includes(w)).length;
+    // Exige ao menos 60% das palavras-chave presentes
+    return matches>=Math.max(1,Math.ceil(cidadeWords.length*0.6));
+  }
+
+  // ── Estratégia 1: REST v1 summary ────────────────────────────────
+  for(const slug of dedup){
+    try{
+      const r=await fetchWithRetry(`https://pt.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(slug)}`,{},1,7000);
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(d?.extract&&d.extract.length>60&&d.type!=='disambiguation'&&resultMatchesCidade(d.title)){
+        const result={extract:d.extract,
+          url:d.content_urls?.desktop?.page||`https://pt.wikipedia.org/wiki/${encodeURIComponent(slug)}`,
+          thumb:d.thumbnail?.source||null,title:d.title||cidade};
+        wikipediaSummaryCache[cidade]=result;return result;
+      }
+    }catch{}
+  }
+
+  // ── Estratégia 2: Action API search ──────────────────────────────
+  try{
+    const q=encodeURIComponent(toTitle(cidade).replace(/_/g,' ')+' Minas Gerais');
+    const sr=await fetchWithRetry(`https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&format=json&origin=*&srlimit=8`,{},1,7000);
+    if(sr.ok){
+      const hits=(await sr.json())?.query?.search||[];
+      for(const hit of hits){
+        if(/lista|desambiguação|disambig/i.test(hit.title))continue;
+        // Valida que o título bate com a cidade antes de buscar o conteúdo
+        if(!resultMatchesCidade(hit.title))continue;
+        const dp=await fetchWithRetry(`https://pt.wikipedia.org/w/api.php?action=query&prop=extracts|pageimages|info`
+          +`&exintro=true&titles=${encodeURIComponent(hit.title)}&format=json&origin=*`
+          +`&pithumbsize=500&inprop=url`,{},1,7000);
+        if(!dp.ok)continue;
+        const page=Object.values((await dp.json())?.query?.pages||{})[0];
+        if(!page||page.missing!==undefined)continue;
+        const extract=( page.extract||'').replace(/<[^>]*>/g,' ').replace(/\s{2,}/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+        if(extract.length<80)continue;
+        const result={extract,
+          url:page.canonicalurl||`https://pt.wikipedia.org/wiki/${encodeURIComponent(hit.title)}`,
+          thumb:page.thumbnail?.source||null,title:page.title||cidade};
+        wikipediaSummaryCache[cidade]=result;return result;
+      }
+    }
+  }catch{}
+
+  wikipediaSummaryCache[cidade]=null;return null;
+}
+
+// Fonte 2: GDELT — artigos mencionando a cidade (com suporte a CORS)
+async function fetchGdeltNews(cidade){
+  // Tenta 3 variações de query, da mais específica para a mais ampla
+  const queries=[
+    `"${cidade}" "Minas Gerais"`,
+    `${cidade} Minas Gerais energia elétrica`,
+    `${cidade} MG`
+  ];
+  for(const q of queries){
+    try{
+      const url=`https://api.gdeltproject.org/api/v2/doc/doc?`
+        +`query=${encodeURIComponent(q)}`
+        +`&mode=artlist&maxrecords=8&timespan=30d&format=json&sort=DateDesc`;
+      const r=await fetchWithRetry(url,{},1,8000);
+      if(!r.ok)continue;
+      const d=await r.json();
+      const arts=(d?.articles||[]).filter(a=>a.title&&a.url&&a.title.length>10);
+      if(arts.length){
+        return arts.slice(0,4).map(a=>({
+          title:a.title,
+          url:a.url,
+          source:a.domain||'GDELT',
+          date:(a.seendate||'').substring(0,10)
+        }));
+      }
+    }catch{}
+  }
+  return[];
+}
+
+// Fonte 3: IBGE — dados municipais como informação extra
+async function fetchIbgeContext(cidade){
+  try{
+    // Busca o município pelo nome
+    const q=encodeURIComponent(cidade);
+    const r=await fetchWithRetry(`https://servicodados.ibge.gov.br/api/v1/localidades/municipios?nome=${q}`,{},1,8000);
+    if(!r.ok)return null;
+    const arr=await r.json();
+    // Filtra para MG (código 31)
+    const muni=arr.find(m=>String(m.microrregiao?.mesorregiao?.UF?.id||'').startsWith('31'));
+    if(!muni)return null;
+    const cod=muni.id;
+    // Busca dados do IBGE Cidades
+    const r2=await fetchWithRetry(`https://servicodados.ibge.gov.br/api/v3/malhas/municipios/${cod}?formato=application/json`,{},1,4000);
+    // Retorna só os dados básicos do município
+    return{
+      nome:muni.nome,
+      micro:muni.microrregiao?.nome||'',
+      meso:muni.microrregiao?.mesorregiao?.nome||'',
+      cod
+    };
+  }catch{return null;}
+}
+
+// Agrega fontes — Wikipedia + GDELT + IBGE como contexto
+async function fetchCityNewsBundle(cidade){
+  const[wiki,gdelt,ibge]=await Promise.all([fetchWikipediaSummary(cidade),fetchGdeltNews(cidade),fetchIbgeContext(cidade)]);
+  // Deduplicação GDELT
+  const seen=new Set();
+  const articles=gdelt.filter(a=>{
+    const k=norm(a.title).substring(0,30);
+    if(!k||seen.has(k))return false;
+    seen.add(k);return true;
+  });
+  return{articles,wiki,ibge};
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+function initMap(){
+  map=L.map('map',{zoomControl:false,center:[-18.5,-44.5],zoom:7,minZoom:5,maxZoom:18});
+
+  // CartoDB Dark Matter — sem restrição de referrer, dark nativo, excelente qualidade
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',maxZoom:20
+  }).addTo(map);
+
+  Object.entries(MALHA_COLORS).forEach(([malha,color])=>{
+    clusterLayersByMalha[malha]=L.markerClusterGroup({
+      maxClusterRadius:180,disableClusteringAtZoom:11,
+      // zIndex elevado para ficar acima dos tiles de precipitação/vento
+      iconCreateFunction:cl=>{
+        const n=cl.getChildCount();
+        const sz=n>20?52:n>10?44:36;
+        return L.divIcon({className:'',html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:color-mix(in srgb,${color} 16%,var(--s1));border:2px solid color-mix(in srgb,${color} 65%,transparent);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:${color};box-shadow:0 0 18px color-mix(in srgb,${color} 30%,transparent),inset 0 0 8px color-mix(in srgb,${color} 8%,transparent)">${n}</div>`,iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]});
+      },
+      spiderfyOnMaxZoom:true,showCoverageOnHover:false,zoomToBoundsOnClick:true,animate:true,chunkedLoading:true
+    });
+    map.addLayer(clusterLayersByMalha[malha]);
+  });
+
+  municipalityMarkerLayer=null; // criado dinamicamente em plotMunis com a cor do polo
+
+  buildLegend();buildFilters();buildMalhaFilter();plotPolos();setupSearch();setupToggles();loadKpi();loadRainViewerFrames();initPanels();
+  ensureMgGeo(); // pré-carrega limites municipais em background
+  map.on('click',()=>closeMCard());
+  // Esconde legenda quando cluster ativo (default)
+  updateLegendVisibility();
+  setTimeout(()=>document.getElementById('loading').classList.add('out'),600);
+}
+
+function bootstrapMap(){
+  initializeRuntimeWarnings();
+  if(typeof window.L==='undefined'){
+    const loading=document.getElementById('loading');
+    if(loading)loading.innerHTML='<div class="lt2">Falha ao carregar a biblioteca do mapa.</div>';
+    renderServiceBanner('Leaflet não foi carregado. Verifique sua conexão ou se os arquivos externos foram bloqueados.');
+    return;
+  }
+  initMap();
+}
+
+// ── PLOT POLOS ────────────────────────────────────────────────────
+function plotPolos(){
+  Object.values(clusterLayersByMalha).forEach(g=>g.clearLayers());
+  allPoloMarkers=[];
+
+  // Filtra por malha: se selectedMalhas tem itens, usa só elas; senão usa selectedMalha legado
+  const filtroAtivo=selectedMalhas.size>0;
+
+  Object.entries(POLO_DATA).forEach(([polo,d])=>{
+    // Compatibilidade com filtro legado (botões do painel flutuante)
+    if(selectedMalha&&d.malha!==selectedMalha)return;
+
+    const col=MALHA_COLORS[d.malha]||'#fff';
+    const nC=Object.keys(d.cidades).length;
+    const sz=nC>40?14:nC>20?12:10;
+    const base=d.base||'';
+
+    // Dim: atenua polos de malhas não selecionadas (mas mantém visíveis)
+    const dimmed=filtroAtivo&&!selectedMalhas.has(d.malha);
+    // Alert glow: verifica se o polo tem alertas ativos
+    const temAlerta=(_alertKpiList||[]).some(a=>a.polo===polo.split(',')[0]);
+
+    const classes=['polo-mk',dimmed?'dimmed':'',temAlerta?'has-alert':''].filter(Boolean).join(' ');
+
+    const mk=L.marker([d.lat,d.lng],{
+      icon:L.divIcon({className:'',html:`<div class="${classes}" style="--pc:${col}">
+        <div class="polo-mk-dot" style="width:${sz}px;height:${sz}px"></div>
+        <div class="polo-mk-lbl">${base}</div>
+      </div>`,iconSize:[sz+32,18],iconAnchor:[5,9]}),
+      title:polo,
+      // Polos selecionados ficam na frente dos atenuados
+      zIndexOffset:dimmed?-100:(temAlerta?500:0)
+    });
+    mk.on('click',()=>onPoloClick(polo,d,col,mk));
+    clusterLayersByMalha[d.malha].addLayer(mk);
+    allPoloMarkers.push({polo,d,mk,col});
+  });
+}
+
+// ── LEGENDA — só aparece quando municípios estão visíveis ─────────
+function updateLegendVisibility(){
+  const leg=document.getElementById('leg');
+  if(municipalitiesVisible){leg.classList.remove('hidden-leg');}
+  else{leg.classList.add('hidden-leg');}
+}
+
+// ── CLICK POLO ────────────────────────────────────────────────────
+function onPoloClick(polo,d,col,mk){
+  activePoloName=polo;
+  const nC=Object.keys(d.cidades).length;
+  const nL=Object.values(d.cidades).reduce((a,c)=>a+c.locais.length,0);
+  L.popup({maxWidth:270}).setLatLng([d.lat,d.lng]).setContent(`
+    <div class="pu">
+      <div class="pu-n" style="color:${col}"><span style="font-family:var(--fm);font-size:11px;opacity:.7;margin-right:4px">${d.base}</span>${polo.split(',')[0]}</div>
+      <div class="pu-m">MALHA ${d.malha.toUpperCase()}</div>
+      <div class="pu-g">
+        <div class="pu-s"><div class="pu-sv">${nC}</div><div class="pu-sl">MUNICÍPIOS</div></div>
+        <div class="pu-s"><div class="pu-sv" style="color:var(--ab)">${nL}</div><div class="pu-sl">LOCAIS</div></div>
+      </div>
+      <button class="pu-btn" onclick="expandPolo('${polo}')">VER CLIMA E MUNICÍPIOS →</button>
+    </div>`).openOn(map);
+  openLeftDetail(polo,d,col);
+}
+
+// ── EXPAND POLO ───────────────────────────────────────────────────
+let poloFocused=false;
+async function expandPolo(polo){
+  map.closePopup();
+  const d=POLO_DATA[polo];if(!d)return;
+  const col=MALHA_COLORS[d.malha]||'#fff';
+
+  // Seta o polo ativo PRIMEIRO — antes de qualquer filtro ou closeRight,
+  // para que filtrarAlertasKpi já enxergue o polo correto.
+  activePoloName=polo;
+
+  // Se já havia polo focado, fecha o painel sem resetar zoom nem zerar activePoloName
+  if(poloFocused){
+    closeRight(false);
+  }
+
+  // Esconde clusters — foco total nos municípios do polo
+  Object.values(clusterLayersByMalha).forEach(g=>map.removeLayer(g));
+  poloFocused=true;
+
+  // Zoom para os municípios do polo
+  const bounds=Object.values(d.cidades).filter(c=>c.coord).map(c=>c.coord);
+  if(bounds.length>1){
+    map.fitBounds(bounds,{padding:[40,40],maxZoom:11,animate:false});
+  } else {
+    map.setView([d.lat,d.lng],10,{animate:false});
+  }
+
+  // Plota municípios, abre painel direito e atualiza legenda
+  municipalitiesVisible=true;updateLegendVisibility();
+  buildMuniLegend(d.cidades,col,polo);
+  plotMunis(polo,d,col);
+  openRightPanel(polo,d,col);
+
+  // Filtra sidebar e pins visuais — activePoloName já está correto
+  filtrarAlertasKpi();
+  aplicarFiltroVisualCamadas();
+  atualizarBotaoLimparFiltro();
+}
+
+// ── RETRAIR POLO — volta à visão de polos ─────────────────────────
+function retractPolo(){
+  closeRight();
+}
+
+// ── RIGHT PANEL ───────────────────────────────────────────────────
+async function openRightPanel(polo,d,col){
+  const right=document.getElementById('right');
+  const layers=document.getElementById('layers');
+  right.classList.remove('hidden');
+  layers.classList.add('rp-open');
+  document.getElementById('rain-leg').classList.add('rp-open');
+  document.getElementById('rp-accent').style.background=col;
+  const nC=Object.keys(d.cidades).length;
+  const nL=Object.values(d.cidades).reduce((a,c)=>a+c.locais.length,0);
+  const ts=`color:${col};border-color:${col};background:color-mix(in srgb,${col} 8%,transparent)`;
+  const pop=d.populacao?d.populacao.toLocaleString('pt-BR'):'--';
+  document.getElementById('rcont').innerHTML=`
+    <div class="rp-name" style="color:${col}">⚡ ${polo.split(',')[0]}</div>
+    <div class="rp-meta">BASE ${d.base} · MALHA ${d.malha.toUpperCase()}</div>
+    <div class="d-chips" style="margin-bottom:8px">
+      <span class="chip" style="${ts}">${nC} MUNICÍPIOS</span>
+      <span class="chip" style="${ts}">${nL} LOCAIS</span>
+      ${d.populacao?`<span class="chip" style="${ts}">${pop} hab.</span>`:''}
+    </div>
+        <button onclick="retractPolo()" style="width:100%;margin-bottom:12px;padding:6px 0;background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:4px;color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:1.5px;cursor:pointer;transition:all .15s;" onmouseover="this.style.color='var(--t1)';this.style.borderColor='var(--b3)'" onmouseout="this.style.color='var(--t3)';this.style.borderColor='var(--b2)'">← RETRAIR · VOLTAR AOS POLOS</button>
+    <div id="clima-slot" style="font-family:var(--fm);font-size:9px;color:var(--t4);padding:10px 0;text-align:center">Carregando clima...</div>
+    <div class="rp-muni-ttl">MUNICÍPIOS DO POLO</div>
+    <div>${Object.entries(d.cidades).map(([c,cd])=>`
+      <div class="muni-item" onclick="focusMuni('${polo}','${c.replace(/'/g,"\\'")}',${cd.coord?cd.coord[0]:d.lat},${cd.coord?cd.coord[1]:d.lng})">
+        <div class="muni-dot" style="background:${col}"></div>
+        <span>${c}</span><span class="muni-cnt">${cd.locais.length}L</span>
+      </div>`).join('')}
+    </div>`;
+
+  const w=await fetchWeatherSnapshot(d.lat,d.lng);
+  const slot=document.getElementById('clima-slot');
+  if(!slot)return;
+  if(!w?.current){
+    slot.innerHTML='<div class="fore-empty">Clima indisponível no momento</div>';
+    return;
+  }
+  const t=w.current.temperature_2m?.toFixed(1)?? '--';
+  const at=w.current.apparent_temperature?.toFixed(0)?? '--';
+  const r=w.current.precipitation_probability??0;
+  const v=w.current.wind_speed_10m?.toFixed(0)?? '--';
+  const vd=getWindDirectionLabel(w.current.wind_direction_10m??0);
+  const h=w.current.relative_humidity_2m??'--';
+  const pp=w.current.precipitation?.toFixed(1)?? '0';
+  const code=w.current.weather_code??0;
+  const rain=buildRainOutlook(w.hourly);
+  const fore=buildFore(w.hourly);
+  const intervals=buildIntervalForecast(w.hourly);
+  const isAl=code>=80||parseFloat(v)>45;
+  slot.outerHTML=`
+    ${isAl?`<div class="clima-alert">⚡ ${getWeatherDescription(code).toUpperCase()} · Vento ${v} km/h ${vd} · ${r}% prob. chuva</div>`:''}
+    <div class="clima-card">
+      <div class="cc-hero">
+        <div class="cc-icon">${getWeatherIcon(code)}</div>
+        <div class="cc-temp">${t}°</div>
+        <div class="cc-info"><div class="cc-desc">${getWeatherDescription(code)}</div><div class="cc-feel">Sensação ${at}°C</div></div>
+      </div>
+      <div class="cc-grid">
+        <div class="ccs"><div class="ccs-v blue">💧 ${r}%</div><div class="ccs-l">PROB. CHUVA</div></div>
+        <div class="ccs"><div class="ccs-v blue">💨 ${v}km/h ${vd}</div><div class="ccs-l">VENTO</div></div>
+        <div class="ccs"><div class="ccs-v">🌢 ${h}%</div><div class="ccs-l">UMIDADE</div></div>
+        <div class="ccs"><div class="ccs-v yel">🌧 ${pp}mm</div><div class="ccs-l">PRECIPITAÇÃO</div></div>
+      </div>
+      ${rain?`<div class="cc-fore-ttl" style="margin-top:4px">PREVISÃO DE CHUVA</div>${rain}`:''}
+      ${fore?`<div class="cc-fore-ttl">PRÓXIMAS HORAS</div>${fore}`:''}
+      <div class="data-src-row">Fonte: Open-Meteo · ECMWF · 48h</div>
+    </div>
+    ${buildIntervalCard(intervals)}`;
+}
+
+function closeRight(resetView=true){
+  document.getElementById('right').classList.add('hidden');
+  document.getElementById('layers').classList.remove('rp-open');
+  document.getElementById('rain-leg').classList.remove('rp-open');
+  clearMunis();
+  municipalitiesVisible=false;updateLegendVisibility();
+
+  // Zera activePoloName APENAS na retração real (botão voltar / limpar filtro).
+  // Quando resetView=false (troca de polo via expandPolo), NÃO zera —
+  // expandPolo já setou o novo polo antes de chamar closeRight(false).
+  if(resetView){
+    activePoloName=null;
+  }
+
+  if(poloFocused && resetView){
+    poloFocused=false;
+    const tgCluster=document.getElementById('tg-cluster');
+    if(tgCluster.checked){
+      Object.entries(clusterLayersByMalha).forEach(([m,g])=>{
+        if(!selectedMalha||selectedMalha===m)map.addLayer(g);
+      });
+    }
+    map.setView([-18.5,-44.5],7,{animate:true,duration:.5});
+    buildLegend();
+  } else {
+    poloFocused=false;
+  }
+
+  // filtrarAlertasKpi e aplicarFiltroVisualCamadas usam activePoloName atual:
+  // — se resetView=true  → activePoloName=null → mostra todos
+  // — se resetView=false → activePoloName=novo polo → expandPolo vai filtrar em seguida
+  filtrarAlertasKpi();
+  aplicarFiltroVisualCamadas();
+  atualizarBotaoLimparFiltro();
+}
+
+// ── LEFT DETAIL ─ (removed sidebar — no-op kept for compatibility) ─
+function openLeftDetail(polo,d,col){}
+
+// ── PLOT MUNICÍPIOS ───────────────────────────────────────────────
+function clearMunis(){
+  if(municipalityMarkerLayer){municipalityMarkerLayer.clearLayers();map.removeLayer(municipalityMarkerLayer);}
+  if(municipalityGeoJsonLayer){map.removeLayer(municipalityGeoJsonLayer);municipalityGeoJsonLayer=null;}
+}
+
+function plotMunis(polo,d,col){
+  clearMunis();
+  // Cria cluster group novo com a cor do polo
+  municipalityMarkerLayer=L.markerClusterGroup({
+    maxClusterRadius:70,
+    disableClusteringAtZoom:10,
+    spiderfyOnMaxZoom:true,
+    showCoverageOnHover:false,
+    animate:true,
+    iconCreateFunction:cl=>{
+      const n=cl.getChildCount();
+      const sz=n>15?42:n>8?36:30;
+      return L.divIcon({
+        className:'',
+        html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;`
+          +`background:color-mix(in srgb,${col} 16%,var(--s1));`
+          +`border:2px solid color-mix(in srgb,${col} 55%,transparent);`
+          +`display:flex;align-items:center;justify-content:center;`
+          +`font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${col};`
+          +`box-shadow:0 0 14px color-mix(in srgb,${col} 28%,transparent),`
+          +`inset 0 0 6px color-mix(in srgb,${col} 6%,transparent)">${n}</div>`,
+        iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+      });
+    }
+  });
+  map.addLayer(municipalityMarkerLayer);
+
+  Object.entries(d.cidades).forEach(([cidade,cd])=>{
+    // Usa centroide IBGE se disponível (corrige coords erradas); fallback para hardcoded
+    const municipalityCode=resolveMunicipalityCode(cidade);
+    const ibgeNormalizedName=municipalityCode?minasMunicipalityCodeMap?.[String(municipalityCode)]||'':'';
+    const ibgeCentroid=ibgeNormalizedName?minasMunicipalityCentroids[ibgeNormalizedName]:null;
+    const coord=ibgeCentroid||(cd.coord||null);
+    if(!coord)return;
+    const [lat,lng]=coord;
+    const ico=L.divIcon({
+      className:'',
+      html:`<div class="muni-mk">
+        <div class="muni-mk-dot" style="background:${col};color:${col}"></div>
+        <div class="muni-mk-lbl">${cidade}</div>
+      </div>`,
+      iconSize:[null,18],
+      iconAnchor:[5,9]
+    });
+    const mk=L.marker([lat,lng],{icon:ico});
+    mk.on('click',e=>{
+      L.DomEvent.stopPropagation(e);
+      showMuniPanel(polo,cidade,cd,lat,lng,col);
+      showMCard(polo,cidade,cd,lat,lng,col,e.originalEvent??e);
+    });
+    municipalityMarkerLayer.addLayer(mk);
+  });
+  loadMuniGeo(polo,d,col);
+}
+
+// ── IBGE GEO — municípios MG ─────────────────────────────────────
+// normGeo: remove acentos, espaços extras, caixa alta
+const normGeo=s=>s.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+const stripMunicipalityArticles=s=>(s||'').replace(/\b(DO|DE|DA|DOS|DAS|NO|NA|NOS|NAS)\b/g,'').replace(/\s+/g,' ').trim();
+const MUNICIPALITY_NAME_ALIASES={
+  // Corrige grafias legadas presentes no dataset operacional.
+  'SAO BRAZ SUACUI':['SAO BRAS DO SUACUI','SAO BRAS SUACUI','SAO BRAZ SUACUI'],
+  'SAO BRAS DO SUACUI':['SAO BRAS DO SUACUI','SAO BRAS SUACUI','SAO BRAZ SUACUI'],
+  'LAMIN':['LAMIM','LAMIN'],
+  'LAMIM':['LAMIM','LAMIN']
+};
+
+function buildMunicipalitySearchKeys(name){
+  const normalizedName=normGeo(name);
+  const aliasKeys=MUNICIPALITY_NAME_ALIASES[normalizedName]||[];
+  const candidateKeys=new Set([normalizedName,stripMunicipalityArticles(normalizedName)]);
+  aliasKeys.forEach(aliasName=>{
+    const normalizedAlias=normGeo(aliasName);
+    candidateKeys.add(normalizedAlias);
+    candidateKeys.add(stripMunicipalityArticles(normalizedAlias));
+  });
+  return [...candidateKeys].filter(Boolean);
+}
+
+function computeLevenshteinDistance(sourceText,targetText){
+  if(sourceText===targetText)return 0;
+  if(!sourceText.length)return targetText.length;
+  if(!targetText.length)return sourceText.length;
+  const previousRow=Array.from({length:targetText.length+1},(_,index)=>index);
+  for(let sourceIndex=0;sourceIndex<sourceText.length;sourceIndex++){
+    let upperLeft=previousRow[0];
+    previousRow[0]=sourceIndex+1;
+    for(let targetIndex=0;targetIndex<targetText.length;targetIndex++){
+      const upper=previousRow[targetIndex+1];
+      const cost=sourceText[sourceIndex]===targetText[targetIndex]?0:1;
+      previousRow[targetIndex+1]=Math.min(
+        previousRow[targetIndex+1]+1,
+        previousRow[targetIndex]+1,
+        upperLeft+cost
+      );
+      upperLeft=upper;
+    }
+  }
+  return previousRow[targetText.length];
+}
+
+function findClosestMunicipalityName(searchKeys){
+  const knownNames=Object.keys(minasMunicipalityNameToCode||{});
+  let bestMatch=null;
+  for(const searchKey of searchKeys){
+    const normalizedSearchKey=stripMunicipalityArticles(searchKey);
+    for(const candidateName of knownNames){
+      const normalizedCandidateName=stripMunicipalityArticles(candidateName);
+      const distance=computeLevenshteinDistance(normalizedSearchKey,normalizedCandidateName);
+      const maxDistance=normalizedSearchKey.length<=8?1:2;
+      if(distance>maxDistance)continue;
+      if(!bestMatch
+        || distance<bestMatch.distance
+        || (distance===bestMatch.distance&&normalizedCandidateName.length>bestMatch.name.length)){
+        bestMatch={name:candidateName,distance};
+      }
+    }
+  }
+  return bestMatch?.name||null;
+}
+
+// ── BLACKLIST: entradas do POLO_DATA que são localidades/distritos, ─────────
+// não municípios oficiais do IBGE. Para essas, nunca tenta match —
+// evita pegar o polígono errado de um município com nome parecido.
+const NOMES_NAO_MUNICIPIOS=new Set([
+  'AGUAS FERREAS',
+  'ANTINHA',
+  'ARAUNA',
+  'AREIAS',
+  'AREIAS - S.S. PARAISO',
+  'BARRA MANSA',
+  'BARREIRO-RIB.VER-PERDOES',
+  'BARRINHA',
+  'BARRO BRANCO',
+  'BARRO MANSA',
+  'BARROSO-SAO PEDRO FERROS',
+  'BOACHA DO BUGRE',
+  'BOACHAT',
+  'CACHOEIRA - RIO PARANAIBA',
+  'CAGADO',
+  'CALCADA-STO ANT.AMP-B.SUC',
+  'CAMPO ALEGRE',
+  'CAPIVARI DOS ELEOTERIOS',
+  'CATIGUA',
+  'CERRADO/CANA VERDE-PERDOE',
+  'CHAPADAO',
+  'COQUEIRO-OLIV-STO ANT AMP',
+  'CORREGO DANTAS-CAMPOS ALT',
+  'CORREGO DO OURO',
+  'COSTAS-PARAISOPOLIS-GONCA',
+  'CRUZEIRO-STO ANT AMP-PERD',
+  'CURUTUBA',
+  'DIAMANTE',
+  'DIVISA',
+  'ESTACAO DE SAO TOME',
+  'ESTACAO SAO THOME',
+  'FAZ VELHA-ESTIVA-B.REPOUS',
+  'FAZENDA DA POSSE',
+  'FORMIGA - BETANIA',
+  'FORMIGA-RDR CACHOEIRINHA',
+  'FREI LAGO NEGRO',
+  'GASPAR LOPES',
+  'GRANADA',
+  'ILHA DO RIO DOCE',
+  'ITAIM E OUTROS',
+  'ITUTINGA-VL OPERARIA USIN',
+  'JARDIM',
+  'JATAI',
+  'JATIBOCA',
+  'JUIZ DE FORA - AG BENFICA',
+  'JUIZ DE FORA - BRUMADO',
+  'JUIZ DE FORA - CASTELINHO',
+  'JUIZ DE FORA - GENERICO',
+  'JUIZ DE FORA - PONTE ZAMB',
+  'JUIZ DE FORA - SAO MATEUS',
+  'JUIZ DE FORA - VALADARES',
+  'LAGOA',
+  'LAGOINHA-LAVRAS-NEPOMUCEN',
+  'LARANJEIRA-S.TIAGO-B.SUCE',
+  'LIMOEIROS',
+  'MACAQUINHOS',
+  'MACAUBAS',
+  'MADRUGADA',
+  'MAIRINQUE',
+  'MALAQUIAS',
+  'MAMOTES',
+  'MANOEL LOPES',
+  'MATA - S.J.B. GLORIA',
+  'MATA DO SINO',
+  'MATIAS BARBOSA AGUA SAL',
+  'MATO DENTRO - JACUI',
+  'MATO GROSSO',
+  'MOINHO',
+  'MORRO ALTO',
+  'MORRO DO FERRO-ITAU DE MG',
+  'MORRO PILAR',
+  'MORRO VERMELHO-S.S.PARAIS',
+  'OLARIA - LIMA DUARTE',
+  'OLARIA-S.S.PARAISO',
+  'PAULO FREITAS-ITUTIN-LAVR',
+  'PEDRA BRANCA-NAZAREN-B.SU',
+  'PETUNIA',
+  'PICO DO GAVIAO',
+  'PIEDADE PONTE NOVA',
+  'PIMENTAS-S.S.PARAISO',
+  'PINHAL-PERDOES-STO ANT AM',
+  'PIRAPETINGA CAIAPO',
+  'PIRAPETINGA VALAO QUENTE',
+  'PONTE NOVA - VAU ACU',
+  'POVOADO DE PIRAPETINGA',
+  'REVES DO BELEM',
+  'RIO GRANDE',
+  'RIO PRETO FAZ S QUITERIA',
+  'ROCINHA',
+  'ROSDUNGA',
+  'SANTA CRUZ ESCALVADO',
+  'SANTA QUITERIA',
+  'SANTA RITA JACUTINGA',
+  'SANTO ANTONIO RIO ABAIXO',
+  'SANTOS DUMONT CACHOEIRINH',
+  'SANTOS DUMONT CORUJA',
+  'SAO BENTO',
+  'SAO GERALDO TUMIRITINGA',
+  'SAO JOAO BATISTA GLORIA',
+  'SAO JOAO-PRATAPOLIS',
+  'SAO JOSE BARREIRO',
+  'SAO LOURENCO DO ESCURO',
+  'SAO PEDRO DO PAMPAM',
+  'SAO SEBASTIAO BELA VISTA',
+  'SAO SEBASTIAO RIO PRETO',
+  'SAO SEBASTIAO RIO VERDE',
+  'SAO SEBASTIAO VARGEM ALEG',
+  'SAPUCAIA',
+  'SERRA DAS AGUAS',
+  'SERRINHA',
+  'SERROTE',
+  'SERTAO',
+  'SERVO',
+  'SIMAO PEREIRA F S PAULO',
+  'SIMAO PEREIRA SOBRAGY',
+  'STA BARBARA MONTE VERDE',
+  'TACHO I',
+  'TAQUARIL',
+  'TEJUCO',
+  'TELHAS',
+  'TERRA ROXA-OLIVEIRA-B.SUC',
+  'TIPITI',
+  'TOMBA-INGAI-LAVRAS',
+  'TRES FONTES',
+  'TRIQUEDA',
+  'UBERABA-01',
+  'UBERLANDIA - MARTINS',
+  'UBERLANDIA -JOAO PINHEIRO',
+  'UBERLANDIA 3',
+  'VARGEM-B.SUCE-STO ANT AMP',
+  'VILA PEREIRA',
+  'VIRADOURO',
+  'VISTA ALEGRE'
+]);
+
+// Índice secundário: nome-sem-artigos → código IBGE
+// Construído uma única vez quando o dicionário principal estiver pronto.
+// Resolve casos como 'DIVINO LARANJEIRAS' → 'DIVINO DAS LARANJEIRAS' (IBGE)
+let _municipioSemArtigosParaCodigo=null;
+function getMunicipioSemArtigos(){
+  if(_municipioSemArtigosParaCodigo)return _municipioSemArtigosParaCodigo;
+  if(!minasMunicipalityNameToCode)return null;
+  _municipioSemArtigosParaCodigo={};
+  for(const [nome,cod] of Object.entries(minasMunicipalityNameToCode)){
+    const semArt=stripMunicipalityArticles(nome);
+    // Só registra se o nome sem artigo é diferente (senão já existe no índice principal)
+    if(semArt!==nome&&!_municipioSemArtigosParaCodigo[semArt]){
+      _municipioSemArtigosParaCodigo[semArt]=cod;
+    }
+  }
+  return _municipioSemArtigosParaCodigo;
+}
+
+function resolveMunicipalityCode(name){
+  if(!minasMunicipalityNameToCode)return null;
+
+  // Localidades/distritos: retorna null imediatamente, sem tentar match
+  const normalizedInput=normGeo(name);
+  if(NOMES_NAO_MUNICIPIOS.has(normalizedInput))return null;
+
+  const searchKeys=buildMunicipalitySearchKeys(name);
+
+  // Passo 1a: match exato no índice principal (nome completo normalizado)
+  for(const key of searchKeys){
+    if(minasMunicipalityNameToCode[key])return minasMunicipalityNameToCode[key];
+  }
+
+  // Passo 1b: match no índice secundário sem artigos
+  // Resolve 'DIVINO LARANJEIRAS' → chave 'DIVINO LARANJEIRAS' no índice
+  // que aponta para o código de 'DIVINO DAS LARANJEIRAS' (nome IBGE com artigo)
+  const idxSemArt=getMunicipioSemArtigos();
+  if(idxSemArt){
+    for(const key of searchKeys){
+      const keySemArt=stripMunicipalityArticles(key);
+      if(idxSemArt[keySemArt])return idxSemArt[keySemArt];
+    }
+  }
+
+  const knownNames=Object.keys(minasMunicipalityNameToCode);
+
+  // Passo 2: match por prefixo — mais seguro que substring
+  // Exige que o nome da busca COMECE com o nome do município (ou vice-versa)
+  // e que os tamanhos sejam similares (razão > 0.55) para evitar falsos positivos.
+  // Ex: "TUMIRITINGA" faz match com "TUMIRITINGA" ✓
+  //     "SAO GERALDO TUMIRITINGA" NÃO faz match com "ITINGA" ✓ (tamanhos muito diferentes)
+  for(const searchKey of searchKeys){
+    const sk=stripMunicipalityArticles(searchKey);
+    const resolvedName=knownNames.find(candidateName=>{
+      const c=stripMunicipalityArticles(candidateName);
+      if(!c||!sk)return false;
+
+      // Match exato sem artigos
+      if(c===sk)return true;
+
+      // Prefixo: um começa com o outro
+      const prefixMatch=c.startsWith(sk)||sk.startsWith(c);
+      if(!prefixMatch)return false;
+
+      // Guarda de comprimento: evita "ITINGA" ser match de "SAO GERALDO TUMIRITINGA"
+      const ratio=Math.min(c.length,sk.length)/Math.max(c.length,sk.length);
+      return ratio>=0.55;
+    });
+    if(resolvedName)return minasMunicipalityNameToCode[resolvedName];
+  }
+
+  // Passo 3: Levenshtein conservador — apenas nomes muito próximos
+  const closestName=findClosestMunicipalityName(searchKeys);
+  if(closestName)return minasMunicipalityNameToCode[closestName];
+
+  return null;
+}
+
+function resolveDisplayMunicipalityName(cityMap,ibgeNormalizedName){
+  const cityNames=Object.keys(cityMap||{});
+  return cityNames.find(cityName=>buildMunicipalitySearchKeys(cityName).includes(ibgeNormalizedName))
+    || cityNames.find(cityName=>normGeo(cityName)===ibgeNormalizedName)
+    || ibgeNormalizedName;
+}
+
+// Calcula centroide exato via fórmula de Shoelace (Green's theorem) — evita deslocamentos em polígonos côncavos
+function geoCentroid(geometry){
+  const rings=geometry.type==='Polygon'?geometry.coordinates:geometry.coordinates[0];
+  const ring=rings[0];
+  if(!ring||ring.length<3)return null;
+  let area=0,cx=0,cy=0;
+  for(let i=0,n=ring.length-1;i<n;i++){
+    const x0=ring[i][0],y0=ring[i][1],x1=ring[i+1][0],y1=ring[i+1][1];
+    const a=x0*y1-x1*y0;
+    area+=a; cx+=(x0+x1)*a; cy+=(y0+y1)*a;
+  }
+  area/=2;
+  if(Math.abs(area)<1e-10){
+    // Fallback: média de vértices
+    const lng=ring.reduce((s,c)=>s+c[0],0)/ring.length;
+    const lat=ring.reduce((s,c)=>s+c[1],0)/ring.length;
+    return[lat,lng];
+  }
+  return[cy/(6*area),cx/(6*area)];
+}
+
+// Carrega GeoJSON de municípios MG + mapeamento code→name do IBGE Localidades
+async function ensureMgGeo(){
+  if(minasMunicipalityGeoJson&&minasMunicipalityCodeMap)return;
+  try{
+    // 1. Malhas v3: features com {codarea} — municípios de MG
+    const geoUrl='https://servicodados.ibge.gov.br/api/v3/malhas/estados/31'
+      +'?intrarregiao=municipio&resolucao=5&formato=application/vnd.geo+json';
+    // 2. Localidades: lista com {id, nome} de todos os municípios de MG
+    const locUrl='https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios';
+    const[geoResp,locResp]=await Promise.all([fetch(geoUrl),fetch(locUrl)]);
+    minasMunicipalityGeoJson=await geoResp.json();
+    const muniList=await locResp.json();
+    // Monta code → nome normalizado e nome normalizado → code
+    minasMunicipalityCodeMap={}; minasMunicipalityNameToCode={};
+    _municipioSemArtigosParaCodigo=null; // invalida cache do índice secundário
+    muniList.forEach(m=>{ const nm=normGeo(m.nome); minasMunicipalityCodeMap[String(m.id)]=nm; minasMunicipalityNameToCode[nm]=String(m.id); });
+    // Pré-computa centroides por nome normalizado
+    minasMunicipalityCentroids={};
+    (minasMunicipalityGeoJson.features||[]).forEach(f=>{
+      const cod=String(f.properties?.codarea||'');
+      const nm=minasMunicipalityCodeMap[cod];
+      if(!nm)return;
+      const c=geoCentroid(f.geometry);
+      if(c)minasMunicipalityCentroids[nm]=c;
+    });
+  }catch(e){console.warn('IBGE geo error',e);}
+}
+
+// ── STATS MUNICIPAIS via IBGE Indicadores ─────────────────────────
+// indicador 29171 = população estimada, 29168 = área territorial km²
+const _muniStatsCache={};
+async function getMuniStats(cidade){
+  const normC=normGeo(cidade);
+  if(_muniStatsCache[normC]!==undefined)return _muniStatsCache[normC];
+  await ensureMgGeo();
+  const code=resolveMunicipalityCode(cidade);
+  if(!code){_muniStatsCache[normC]=null;return null;}
+  try{
+    const url=`https://servicodados.ibge.gov.br/api/v1/pesquisas/-/indicadores/29171|29168/resultados/${code}`;
+    const data=await fetch(url).then(r=>r.json());
+    const stats={pop:null,area:null,code};
+    (Array.isArray(data)?data:[]).forEach(ind=>{
+      // Pega o resultado mais recente (último item do res)
+      const entries=ind.res?.[0]?.res;
+      if(!entries)return;
+      const val=typeof entries==='object'?Object.values(entries).filter(Boolean).pop():entries;
+      if(!val)return;
+      if(String(ind.id)==='29171'){const n=parseInt(String(val).replace(/\D/g,''));if(!isNaN(n))stats.pop=n;}
+      if(String(ind.id)==='29168'){const n=parseFloat(String(val).replace(',','.'));if(!isNaN(n))stats.area=n;}
+    });
+    _muniStatsCache[normC]=stats;
+    return stats;
+  }catch(e){_muniStatsCache[normC]=null;return null;}
+}
+
+async function loadMuniGeo(polo,d,col){
+  try{
+    await ensureMgGeo();
+    if(!minasMunicipalityGeoJson||!minasMunicipalityCodeMap)return;
+    const municipalityCodes=new Set();
+    const unresolvedMunicipalities=[];
+    Object.keys(d.cidades).forEach(cityName=>{
+      const code=resolveMunicipalityCode(cityName);
+      if(code)municipalityCodes.add(String(code));
+      else unresolvedMunicipalities.push(cityName);
+    });
+    if(unresolvedMunicipalities.length){
+      console.warn('loadMuniGeo: municípios sem código IBGE resolvido',polo,unresolvedMunicipalities);
+    }
+    // Filtra features pelo código IBGE resolvido para evitar falhas por variação de nome.
+    const filtered={type:'FeatureCollection',features:(minasMunicipalityGeoJson.features||[]).filter(f=>{
+      const cod=String(f.properties?.codarea||'');
+      return municipalityCodes.has(cod);
+    })};
+    if(!filtered.features.length){console.warn('loadMuniGeo: 0 features matched for',polo);return;}
+    if(municipalityGeoJsonLayer)map.removeLayer(municipalityGeoJsonLayer);
+    municipalityGeoJsonLayer=L.geoJSON(filtered,{
+      style:f=>{
+        const cod=String(f.properties?.codarea||'');
+        const nm=minasMunicipalityCodeMap[cod]||'';
+        const dispNm=resolveDisplayMunicipalityName(d.cidades,nm);
+        return{
+          color:col,weight:2,
+          fillColor:col,fillOpacity:.16,
+          opacity:.85,
+          className:'muni-geo'
+        };
+      },
+      onEachFeature:(f,layer)=>{
+        const cod=String(f.properties?.codarea||'');
+        const nm=minasMunicipalityCodeMap[cod]||'';
+        const dispNm=resolveDisplayMunicipalityName(d.cidades,nm);
+        if(dispNm){
+          // Hover tooltip via div flutuante custom (evita box branco do Leaflet)
+          const tip=document.getElementById('geo-tip');
+          layer.on('mouseover',e=>{
+            layer.setStyle({fillOpacity:.28,weight:2.5});
+            if(tip){tip.textContent=dispNm;tip.style.display='block';}
+          });
+          layer.on('mousemove',e=>{
+            if(tip){
+              const mwRect=document.getElementById('mw').getBoundingClientRect();
+              tip.style.left=(e.originalEvent.clientX-mwRect.left+14)+'px';
+              tip.style.top=(e.originalEvent.clientY-mwRect.top-32)+'px';
+            }
+          });
+          layer.on('mouseout',()=>{
+            layer.setStyle({fillOpacity:.16,weight:2});
+            if(tip)tip.style.display='none';
+          });
+          layer.on('click',e=>{
+            L.DomEvent.stopPropagation(e);
+            if(tip)tip.style.display='none';
+            const cd=d.cidades[dispNm];
+            const useLat=cd?.coord?cd.coord[0]:d.lat;
+            const useLng=cd?.coord?cd.coord[1]:d.lng;
+            showMuniPanel(polo,dispNm,cd||{coord:[useLat,useLng],locais:[]},useLat,useLng,col);
+            // Posiciona mcard no centro do mapa, não nas coords do clique (que podem ser 0,0)
+            const mwEl=document.getElementById('mw');
+            const r=mwEl.getBoundingClientRect();
+            showMCard(polo,dispNm,cd||{coord:[useLat,useLng],locais:[]},useLat,useLng,col,
+              {clientX:r.left+r.width*0.38, clientY:r.top+r.height*0.35});
+          });
+        }
+      }
+    }).addTo(map);
+  }catch(e){console.warn('loadMuniGeo error',e);}
+}
+
+
+// ── MCARD — caixa flutuante município ─────────────────────────────
+async function showMCard(polo,cidade,cd,lat,lng,col,evt){
+  const card=document.getElementById('mcard');
+  const mw=document.getElementById('mw');
+  const rect=mw.getBoundingClientRect();
+  const rightW=document.getElementById('right').classList.contains('hidden')?0:document.getElementById('right').offsetWidth;
+
+  // Posiciona perto do clique mas dentro da área do mapa
+  let x=(evt.clientX-rect.left)+12;
+  let y=(evt.clientY-rect.top)+12;
+  const cw=295;
+  if(x+cw>rect.width-rightW-10) x=(evt.clientX-rect.left)-cw-10;
+  if(y+420>rect.height) y=Math.max(0,rect.height-430);
+  if(x<0)x=10;
+
+  card.style.left=Math.max(0,x)+'px';
+  card.style.top=Math.max(0,y)+'px';
+  card.style.display='block';
+
+  document.getElementById('mc-name').textContent=cidade;
+  document.getElementById('mc-name').style.color=col;
+  document.getElementById('mc-sub').textContent=`POLO ${POLO_DATA[polo]?.base||''} · ${POLO_DATA[polo]?.malha?.toUpperCase()??''}`;
+
+  // Card flutuante mostra apenas clima — Wikipedia vai para o painel lateral
+  document.getElementById('mc-body').innerHTML=
+    `<div id="mc-clima-inner" style="font-family:var(--fm);font-size:9px;color:var(--t4);padding:8px 0;text-align:center">Carregando clima…</div>`;
+
+  // Painel lateral é aberto pelo chamador (focusMuni / goToMuni), não aqui
+  // Clima no card flutuante (captura nome antes do await para comparar depois)
+  const _cidadeSnap=cidade;
+  const w=await fetchWeatherSnapshot(lat,lng);
+  const climaSlot=document.getElementById('mc-clima-inner');
+  // Descarta se outro município foi aberto enquanto aguardávamos
+  if(!climaSlot||document.getElementById('mc-name')?.textContent!==_cidadeSnap)return;
+  if(climaSlot&&w?.current){
+    const t=w.current.temperature_2m?.toFixed(1)?? '--';
+    const r=w.current.precipitation_probability??0;
+    const v=w.current.wind_speed_10m?.toFixed(0)?? '--';
+    const vd=getWindDirectionLabel(w.current.wind_direction_10m??0);
+    const code=w.current.weather_code??0;
+    climaSlot.outerHTML=`
+      <div class="mc-clima">
+        <div class="mc-icon">${getWeatherIcon(code)}</div>
+        <div class="mc-temp">${t}°</div>
+        <div class="mc-cr">
+          <div class="mc-desc">${getWeatherDescription(code)}</div>
+          <div class="mc-row">
+            <span class="mc-pill">💧${r}%</span>
+            <span class="mc-pill">💨${v}km/h ${vd}</span>
+          </div>
+        </div>
+      </div>`;
+  }else if(climaSlot){
+    climaSlot.textContent='Clima indisponível';
+  }
+}
+
+function closeMCard(){document.getElementById('mcard').style.display='none';}
+
+// ── PAINEL DO MUNICÍPIO (sidebar direita) ────────────────────────
+let _muniPanelPolo=null; // para o botão "voltar ao polo"
+let _muniPanelToken=0;   // cancellation token — incrementa a cada nova chamada
+
+async function showMuniPanel(polo,cidade,cd,lat,lng,col){
+  _muniPanelPolo=polo;
+  const token=++_muniPanelToken; // snapshot: se token mudar durante await, descarta
+  const d=POLO_DATA[polo];
+  const right=document.getElementById('right');
+  const layers=document.getElementById('layers');
+  right.classList.remove('hidden');
+  layers.classList.add('rp-open');
+  document.getElementById('rain-leg').classList.add('rp-open');
+  document.getElementById('rp-accent').style.background=col;
+
+  // Renderiza esqueleto imediatamente (não espera APIs)
+  const locaisHtml=cd.locais.slice(0,8).map(l=>
+    `<div class="mp-loc"><span class="mp-lc">${l.local}</span><span>${l.nome.split(' - ').slice(1).join(' ')||l.nome}</span></div>`
+  ).join('')+(cd.locais.length>8?`<div class="mp-loc-more">+${cd.locais.length-8} locais</div>`:'');
+
+  document.getElementById('rcont').innerHTML=`
+    <div class="mp-breadcrumb">
+      <span class="mp-bc-polo" onclick="backToPolo()">← ${d?.base||'POLO'} · ${polo.split(',')[0]}</span>
+      <span class="mp-bc-sep">›</span>
+      <span class="mp-bc-cur">${cidade}</span>
+    </div>
+    <div class="mp-title" style="color:${col}">${cidade}</div>
+    <div class="mp-meta">MALHA ${d?.malha?.toUpperCase()||''} · ${d?.base||''}</div>
+
+    <div class="mp-stats" id="mp-stats">
+      <div class="mp-stat"><div class="mp-sv" id="mp-sv-pop"><span class="mc-loading">···</span></div><div class="mp-sl">POPULAÇÃO</div></div>
+      <div class="mp-stat"><div class="mp-sv" id="mp-sv-area"><span class="mc-loading">···</span></div><div class="mp-sl">ÁREA KM²</div></div>
+      <div class="mp-stat"><div class="mp-sv">${cd.locais.length}</div><div class="mp-sl">LOCAIS CEMIG</div></div>
+    </div>
+
+    <div id="mp-ibge-badge"></div>
+    <div id="mp-alert-slot"></div>
+
+    <div id="mp-wiki-slot" class="mp-wiki-loading">
+      <div class="mp-wiki-spinner"></div>
+      <span>Buscando na Wikipedia…</span>
+    </div>
+
+    <div id="mp-clima-slot" class="mp-section-placeholder">Carregando clima…</div>
+
+    <div class="mp-section-ttl">⚡ LOCAIS CEMIG</div>
+    <div class="mp-locs">${locaisHtml}</div>`;
+
+  // — Carrega em paralelo — incluindo INMET e OWM
+  const [stats, wikiData, weather, ibge, owmData] = await Promise.all([
+    getMuniStats(cidade),
+    fetchWikipediaSummary(cidade),
+    fetchWeatherSnapshot(lat,lng),
+    fetchIbgeContext(cidade),
+    fetchOpenWeatherAlerts(lat,lng)
+  ]);
+
+  // Se outro município foi selecionado enquanto aguardávamos, descarta este resultado
+  if(token!==_muniPanelToken)return;
+
+  // Stats
+  const popEl=document.getElementById('mp-sv-pop');
+  const areaEl=document.getElementById('mp-sv-area');
+  if(popEl)popEl.innerHTML=stats?.pop!=null?stats.pop.toLocaleString('pt-BR'):'—';
+  if(areaEl)areaEl.innerHTML=stats?.area!=null?stats.area.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
+
+  // Alertas OWM badge
+  const owmAlerts=parseOpenWeatherAlerts(owmData);
+  const alertBadge=buildAlertBadge(owmAlerts);
+  const alertSlot=document.getElementById('mp-alert-slot');
+  if(alertSlot)alertSlot.innerHTML=alertBadge;
+
+  // IBGE badge
+  const ibgeBadge=document.getElementById('mp-ibge-badge');
+  if(ibgeBadge&&ibge?.micro){
+    ibgeBadge.innerHTML=`<div class="mp-ibge">📍 ${ibge.micro} · ${ibge.meso}</div>`;}
+
+  // Wikipedia
+  const wikiSlot=document.getElementById('mp-wiki-slot');
+  if(wikiSlot){
+    if(wikiData?.extract){
+      const url=(wikiData.url||'').replace(/'/g,"\\'");
+      const photo=wikiData.thumb
+        ?`<a href="${url}" target="_blank"><img class="mp-wiki-photo" src="${wikiData.thumb}" loading="lazy"></a>`:'';
+      // Divide o extrato em parágrafos para melhor leitura
+      const paras=wikiData.extract.split('\n').filter(p=>p.trim().length>20);
+      const parasHtml=paras.map(p=>`<p class="mp-wiki-p">${p}</p>`).join('');
+      wikiSlot.className='mp-wiki-box';
+      wikiSlot.innerHTML=`
+        ${photo}
+        <div class="mp-wiki-header">
+          <div class="mp-wiki-badge">📖 WIKIPEDIA</div>
+          <div class="mp-wiki-title">${wikiData.title}</div>
+        </div>
+        <div class="mp-wiki-text">${parasHtml}</div>
+        <a href="${url}" target="_blank" class="mp-wiki-link">Ler artigo completo na Wikipedia ↗</a>`;
+    }else{
+      const search=`https://pt.wikipedia.org/w/index.php?search=${encodeURIComponent(cidade+' Minas Gerais')}`;
+      wikiSlot.className='mp-wiki-empty';
+      wikiSlot.innerHTML=`<span>Sem artigo encontrado</span>
+        <a href="${search}" target="_blank" class="mp-wiki-link">Buscar "${cidade}" na Wikipedia ↗</a>`;
+    }
+  }
+
+  // Clima
+  const climaSlot=document.getElementById('mp-clima-slot');
+  if(climaSlot){
+    if(weather?.current){
+      const t=weather.current.temperature_2m?.toFixed(1)?? '--';
+      const at=weather.current.apparent_temperature?.toFixed(0)?? '--';
+      const r=weather.current.precipitation_probability??0;
+      const v=weather.current.wind_speed_10m?.toFixed(0)?? '--';
+      const vd=getWindDirectionLabel(weather.current.wind_direction_10m??0);
+      const h=weather.current.relative_humidity_2m??'--';
+      const code=weather.current.weather_code??0;
+      const rain=buildRainOutlook(weather.hourly);
+      const fore=buildFore(weather.hourly);
+      const intervals=buildIntervalForecast(weather.hourly);
+      const owmHourly=buildOpenWeatherHourlyCards(owmData);
+      climaSlot.outerHTML=`
+        <div class="mp-section-ttl">🌤 CLIMA ATUAL</div>
+        <div class="clima-card">
+          <div class="cc-hero">
+            <div class="cc-icon">${getWeatherIcon(code)}</div>
+            <div class="cc-temp">${t}°</div>
+            <div class="cc-info"><div class="cc-desc">${getWeatherDescription(code)}</div><div class="cc-feel">Sensação ${at}°C</div></div>
+          </div>
+          <div class="cc-grid">
+            <div class="ccs"><div class="ccs-v blue">💧 ${r}%</div><div class="ccs-l">PROB. CHUVA</div></div>
+            <div class="ccs"><div class="ccs-v blue">💨 ${v}km/h ${vd}</div><div class="ccs-l">VENTO</div></div>
+            <div class="ccs"><div class="ccs-v">🌢 ${h}%</div><div class="ccs-l">UMIDADE</div></div>
+          </div>
+          ${rain?`<div class="cc-fore-ttl" style="margin-top:4px">PREVISÃO DE CHUVA</div>${rain}`:''}
+          ${fore?`<div class="cc-fore-ttl">PRÓXIMAS HORAS</div>${fore}`:''}
+          <div class="data-src-row">Fonte: Open-Meteo · ECMWF · 48h</div>
+        </div>
+        ${buildIntervalCard(intervals)}
+        ${owmHourly?`<div class="mp-section-ttl" style="margin-top:10px">📡 PREVISÃO OPENWEATHER <span class="data-src">One Call 3.0</span></div>${owmHourly}`:''}
+        `;
+    }else{
+      climaSlot.remove();
+    }
+  }
+}
+
+function backToPolo(){
+  if(!_muniPanelPolo)return;
+  const polo=_muniPanelPolo;
+  const d=POLO_DATA[polo];if(!d)return;
+  const col=MALHA_COLORS[d.malha]||'#fff';
+  _muniPanelPolo=null;
+  closeMCard();
+  openRightPanel(polo,d,col);
+}
+
+function focusMuni(polo,cidade,lat,lng){
+  const d=POLO_DATA[polo];if(!d)return;
+  const col=MALHA_COLORS[d.malha]||'#fff';
+  const cd=d.cidades[cidade];if(!cd)return;
+  const useLat=lat||d.lat, useLng=lng||d.lng;
+  map.setView([useLat,useLng],13,{animate:true,duration:.4});
+  showMuniPanel(polo,cidade,cd,useLat,useLng,col);
+  const mw=document.getElementById('mw');
+  const rect=mw.getBoundingClientRect();
+  showMCard(polo,cidade,cd,useLat,useLng,col,{clientX:rect.left+rect.width*0.38,clientY:rect.top+200});
+}
+
+// ── KPI ───────────────────────────────────────────────────────────
+async function loadKpi(){
+  const pts=[[-19.9167,-43.9345],[-18.9186,-48.2772],[-21.7642,-43.3503],[-16.7356,-43.8614],[-18.8511,-41.9494]];
+  // Busca clima para os pontos representativos de MG
+  const ws=await Promise.all(pts.map(([a,b])=>fetchWeatherSnapshot(a,b)));
+  const ts=ws.filter(w=>w?.current).map(w=>w.current.temperature_2m);
+  const al=ws.filter(w=>w?.current&&(w.current.weather_code>=80||(w.current.wind_speed_10m||0)>45)).length;
+  if(ts.length){
+    const bh=ws[0]?.current?.temperature_2m?.toFixed(1);
+    if(bh)document.getElementById('tb-temp').textContent=bh+'°C';
+  }
+  document.getElementById('tb-alr').textContent=al;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// ── SISTEMA DE ALERTAS — INMET + OpenWeather One Call 3.0 ─────────
+// ══════════════════════════════════════════════════════════════════
+
+// A chave OpenWeather não fica mais hardcoded no HTML.
+// Use `window.CEMIG_MAP_CONFIG.openWeatherApiKey` ou o banner "Configurar chave".
+
+// Cache OpenWeather
+const openWeatherAlertCache={};  // lat,lng → dados
+
+// ── OpenWeather One Call 3.0 ───────────────────────────────────────
+async function fetchOpenWeatherAlerts(lat,lng){
+  const k=`${lat.toFixed(2)},${lng.toFixed(2)}`;
+  if(openWeatherAlertCache[k]&&Date.now()-openWeatherAlertCache[k].ts<600000)return openWeatherAlertCache[k].data;
+  const apiKey=requireOpenWeatherApiKey('Alertas meteorológicos premium');
+  if(!apiKey)return null;
+  try{
+    const url=`https://api.openweathermap.org/data/3.0/onecall`
+      +`?lat=${lat}&lon=${lng}&appid=${apiKey}`
+      +`&exclude=minutely,daily&units=metric&lang=pt_br`;
+    const r=await fetchWithRetry(url,{},1,8000);
+    if(!r.ok)throw new Error('OWM '+r.status);
+    const d=await r.json();
+    openWeatherAlertCache[k]={data:d,ts:Date.now()};
+    return d;
+  }catch(e){
+    console.warn('OWM error:',e.message);
+    return null;
+  }
+}
+
+// Extrai alertas OWM e normaliza
+function parseOpenWeatherAlerts(owmData){
+  if(!owmData?.alerts||!owmData.alerts.length)return[];
+  return owmData.alerts.map(a=>({
+    event: a.event||'Alerta',
+    sender: a.sender_name||'OpenWeatherMap',
+    start: a.start?new Date(a.start*1000):null,
+    end:   a.end?new Date(a.end*1000):null,
+    desc:  a.description||'',
+    tags:  a.tags||[],
+    source:'owm'
+  }));
+}
+
+// Enriquece dados OWM com previsão horária premium
+function buildOpenWeatherHourlyCards(owmData){
+  if(!owmData?.hourly)return'';
+  const now=new Date();
+  const slots=owmData.hourly.filter(h=>new Date(h.dt*1000)>now).slice(0,8);
+  if(!slots.length)return'';
+  const col=p=>p>=70?'var(--ar)':p>=40?'var(--ay)':'var(--ab)';
+  return`<div class="owm-hourly">${slots.map(h=>{
+    const dt=new Date(h.dt*1000);
+    const hr=dt.getHours()+'h';
+    const t=h.temp?.toFixed(0)?? '--';
+    const pop=Math.round((h.pop||0)*100);
+    const mm=(h.rain?.['1h']||0).toFixed(1);
+    const code=h.weather?.[0]?.id??800;
+    const wmoCode=mapOpenWeatherCodeToWmo(code);
+    return`<div class="owm-slot">
+      <div class="owm-h">${hr}</div>
+      <div class="owm-i">${getWeatherIcon(wmoCode)}</div>
+      <div class="owm-t">${t}°</div>
+      <div class="owm-p" style="color:${col(pop)}">💧${pop}%</div>
+      ${parseFloat(mm)>0?`<div class="owm-mm">${mm}mm</div>`:''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// Converte ID OpenWeather → código WMO aproximado (para getWeatherIcon())
+function mapOpenWeatherCodeToWmo(id){
+  if(id>=200&&id<300)return 95;
+  if(id>=300&&id<400)return 55;
+  if(id>=500&&id<600){if(id>=502)return 65;if(id>=500)return 61;return 61;}
+  if(id>=600&&id<700)return 71;
+  if(id>=700&&id<800)return 45;
+  if(id===800)return 0;
+  if(id===801)return 1;
+  if(id===802)return 2;
+  return 3;
+}
+
+// Variáveis INMET removidas
+
+// ── ALERTA BADGE: widget premium ──────────────────────────────────
+// buildAlertBadge: apenas alertas OWM (INMET removido)
+function buildAlertBadge(owmAlerts){
+  const all=[
+    ...owmAlerts.map(a=>({
+      source:'OWM',
+      event:a.event,
+      sev:{color:'#a888ff',ico:'🔔',level:1,short:a.sender},
+      start:a.start?a.start.toLocaleString('pt-BR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}):'',
+      end:a.end?a.end.toLocaleString('pt-BR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}):'',
+      desc:a.desc
+    }))
+  ];
+  if(!all.length)return'';
+  return`<div class="mp-alerts-wrap">${all.map(a=>`
+    <div class="mp-alert" style="--ac2:${a.sev.color}">
+      <div class="mp-alert-head">
+        <span class="mp-alert-ico">${a.sev.ico}</span>
+        <span class="mp-alert-badge" style="color:${a.sev.color};border-color:${a.sev.color}40;background:${a.sev.color}12">${a.sev.short}</span>
+        <span class="mp-alert-src">${a.source}</span>
+      </div>
+      <div class="mp-alert-evt">${a.event}</div>
+      ${a.start||a.end?`<div class="mp-alert-time">🕒 ${a.start}${a.end?' → '+a.end:''}</div>`:''}
+      ${a.desc?`<div class="mp-alert-desc">${a.desc.slice(0,180)}${a.desc.length>180?'…':''}</div>`:''}
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── wCondition (mantida para compatibilidade) ─────────────────────
+function wCondition(code,wind,temp){
+  const w=wind||0;
+  if(code>=95||w>60)return{ico:'🌩️',label:'TEMPESTADE',color:'#ff5a78',pulsate:true};
+  if(code>=80||w>45)return{ico:'⛈️',label:'CHUVA FORTE',color:'#ffd166',pulsate:true};
+  if(code>=61||w>35)return{ico:'🌧️',label:'CHUVA',color:'#3db8ff',pulsate:false};
+  if(code>=51)return{ico:'🌦️',label:'GAROA',color:'#3db8ff',pulsate:false};
+  if(code>=1)return{ico:'⛅',label:'NUBLADO',color:'#7898b8',pulsate:false};
+  return{ico:'☀️',label:`${(temp||0).toFixed(0)}°C`,color:'#51f587',pulsate:false};
+}
+
+// ── loadAlerts: pins no mapa com dados INMET + OWM ────────────────
+let alertLoading=false;
+// _alertLayersByPolo: mapa { nomePolo → [layers Leaflet] }
+// Permite mostrar/ocultar marcadores de alerta por polo sem refazer fetch.
+let _alertLayersByPolo={};
+
+// _precipLayersByPolo: mesma ideia para os pins de precipitação.
+let _precipLayersByPolo={};
+
+async function loadAlerts(){
+  if(alertLoading)return;
+  alertLoading=true;
+
+  // Inicializa o grupo de camadas no mapa (reutiliza se já existir)
+  if(!weatherAlertLayerGroup)weatherAlertLayerGroup=L.layerGroup();
+  weatherAlertLayerGroup.clearLayers();
+  _alertLayersByPolo={};  // limpa índice anterior
+  if(!map.hasLayer(weatherAlertLayerGroup))weatherAlertLayerGroup.addTo(map);
+
+  const pts=Object.entries(POLO_DATA).map(([name,d])=>({name,lat:d.lat,lng:d.lng}));
+  let alertCount=0;
+  _alertKpiList=[];
+
+  const batchSize=5;
+  for(let i=0;i<pts.length;i+=batchSize){
+    if(!map.hasLayer(weatherAlertLayerGroup))break;
+    await Promise.all(pts.slice(i,i+batchSize).map(async pt=>{
+      try{
+        // Dados meteorológicos base (Open-Meteo, cacheado)
+        const w=await fetchWeatherSnapshot(pt.lat,pt.lng);
+        if(!w?.current)return;
+        const code=w.current.weather_code??0;
+        const wind=w.current.wind_speed_10m??0;
+        const temp=w.current.temperature_2m??0;
+        const cond=wCondition(code,wind,temp);
+
+        // Alertas OpenWeather (apenas se condição severa)
+        let owmData=null,owmAlerts=[];
+        if(cond.pulsate){
+          owmData=await fetchOpenWeatherAlerts(pt.lat,pt.lng);
+          owmAlerts=parseOpenWeatherAlerts(owmData);
+        }
+
+        const hasAlert=cond.pulsate||owmAlerts.length>0;
+        if(hasAlert)alertCount++;
+
+        // Acumula no KPI — apenas WMO e OWM
+        if(cond.pulsate){
+          _alertKpiList.push({
+            polo:pt.name.split(',')[0],source:'WMO',
+            event:cond.label+' · '+temp.toFixed(0)+'°C · vento '+wind.toFixed(0)+'km/h',
+            sevShort:cond.label,color:cond.color,sevLevel:2,
+            start:null,end:null,
+          });
+        }
+        if(owmAlerts.length){
+          owmAlerts.forEach(a=>{
+            _alertKpiList.push({
+              polo:pt.name.split(',')[0],source:'OWM',
+              event:a.event,sevShort:'ALERTA',color:'#a888ff',sevLevel:1,
+              start:a.start,end:a.end,
+            });
+          });
+        }
+
+        // Cor do pin: OWM > WMO
+        let pinColor=cond.color,pinIco=cond.ico,pinLabel=cond.label;
+        if(owmAlerts.length){pinColor='#a888ff';pinIco='🔔';pinLabel='ALERTA OWM';}
+
+        // Badge de fonte
+        const srcBadge=owmAlerts.length
+          ?`<div class="alert-src-badge owm">OWM</div>`:'';
+
+        const animStyle=hasAlert?'animation:alertPulse 1.5s ease-in-out infinite':'';
+        const ico=L.divIcon({
+          className:'',
+          html:`<div class="alert-pin">
+            ${hasAlert?`<div class="alert-glow" style="--ag:${pinColor}"></div>`:''}
+            <div class="alert-ico" style="${animStyle}">${pinIco}</div>
+            <div class="alert-lbl" style="color:${pinColor};border-color:${pinColor}40;background:${pinColor}15">${pinLabel}</div>
+            ${srcBadge}
+          </div>`,
+          iconSize:[72,52],iconAnchor:[36,52]
+        });
+
+        const tk=`<b style="color:${pinColor}">${pt.name.split(',')[0]}</b><br>${pinLabel} · ${temp.toFixed(0)}°C · 💨${wind.toFixed(0)}km/h`
+
+          +(owmAlerts.length?`<br><span style="color:#a888ff;font-size:9px">🔔 ${owmAlerts.length} alerta(s) OWM</span>`:'');
+
+        // Cria o marcador e guarda referência no índice polo→layers
+        const alertMarker=L.marker([pt.lat,pt.lng],{icon:ico,zIndexOffset:900})
+          .bindTooltip(tk,{direction:'top',className:'alert-tip'})
+          .on('click',()=>{
+            const pd=POLO_DATA[pt.name];
+            if(pd){const c=MALHA_COLORS[pd.malha]||'#fff';onPoloClick(pt.name,pd,c,null);}
+          })
+          .addTo(weatherAlertLayerGroup);
+        // Indexa pelo nome do polo para permitir filtro visual posterior
+        if(!_alertLayersByPolo[pt.name])_alertLayersByPolo[pt.name]=[];
+        _alertLayersByPolo[pt.name].push(alertMarker);
+      }catch(e){console.warn('Alert pin error',pt.name,e);}
+    }));
+  }
+  alertLoading=false;
+  if(document.getElementById('kv-alr'))document.getElementById('kv-alr').textContent=alertCount;
+  if(document.getElementById('tb-alr'))document.getElementById('tb-alr').textContent=alertCount;
+
+  // Popula a lista na sidebar (já aplica filtro de polo/malha ativo)
+  updateAlertKpi(_alertKpiList);
+
+  // Replota marcadores de polo para atualizar glow nos que têm alerta
+  plotPolos();
+
+  // Aplica filtro visual nos pins de alerta recém-plotados
+  aplicarFiltroVisualCamadas();
+}
+
+// Lista acumulada de alertas para o KPI — preenchida dentro do loop
+let _alertKpiList=[];
+
+// ── PRECIPITAÇÃO — dual layer: radar RainViewer + pins animados ───
+function precipStyle(prob,mm,code){
+  if(prob<20&&mm<0.1)return null;
+  const r=prob<35?18000:prob<55?30000:prob<75?45000:62000;
+  // Escala intuitiva: azul=fraco → verde→amarelo→laranja→vermelho=tempestade
+  if(code>=95)       return{color:'#ff2050',r,label:mm>0?mm.toFixed(1)+'mm/h':prob+'%',intensity:'storm',   desc:'Tempestade'};
+  if(mm>=15||code>=80)return{color:'#ff6030',r,label:mm.toFixed(1)+'mm/h',           intensity:'heavy',   desc:'Chuva forte'};
+  if(mm>=5)           return{color:'#ffcc30',r,label:mm.toFixed(1)+'mm/h',           intensity:'moderate',desc:'Chuva moderada'};
+  if(mm>=1)           return{color:'#40e090',r,label:mm.toFixed(1)+'mm/h',           intensity:'light',   desc:'Chuva fraca'};
+  if(prob>=50)        return{color:'#47b8ff',r,label:prob+'%',                        intensity:'likely',  desc:'Provável'};
+  return               {color:'#2a7aaa',r,label:prob+'%',                             intensity:'possible',desc:'Possível'};
+}
+
+// Gera drops CSS animados para a chuva dentro do pin
+function makePrDrops(color,intensity,sz){
+  const counts={storm:14,heavy:11,moderate:8,light:5,likely:4,possible:3};
+  const speeds={storm:.5,heavy:.65,moderate:.8,light:1.1,likely:1.3,possible:1.6};
+  const n=counts[intensity]||5;
+  const spd=speeds[intensity]||1;
+  let drops='';
+  for(let i=0;i<n;i++){
+    const x=8+Math.random()*(sz-16);
+    const h=6+Math.random()*10;
+    const delay=Math.random()*1.5;
+    const dur=(spd+Math.random()*.4).toFixed(2);
+    drops+=`<div class="pr-drop" style="left:${x.toFixed(1)}px;height:${h}px;animation-duration:${dur}s;animation-delay:${delay.toFixed(2)}s;opacity:${(.3+Math.random()*.5).toFixed(2)};background:linear-gradient(to bottom,transparent,${color})"></div>`;
+  }
+  return drops;
+}
+
+async function loadPrecipLayer(){
+  if(isPrecipitationLoading)return;
+  isPrecipitationLoading=true;
+
+  // Inicializa o grupo de camadas (reutiliza se já existir)
+  if(!precipitationMarkerGroup)precipitationMarkerGroup=L.layerGroup();
+  precipitationMarkerGroup.clearLayers();
+  _precipLayersByPolo={};  // limpa índice anterior
+  if(!map.hasLayer(precipitationMarkerGroup))precipitationMarkerGroup.addTo(map);
+
+  // Itera todos os polos em lotes para não bloquear a UI
+  const entries=Object.entries(POLO_DATA);
+  for(let i=0;i<entries.length;i+=8){
+    if(!map.hasLayer(precipitationMarkerGroup))break;
+    await Promise.all(entries.slice(i,i+8).map(async([name,polo])=>{
+      try{
+        const w=await fetchWeatherSnapshot(polo.lat,polo.lng);
+        if(!w?.current)return;
+        const mm=w.current.precipitation??0;
+        const prob=w.current.precipitation_probability??0;
+        const code=w.current.weather_code??0;
+        const temp=w.current.temperature_2m??0;
+        const wind=w.current.wind_speed_10m??0;
+        const ps=precipStyle(prob,mm,code);
+        if(!ps)return;
+
+        // Anéis concêntricos gradiente (3 camadas de profundidade visual)
+        // São indexados junto com o pin para permitir ocultar tudo do polo de uma vez
+        if(!_precipLayersByPolo[name])_precipLayersByPolo[name]=[];
+        const r1=L.circle([polo.lat,polo.lng],{radius:ps.r,      fillColor:ps.color,fillOpacity:.04,color:ps.color,weight:.5, opacity:.12,interactive:false}).addTo(precipitationMarkerGroup);
+        const r2=L.circle([polo.lat,polo.lng],{radius:ps.r*.55,  fillColor:ps.color,fillOpacity:.09,color:ps.color,weight:.8, opacity:.25,interactive:false}).addTo(precipitationMarkerGroup);
+        const r3=L.circle([polo.lat,polo.lng],{radius:ps.r*.26,  fillColor:ps.color,fillOpacity:.20,color:ps.color,weight:1.2,opacity:.55,interactive:false}).addTo(precipitationMarkerGroup);
+        _precipLayersByPolo[name].push(r1,r2,r3);
+
+        // Pin animado premium
+        const sz=72;
+        const isStorm=ps.intensity==='storm'||ps.intensity==='heavy';
+        const drops=makePrDrops(ps.color,ps.intensity,sz);
+        const lightning=isStorm?`<div class="pr-lightning" style="top:${sz*.12}px;right:${sz*.15}px">⚡</div>`:'';
+        const card=`<div class="pr-card" style="--pc:${ps.color}">
+          <div class="pr-card-name">${name.split(',')[0]}</div>
+          <div class="pr-card-row"><span class="pr-card-k">💧 Prob.</span><span class="pr-card-v" style="color:${ps.color}">${prob}%</span></div>
+          <div class="pr-card-row"><span class="pr-card-k">🌧 Volume</span><span class="pr-card-v">${mm.toFixed(1)} mm/h</span></div>
+          <div class="pr-card-row"><span class="pr-card-k">🌡 Temp</span><span class="pr-card-v">${temp.toFixed(0)}°C</span></div>
+          <div class="pr-card-row"><span class="pr-card-k">💨 Vento</span><span class="pr-card-v">${wind.toFixed(0)} km/h</span></div>
+        </div>`;
+
+        // Previsão próximas horas (peek: slot de maior prob)
+        let peekHr='';
+        if(w.hourly?.precipitation_probability){
+          const now=new Date();
+          let maxP=0,maxH='';
+          for(let j=0;j<w.hourly.time.length;j++){
+            const dt=new Date(w.hourly.time[j]);
+            if(dt>now&&dt<new Date(now.getTime()+12*3600000)){
+              const p=w.hourly.precipitation_probability[j]??0;
+              if(p>maxP){maxP=p;maxH=dt.getHours()+'h';}
+            }
+          }
+          if(maxH)peekHr=`<div class="pr-card-row"><span class="pr-card-k">🕒 Pico</span><span class="pr-card-v">${maxP}% às ${maxH}</span></div>`;
+          // Inject into card (replace last </div>)
+        }
+
+        const cardFull=`<div class="pr-card" style="--pc:${ps.color}">
+          <div class="pr-card-name">${name.split(',')[0]}</div>
+          <div class="pr-card-row"><span class="pr-card-k">💧 Prob.</span><span class="pr-card-v" style="color:${ps.color}">${prob}%</span></div>
+          <div class="pr-card-row"><span class="pr-card-k">🌧 Volume</span><span class="pr-card-v">${mm.toFixed(1)} mm/h</span></div>
+          ${peekHr}
+          <div class="pr-card-row"><span class="pr-card-k">🌡 Temp</span><span class="pr-card-v">${temp.toFixed(0)}°C</span></div>
+          <div class="pr-card-row"><span class="pr-card-k">💨 Vento</span><span class="pr-card-v">${wind.toFixed(0)} km/h</span></div>
+        </div>`;
+
+        // Pin principal animado — indexado para filtro visual
+        const precipPin=L.marker([polo.lat,polo.lng],{
+          icon:L.divIcon({
+            className:'',
+            html:`<div class="pr-pin" style="--pc:${ps.color};width:${sz}px;height:${sz}px">
+              <div class="pr-ring pr-r1" style="width:${sz}px;height:${sz}px"></div>
+              <div class="pr-ring pr-r2" style="width:${sz*.68}px;height:${sz*.68}px"></div>
+              <div class="pr-ring pr-r3" style="width:${sz*.42}px;height:${sz*.42}px"></div>
+              <div class="pr-sweep" style="width:${sz*.7}px;height:${sz*.7}px"></div>
+              <div class="pr-drops" style="width:${sz*.65}px;height:${sz*.65}px">${drops}</div>
+              ${lightning}
+              <div class="pr-core" style="width:14px;height:14px"></div>
+              <div class="pr-info">${ps.label}</div>
+              ${cardFull}
+            </div>`,
+            iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+          }),
+          zIndexOffset:200,interactive:true
+        })
+        .on('click',()=>{
+          const pd=POLO_DATA[name];
+          if(pd){const c=MALHA_COLORS[pd.malha]||'#fff';onPoloClick(name,pd,c,null);}
+        })
+        .addTo(precipitationMarkerGroup);
+        // Registra o pin no índice polo→layers
+        _precipLayersByPolo[name].push(precipPin);
+      }catch{}
+    }));
+  }
+  isPrecipitationLoading=false;
+
+  // Garante que os clusters de polo ficam na frente dos círculos de chuva
+  Object.values(clusterLayersByMalha).forEach(g=>{try{g.bringToFront()}catch{}});
+  if(municipalityMarkerLayer)municipalityMarkerLayer.bringToFront();
+
+  // Aplica filtro visual: se há polo ou malha ativa, oculta pins dos demais
+  aplicarFiltroVisualCamadas();
+}
+
+// ── RAINVIEWER — carrega lista de frames ─────────────────────────
+async function loadRainViewerFrames(){
+  if(rainViewerRadarFrames.length)return; // já carregado
+  try{
+    const d=await(await fetch('https://api.rainviewer.com/public/weather-maps.json')).json();
+    rainViewerRadarFrames=d?.radar?.past??[];
+  }catch{}
+}
+
+// ── TOGGLES ───────────────────────────────────────────────────────
+function setupToggles(){
+  document.getElementById('tg-cluster').addEventListener('change',e=>{
+    Object.values(clusterLayersByMalha).forEach(g=>e.target.checked?map.addLayer(g):map.removeLayer(g));
+  });
+  document.getElementById('tg-muni').addEventListener('change',e=>{
+    if(e.target.checked&&activePoloName){
+      municipalitiesVisible=true;updateLegendVisibility();
+      const d=POLO_DATA[activePoloName];
+      plotMunis(activePoloName,d,MALHA_COLORS[d.malha]||'#fff');
+    }else{clearMunis();municipalitiesVisible=false;updateLegendVisibility();}
+  });
+  document.getElementById('tg-meteo').addEventListener('change',async e=>{
+    if(e.target.checked){
+      openLeftAlerts();
+      loadPrecipLayer();
+      loadAlerts();
+    }else{
+      closeLeftAlerts();
+      if(precipitationMarkerGroup){map.removeLayer(precipitationMarkerGroup);precipitationMarkerGroup.clearLayers();precipitationMarkerGroup=null;}
+      isPrecipitationLoading=false;
+      if(weatherAlertLayerGroup){map.removeLayer(weatherAlertLayerGroup);weatherAlertLayerGroup.clearLayers();}
+      alertLoading=false;
+      _alertKpiList=[];
+      if(document.getElementById('tb-alr'))document.getElementById('tb-alr').textContent='0';
+    }
+  });
+}
+
+// ── LEGEND ────────────────────────────────────────────────────────
+function buildLegend(){
+  document.getElementById('leg').innerHTML=
+    `<div class="leg-ttl">MALHAS REGIONAIS</div>`+
+    Object.entries(MALHA_COLORS).map(([m,c])=>
+      `<div class="li"><div class="ld" style="background:${c}"></div><span style="color:${c}">${m}</span></div>`).join('');
+}
+
+function buildMuniLegend(cidades,col,poloNome){
+  const d=POLO_DATA[poloNome];
+  const base=d?.base||'';
+  const names=Object.keys(cidades);
+  const MAX=22;
+  document.getElementById('leg').innerHTML=
+    `<div class="leg-ttl" style="color:${col}">⚡ POLO ${base} · ${poloNome.split(',')[0]}</div>`+
+    `<div class="li" style="color:var(--t3);font-size:8px;margin-bottom:5px">${names.length} municípios</div>`+
+    names.slice(0,MAX).map(n=>{
+      const coord=cidades[n]?.coord;
+      const oc=coord?`onclick="focusMuni('${poloNome.replace(/'/g,"\\'")}','${n.replace(/'/g,"\\'")}',${coord[0]},${coord[1]})"`:
+                     `onclick="map.setView([${d.lat},${d.lng}],11,{animate:true})"`;
+      return `<div class="li leg-ci" ${oc}><div class="ld" style="background:${col}"></div>${n}</div>`;
+    }).join('')+
+    (names.length>MAX?
+      `<div class="li" style="color:var(--t4);font-size:8px;margin-top:2px">+${names.length-MAX} municípios</div>`:
+      '');
+}
+
+// ── DRAGGABLE FLOATING PANELS ────────────────────────────────────
+function makeDraggable(panelId,handleId){
+  const panel=document.getElementById(panelId);
+  const handle=document.getElementById(handleId);
+  if(!panel||!handle)return;
+  handle.addEventListener('mousedown',e=>{
+    if(e.button!==0||e.target.closest('.fp-btn'))return;
+    e.preventDefault();
+    const ox=e.clientX-panel.offsetLeft,oy=e.clientY-panel.offsetTop;
+    handle.style.cursor='grabbing';
+    const mm=mv=>{
+      let nx=mv.clientX-ox,ny=mv.clientY-oy;
+      nx=Math.max(0,Math.min(nx,window.innerWidth-panel.offsetWidth));
+      ny=Math.max(0,Math.min(ny,window.innerHeight-panel.offsetHeight));
+      panel.style.left=nx+'px';panel.style.top=ny+'px';
+      panel.style.right='auto';panel.style.bottom='auto';
+    };
+    const mu=()=>{handle.style.cursor='grab';document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);};
+    document.addEventListener('mousemove',mm);
+    document.addEventListener('mouseup',mu);
+  });
+}
+function fpToggle(panelId){
+  const body=document.getElementById(panelId==='layers'?'layers-body':'flt-body');
+  const btn=document.querySelector(`#${panelId} .fp-btn`);
+  if(!body)return;
+  const col=body.classList.toggle('collapsed');
+  if(btn)btn.textContent=col?'+':'−';
+}
+function fpToggleKpi(){
+  const body=document.getElementById('alert-kpi-body');
+  const btn=document.querySelector('#alert-kpi .fp-btn');
+  if(!body)return;
+  const col=body.classList.toggle('collapsed');
+  if(btn)btn.textContent=col?'+':'−';
+}
+function initPanels(){
+  makeDraggable('flt-panel','flt-handle');
+  makeDraggable('layers','layers-handle');
+}
+
+// ── Sidebar esquerda de Alertas ────────────────────────────────────
+function openLeftAlerts(){
+  document.getElementById('left').classList.add('open');
+  // Empurra camadas para não sobrepor
+  const layers=document.getElementById('layers');
+  if(layers)layers.classList.add('rp-open'); // reutiliza classe que já move
+}
+function closeLeftAlerts(){
+  // Full close: deactivates layers and toggle
+  retractLeftAlerts();
+  const tg=document.getElementById('tg-meteo');
+  if(tg&&tg.checked){tg.checked=false;}
+  if(precipitationMarkerGroup){map.removeLayer(precipitationMarkerGroup);precipitationMarkerGroup.clearLayers();precipitationMarkerGroup=null;}
+  isPrecipitationLoading=false;
+  if(weatherAlertLayerGroup){map.removeLayer(weatherAlertLayerGroup);weatherAlertLayerGroup.clearLayers();}
+  alertLoading=false;
+  _alertKpiList=[];
+  if(document.getElementById('tb-alr'))document.getElementById('tb-alr').textContent='0';
+}
+function retractLeftAlerts(){
+  // Slide panel out but keep layers active — tab stays visible
+  const el=document.getElementById('left');
+  if(el){el.classList.remove('open');el.classList.add('retracted');}
+  // Update tab count
+  const tc=document.getElementById('left-tab-count');
+  const lc=document.getElementById('left-count');
+  if(tc&&lc)tc.textContent=lc.textContent;
+}
+function expandLeftAlerts(){
+  const el=document.getElementById('left');
+  if(el){el.classList.remove('retracted');el.classList.add('open');}
+}
+
+// Popula sidebar esquerda com lista de alertas ordenada por severidade
+// ── renderizarListaAlertas: renderiza cards na sidebar esquerda ──────────────
+// Função central usada por updateAlertKpi e filtrarAlertasKpi.
+// lista: array de alertas já filtrado e pronto para exibir.
+function renderizarListaAlertas(lista){
+  const listEl=document.getElementById('left-list');
+  const countEl=document.getElementById('left-count');
+  const tabCount=document.getElementById('left-tab-count');
+  if(!listEl)return;
+
+  if(!lista||!lista.length){
+    listEl.innerHTML='<div class="al-empty">Nenhum alerta ativo no momento</div>';
+    if(countEl)countEl.textContent='0';
+    if(tabCount)tabCount.textContent='0';
+    if(document.getElementById('tb-alr'))document.getElementById('tb-alr').textContent='0';
+    return;
+  }
+
+  // Ordena: severidade desc, depois polo
+  const sorted=[...lista].sort((a,b)=>(b.sevLevel||0)-(a.sevLevel||0)||(a.polo>b.polo?1:-1));
+
+  if(countEl)countEl.textContent=sorted.length;
+  if(tabCount)tabCount.textContent=sorted.length;
+  if(document.getElementById('tb-alr'))document.getElementById('tb-alr').textContent=sorted.length;
+
+  listEl.innerHTML=sorted.map(a=>{
+    const col=a.color||'#ff6080';
+    const timeStr=a.start&&a.end
+      ?`🕒 ${fmtDt(a.start)} → ${fmtDt(a.end)}`
+      :a.start?`🕒 Desde ${fmtDt(a.start)}`:'';
+    const clickFn=`goToPoloFromAlert('${a.polo.replace(/'/g,"\\'")}')`;
+    return`<div class="al-card" style="--alc:${col}" onclick="${clickFn}" title="Clique para ver o polo">
+      <div class="al-head">
+        <span class="al-sev" style="color:${col};border-color:${col}50;background:${col}14">${a.sevShort||'AVISO'}</span>
+        <span class="al-polo">${a.polo}</span>
+        <span class="al-src">${a.source}</span>
+      </div>
+      <div class="al-evt">${a.event}</div>
+      ${timeStr?`<div class="al-time">${timeStr}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// updateAlertKpi: chamada após loadAlerts() com a lista global completa
+function updateAlertKpi(alertList){
+  // Armazena lista global e aplica filtro de malha/polo atual
+  _alertKpiList=alertList||[];
+  filtrarAlertasKpi();
+}
+
+// ── goToPoloFromAlert ─────────────────────────────────────────────────────
+// Chamada ao clicar em um card de alerta na sidebar esquerda.
+// Encontra o polo correspondente no POLO_DATA e expande ele no mapa.
+// expandPolo() já cuida de filtrar pins e sidebar automaticamente.
+function goToPoloFromAlert(poloName){
+  // Tenta match exato; se não achar, tenta match parcial pelo nome base
+  const key=Object.keys(POLO_DATA).find(k=>k===poloName)
+    || Object.keys(POLO_DATA).find(k=>
+        k.split(',')[0]===poloName||
+        k.startsWith(poloName)||
+        poloName.startsWith(k.split(',')[0])
+      );
+  if(!key)return;
+  // expandPolo controla zoom + filtro visual + sidebar
+  expandPolo(key);
+}
+
+function fmtDt(dt){
+  if(!dt)return'';
+  const d=dt instanceof Date?dt:new Date(dt);
+  if(isNaN(d))return String(dt).slice(0,16);
+  return d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────
+function buildFilters(){
+  const el=document.getElementById('mfr');
+  // Count polos per malha
+  const counts={};
+  Object.values(POLO_DATA).forEach(d=>{counts[d.malha]=(counts[d.malha]||0)+1;});
+  const total=Object.keys(POLO_DATA).length;
+  el.innerHTML=`<button class="mfb on" style="background:var(--t1);color:var(--bg)" onclick="setM(null,this)">Todas <span style="font-size:8px;opacity:.6;margin-left:2px">${total}</span></button>`+
+    Object.entries(MALHA_COLORS).map(([m,c])=>`<button class="mfb" data-c="${c}" onclick="setM('${m}',this)"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${c};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${c}66;flex-shrink:0"></span>${m} <span style="font-size:8px;opacity:.6;margin-left:2px">${counts[m]||0}</span></button>`).join('');
+  // Também reconstrói filtro multi-malha da sidebar
+  buildMalhaFilter();
+}
+function setM(m,btn){
+  document.querySelectorAll('.mfb').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.color='';});
+  btn.classList.add('on');btn.style.background=m?btn.dataset.c:'var(--t1)';btn.style.color='var(--bg)';
+  selectedMalha=m;
+  selectedMalhas.clear();
+  buildMalhaFilter();
+  plotPolos();
+  filtrarAlertasKpi();
+  aplicarFiltroVisualCamadas();
+  atualizarBotaoLimparFiltro();
+}
+
+// ── Filtro multi-malha na sidebar de alertas ─────────────────────────────
+function buildMalhaFilter(){
+  const wrap=document.getElementById('malha-filter-chips');
+  if(!wrap)return;
+  wrap.innerHTML=Object.entries(MALHA_COLORS).map(([malha,cor])=>{
+    const ativo=selectedMalhas.has(malha);
+    return`<button class="mfc${ativo?' active':''}" data-malha="${malha}" data-cor="${cor}"
+      style="${ativo?`background:${cor};border-color:${cor};`:''}"
+      onclick="toggleMalhaFiltro('${malha}')">
+      <span class="mfc-dot" style="background:${cor}"></span>${malha}
+    </button>`;
+  }).join('');
+}
+
+// Ativa/desativa uma malha no filtro multi-select (chips da sidebar)
+function toggleMalhaFiltro(malha){
+  if(selectedMalhas.has(malha)) selectedMalhas.delete(malha);
+  else selectedMalhas.add(malha);
+  buildMalhaFilter();
+  aplicarFiltroMalha(); // já chama atualizarBotaoLimparFiltro
+}
+
+// ── limparTodosFiltros ────────────────────────────────────────────────────
+// Chamada pelo botão "✕ LIMPAR FILTRO" na topbar.
+// Zera polo ativo, malhas selecionadas e restaura tudo no mapa e sidebar.
+function limparTodosFiltros(){
+  // Zera todas as seleções ANTES de qualquer outra chamada.
+  // Ordem importa: activePoloName=null garante que filtrarAlertasKpi
+  // (chamada dentro de closeRight) já enxerga estado limpo.
+  activePoloName=null;
+  selectedMalha=null;
+  selectedMalhas.clear();
+
+  // Fecha painel e restaura zoom. closeRight(true) respeita activePoloName=null
+  // e exibirá todos os alertas ao chamar filtrarAlertasKpi internamente.
+  if(poloFocused){
+    closeRight(true);
+  } else {
+    // Painel já fechado — ainda precisa atualizar sidebar e pins
+    filtrarAlertasKpi();
+    aplicarFiltroVisualCamadas();
+  }
+
+  // Reseta botão "Todas" no painel flutuante
+  document.querySelectorAll('.mfb').forEach(b=>{
+    b.classList.remove('on');b.style.background='';b.style.color='';
+  });
+  const btnTodas=document.querySelector('.mfb');
+  if(btnTodas){
+    btnTodas.classList.add('on');
+    btnTodas.style.background='var(--t1)';
+    btnTodas.style.color='var(--bg)';
+  }
+
+  // Reconstrói chips de malha (todos inativos)
+  buildMalhaFilter();
+
+  // Replota polos sem dim
+  plotPolos();
+
+  atualizarBotaoLimparFiltro();
+}
+
+// ── atualizarBotaoLimparFiltro ────────────────────────────────────────────
+// Mostra ou oculta o botão "LIMPAR FILTRO" conforme o estado atual.
+// Deve ser chamada sempre que polo ou malha mudar.
+function atualizarBotaoLimparFiltro(){
+  const btn=document.getElementById('btn-limpar-filtro');
+  if(!btn)return;
+  const filtroAtivo=!!(activePoloName||selectedMalhas.size||selectedMalha);
+  btn.style.display=filtroAtivo?'inline-flex':'none';
+}
+
+// ── aplicarFiltroMalha ────────────────────────────────────────────────────
+// Chamada quando o usuário troca a seleção de malha (chips ou painel flutuante).
+function aplicarFiltroMalha(){
+  plotPolos();
+  filtrarAlertasKpi();
+  aplicarFiltroVisualCamadas();
+  atualizarBotaoLimparFiltro();
+}
+
+// ── aplicarFiltroVisualCamadas ─────────────────────────────────────────────
+// Controla a visibilidade dos layers já plotados por loadAlerts() e
+// loadPrecipLayer() sem refazer nenhum fetch.
+//
+// Lógica de prioridade (em ordem):
+//   1. Polo expandido (activePoloName) → mostra só os pins desse polo
+//   2. Chips de malha (selectedMalhas) → mostra polos das malhas selecionadas
+//   3. Filtro de malha único (selectedMalha) → mesmo, via painel flutuante
+//   4. Sem filtro → mostra tudo
+//
+// Para cada polo, itera seus layers e chama addTo/remove no grupo correto.
+function aplicarFiltroVisualCamadas(){
+
+  // Determina o conjunto de polos que devem ficar VISÍVEIS
+  let polosVisiveis=null; // null = todos visíveis
+
+  if(activePoloName){
+    // Modo polo expandido: só o polo ativo
+    const nomeBase=activePoloName.split(',')[0];
+    polosVisiveis=new Set(
+      Object.keys(POLO_DATA).filter(k=>
+        k===activePoloName||k.split(',')[0]===nomeBase
+      )
+    );
+  } else if(selectedMalhas.size>0){
+    // Modo multi-malha: polos das malhas selecionadas nos chips
+    polosVisiveis=new Set(
+      Object.entries(POLO_DATA)
+        .filter(([,d])=>selectedMalhas.has(d.malha))
+        .map(([k])=>k)
+    );
+  } else if(selectedMalha){
+    // Modo malha única: filtro do painel flutuante
+    polosVisiveis=new Set(
+      Object.entries(POLO_DATA)
+        .filter(([,d])=>d.malha===selectedMalha)
+        .map(([k])=>k)
+    );
+  }
+
+  // ── Aplica nos pins de ALERTA ────────────────────────────────────────────
+  Object.entries(_alertLayersByPolo).forEach(([nomePolo,layers])=>{
+    const visivel=!polosVisiveis||polosVisiveis.has(nomePolo);
+    layers.forEach(layer=>{
+      if(visivel){
+        if(!weatherAlertLayerGroup.hasLayer(layer))weatherAlertLayerGroup.addLayer(layer);
+      } else {
+        weatherAlertLayerGroup.removeLayer(layer);
+      }
+    });
+  });
+
+  // ── Aplica nos pins de PRECIPITAÇÃO (anéis + pin animado) ───────────────
+  Object.entries(_precipLayersByPolo).forEach(([nomePolo,layers])=>{
+    const visivel=!polosVisiveis||polosVisiveis.has(nomePolo);
+    layers.forEach(layer=>{
+      if(visivel){
+        if(!precipitationMarkerGroup.hasLayer(layer))precipitationMarkerGroup.addLayer(layer);
+      } else {
+        precipitationMarkerGroup.removeLayer(layer);
+      }
+    });
+  });
+}
+
+// filtrarAlertasKpi: aplica filtros ativos (malha multi-select + polo expandido)
+// e renderiza a lista. Chamada sempre que o estado de filtro muda.
+function filtrarAlertasKpi(){
+  const base=_alertKpiList||[];
+
+  // Filtro 1: polo expandido — se há um polo ativo, mostra só alertas dele
+  let lista=base;
+  if(activePoloName){
+    const nomeBase=activePoloName.split(',')[0];
+    lista=base.filter(a=>a.polo===nomeBase||activePoloName.startsWith(a.polo)||a.polo.startsWith(nomeBase));
+  }
+
+  // Filtro 2: malhas selecionadas nos chips (só se nenhum polo estiver expandido)
+  if(!activePoloName&&selectedMalhas.size>0){
+    lista=lista.filter(a=>{
+      const entrada=Object.entries(POLO_DATA).find(([k])=>
+        k.split(',')[0]===a.polo||k===a.polo||k.startsWith(a.polo)
+      );
+      return entrada&&selectedMalhas.has(entrada[1].malha);
+    });
+  }
+
+  // Filtro 3: malha única do painel flutuante (selectedMalha legado)
+  if(!activePoloName&&!selectedMalhas.size&&selectedMalha){
+    lista=lista.filter(a=>{
+      const entrada=Object.entries(POLO_DATA).find(([k])=>k.split(',')[0]===a.polo||k===a.polo);
+      return entrada&&entrada[1].malha===selectedMalha;
+    });
+  }
+
+  renderizarListaAlertas(lista);
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────
+window.srActions=[];
+function setupSearch(){
+  const inp=document.getElementById('srch'),res=document.getElementById('sr');
+  let _idx=-1;
+  const closeRes=()=>{res.style.display='none';_idx=-1;};
+  const setActive=(i)=>{
+    res.querySelectorAll('.sri').forEach((el,j)=>el.classList.toggle('sri-active',j===i));
+    res.querySelectorAll('.sri')[i]?.scrollIntoView({block:'nearest'});
+  };
+  inp.addEventListener('keydown',e=>{
+    const items=res.querySelectorAll('.sri');
+    if(e.key==='ArrowDown'){e.preventDefault();_idx=(_idx+1)%items.length;setActive(_idx);}
+    else if(e.key==='ArrowUp'){e.preventDefault();_idx=(_idx-1+items.length)%items.length;setActive(_idx);}
+    else if(e.key==='Enter'&&_idx>=0){e.preventDefault();items[_idx]?.click();}
+    else if(e.key==='Escape'){closeRes();inp.blur();}
+  });
+  inp.addEventListener('input',()=>{
+    _idx=-1;
+    const q=inp.value.toLowerCase().trim();
+    if(q.length<1){closeRes();return;}
+    const found=[];
+    const add=(label,sub,type,action)=>{if(found.length<14)found.push({label,sub,type,action});};
+    Object.entries(POLO_DATA).forEach(([polo,d])=>{
+      if(found.length>=14)return;
+      // Polo match
+      if(polo.toLowerCase().includes(q)||d.base?.toLowerCase().includes(q))
+        add(polo,`${d.base||''} · ${d.malha} · ${Object.keys(d.cidades).length} municípios`,'polo',()=>goTo(polo));
+      // City and local matches
+      Object.entries(d.cidades).forEach(([c,cd])=>{
+        if(found.length>=14)return;
+        if(c.toLowerCase().includes(q))
+          add(c,`${polo} · ${d.malha}`,'muni',()=>goToMuni(polo,c,cd));
+        // Local code/name search
+        cd.locais.forEach(l=>{
+          if(found.length>=14)return;
+          const nm=(l.nome.split(' - ').slice(1).join(' ')||l.nome).toLowerCase();
+          if(l.local.toLowerCase().includes(q)||nm.includes(q))
+            add(l.local,`${l.nome.split(' - ').slice(1).join(' ')||l.nome} · ${c} · ${polo}`,'local',()=>goToMuni(polo,c,cd));
+        });
+      });
+    });
+    if(!found.length){
+      res.style.display='block';
+      res.innerHTML=`<div class="sr-empty">Nenhum resultado para "${inp.value}"</div>`;
+      window.srActions=[];return;
+    }
+    window.srActions=found.map(f=>f.action);
+    res.style.display='block';
+    res.innerHTML=found.map((f,i)=>{
+      const tl={polo:'POLO',muni:'MUNICÍPIO',local:'LOCAL'}[f.type];
+      return `<div class="sri" onclick="window.srActions[${i}]&&window.srActions[${i}]();document.getElementById('sr').style.display='none';document.getElementById('srch').blur()"><span class="sri-type ${f.type}">${tl}</span>${f.label}<div class="sri-s">${f.sub}</div></div>`;
+    }).join('');
+  });
+  inp.addEventListener('focus',()=>{if(inp.value.trim().length>=1)res.style.display='block';});
+  document.addEventListener('click',e=>{if(!e.target.closest('#sw'))closeRes();});
+  // Global keyboard shortcut: / to open search
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){
+      e.preventDefault();inp.focus();inp.select();
+    }
+    if(e.key==='Escape'&&document.activeElement!==inp){
+      const mcard=document.getElementById('mcard');
+      if(mcard&&mcard.style.display!=='none')closeMCard();
+    }
+  });
+}
+function goTo(polo){
+  const d=POLO_DATA[polo];if(!d)return;
+  map.setView([d.lat,d.lng],10,{animate:true,duration:.5});
+  const col=MALHA_COLORS[d.malha]||'#fff';
+  const mo=allPoloMarkers.find(m=>m.polo===polo);
+  const doClick=()=>onPoloClick(polo,d,col,mo?.mk);
+  if(mo){clusterLayersByMalha[d.malha].zoomToShowLayer(mo.mk,doClick);}else doClick();
+}
+function goToMuni(polo,cidade,cd){
+  const d=POLO_DATA[polo];if(!d)return;
+  const lat=cd?.coord?.[0]??d.lat,lng=cd?.coord?.[1]??d.lng;
+  const col=MALHA_COLORS[d.malha]||'#fff';
+  map.setView([lat,lng],13,{animate:true,duration:.5});
+  showMuniPanel(polo,cidade,cd,lat,lng,col);
+  const mw=document.getElementById('mw');
+  const r=mw.getBoundingClientRect();
+  showMCard(polo,cidade,cd,lat,lng,col,{clientX:r.left+r.width*.5,clientY:r.top+r.height*.5});
+}
+function tcb(h){
+  const l=h.nextElementSibling,c=h.querySelector('.cb-c');
+  l.classList.toggle('open');
+  c.textContent=c.textContent.replace(l.classList.contains('open')?'▸':'▾',l.classList.contains('open')?'▾':'▸');
+}
+
+window.addEventListener('load',bootstrapMap);
+window.toggleMalhaFiltro=toggleMalhaFiltro;
+window.aplicarFiltroMalha=aplicarFiltroMalha;
+window.aplicarFiltroVisualCamadas=aplicarFiltroVisualCamadas;
+window.limparTodosFiltros=limparTodosFiltros;
+window.atualizarBotaoLimparFiltro=atualizarBotaoLimparFiltro;
+window.expandPolo=expandPolo;window.closeRight=closeRight;window.retractPolo=retractPolo;
+window.fpToggleKpi=fpToggleKpi;window.fmtDt=fmtDt;
+window.closeLeftAlerts=closeLeftAlerts;window.retractLeftAlerts=retractLeftAlerts;window.expandLeftAlerts=expandLeftAlerts;window.goToPoloFromAlert=goToPoloFromAlert;
+window.dismissServiceBanner=dismissServiceBanner;window.promptForOpenWeatherApiKey=promptForOpenWeatherApiKey;
+window.tcb=tcb;window.setM=setM;window.goTo=goTo;window.backToPolo=backToPolo;
+window.focusMuni=focusMuni;window.closeMCard=closeMCard;
+</script>
+</body>
+</html> 
