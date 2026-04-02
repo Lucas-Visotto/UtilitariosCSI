@@ -7742,7 +7742,7 @@ function calcular() {
                   { text: "Atenção (85–100%)", fillStyle: DARK ? "rgba(255,184,48,0.55)" : "rgba(200,130,0,0.45)", strokeStyle: "transparent", lineWidth: 0, pointStyle: "rectRounded" },
                   { text: "Inviável (>100%)", fillStyle: DARK ? "rgba(255,80,100,0.55)" : "rgba(220,40,60,0.45)", strokeStyle: "transparent", lineWidth: 0, pointStyle: "rectRounded" }
                 ];
-                return base.map(function (b, i) { return Object.assign({ index: i, hidden: false, datasetIndex: i < 3 ? i : 0 }, b); });
+                return base.map(function (b, i) { return Object.assign({ index: i, hidden: false, datasetIndex: i < 3 ? i : 0, fontColor: tc }, b); });
               }
             }
           },
@@ -7867,7 +7867,7 @@ function calcular() {
     return;
   }
 
-  var iVao = iDem(cQ, S.faseD), todosOk = true;
+  var iVao = iDem(cD + cQ, S.faseD), todosOk = true;
   S.vaos.forEach(function (vao) {
     var cab = CABOS[vao.cabo], ok = iVao <= cab.i;
     if (!ok) { todosOk = false; }
@@ -8013,6 +8013,32 @@ var G_MAPA = {};
 var POSTE_KEYS = ["PST", "POSTE", "MULTI", "CARRO", "POST"];
 var CAIXA_KEYS = ["CX", "CAIXA", "MOTO"];
 
+/* Tipos de serviço que devem ser IGNORADOS na extração de notas */
+var SERVICOS_IGNORADOS = ["RC09", "RC11", "RC08", "NSRI"];
+/* Prefixos de tipo de serviço ignorados (ex: MA01, MA27, MA99...) */
+var PREFIXOS_IGNORADOS = ["MA"];
+
+/* Regex para capturar o tipo de serviço numa linha do G-Dis
+   Padrão: ex "C05 RC06 240418220-T ..." ou "B93 239820212 MA27 240445577 ..."
+   Captura tokens que parecem código de serviço: 2-4 letras seguidas de 0-2 dígitos */
+var RTIPO_SERVICO = /\b([A-Z]{2,4}\d{0,2})\b/g;
+
+/* Palavras-chave que indicam linha normalizada — ignorar */
+var NORMAL_KEYS = /NORMALIZADA|NORMALIZ|MX-NORMAL|NORMAL\b/;
+
+function gLinhaIgnorada(linha) {
+  var lu = linha.toUpperCase();
+  /* Verifica palavras-chave de normalizada */
+  if (NORMAL_KEYS.test(lu)) { return true; }
+  var tipos = [...lu.matchAll(/\b([A-Z]{2,4}\d{0,2})\b/g)].map(function(x){ return x[1]; });
+  return tipos.some(function(tipo) {
+    if (SERVICOS_IGNORADOS.indexOf(tipo) >= 0) { return true; }
+    return PREFIXOS_IGNORADOS.some(function(pref) {
+      return tipo.indexOf(pref) === 0;
+    });
+  });
+}
+
 function gAtualizar() {
   var inp = document.getElementById("gin").value.trim();
   /* Auto-extract whenever there's content, otherwise reset */
@@ -8040,13 +8066,19 @@ function gExtrair() {
     gUpdateButtons(); return;
   }
   requestAnimationFrame(function () {
-    var m = [...txt.matchAll(RNOTA)].map(function (x) { return x[1]; });
+    // Filtra linhas cujo tipo de serviço deve ser ignorado
+    var linhasFiltradas = txt.split("\n").filter(function(linha) {
+      return !gLinhaIgnorada(linha);
+    });
+    var txtFiltrado = linhasFiltradas.join("\n");
+
+    var m = [...txtFiltrado.matchAll(RNOTA)].map(function (x) { return x[1]; });
     var total = m.length;
     var u = [...new Set(m)];
     GNOTAS = u; G_MAPA = {};
     var dup = total - u.length;
     // Classifica cada OS pela linha de origem
-    txt.split("\n").forEach(function (linha) {
+    linhasFiltradas.forEach(function (linha) {
       var osLinha = [...linha.matchAll(RNOTA)].map(function (x) { return x[1]; });
       if (!osLinha.length) { return; }
       var lu = linha.toUpperCase().trim();
