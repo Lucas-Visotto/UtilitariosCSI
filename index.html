@@ -27,7 +27,7 @@
   --text: #e8f1fc;
   --text2: #c8ddf2;
   --muted: #8aaac8;
-  --hint: #506a88;
+  --hint: #6a8aaa;
   --sw: 234px;
   --r: 12px;
   --mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
@@ -56,7 +56,7 @@ body.light {
   --text: #08111e;
   --text2: #0e1e32;
   --muted: #304a68;
-  --hint: #526882;
+  --hint: #496075;
   --glass: rgba(0, 0, 0, .02);
   --glass-border: rgba(0, 0, 0, .06);
 }
@@ -142,12 +142,14 @@ body.light::before {
 }
 
 .slogo {
-  padding: 18px 14px 15px;
+  padding: 0 14px;
+  height: 54px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 11px;
   background: linear-gradient(135deg, rgba(0, 229, 184, .04), transparent);
+  flex-shrink: 0;
 }
 
 .slogo-ic {
@@ -284,10 +286,10 @@ body.light::before {
 }
 
 .ni.active {
-  background: linear-gradient(90deg, rgba(0, 229, 184, .14), rgba(0, 229, 184, .05));
+  background: linear-gradient(90deg, rgba(0, 229, 184, .18), rgba(0, 229, 184, .07));
   color: var(--accent);
   font-weight: 600;
-  border: 1px solid rgba(0, 229, 184, .12);
+  border: 1px solid rgba(0, 229, 184, .25);
 }
 
 .ni.active svg {
@@ -559,7 +561,7 @@ body.light .bokw {
 /* ── PÁGINAS ── */
 .pg {
   display: none;
-  padding: 22px 24px 36px;
+  padding: 16px 24px 36px;
   min-height: 100%;
 }
 
@@ -664,7 +666,7 @@ body.light .card-queimado {
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--text2);
+  color: var(--text);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -693,7 +695,7 @@ body.light .card-queimado {
 .lbl {
   display: block;
   font-size: 9.5px;
-  color: var(--text2);
+  color: var(--text);
   margin: 13px 0 5px;
   font-weight: 700;
   letter-spacing: .1em;
@@ -710,7 +712,7 @@ select,
 textarea {
   width: 100%;
   background: var(--surface2);
-  border: 1.5px solid var(--border2);
+  border: 1.5px solid var(--border3);
   color: var(--text);
   font-family: var(--mono);
   font-size: 13px;
@@ -743,6 +745,12 @@ textarea {
   resize: vertical;
   min-height: 90px;
   line-height: 1.55;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--hint);
+  opacity: 1;
 }
 
 .rg {
@@ -1168,7 +1176,7 @@ body.light .rb2.danger {
 }
 
 .bok:disabled {
-  opacity: .28;
+  opacity: .45;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -1236,7 +1244,7 @@ body.light .rb2.danger {
 }
 
 .bdel:disabled {
-  opacity: .28;
+  opacity: .45;
   cursor: not-allowed;
 }
 
@@ -2980,12 +2988,12 @@ body.light .ih-wire-sag {
 }
 
 #tsub {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 400;
+  font-weight: 500;
   transition: opacity .15s;
 }
 
@@ -6052,9 +6060,8 @@ body.light .home-title span {
                   <textarea
                     id="gin"
                     placeholder="1. Abra o G-Dis e selecione as notas desejadas &#10;2. Copie o texto da tela &#10;3. Cole nesse campo"
-                    rows= "4"
-                    oninput="gAtualizar()">
-                  </textarea>
+                    rows="4"
+                    oninput="gAtualizar()"></textarea>
                   <div class="brow">
                     <button class="bdel" id="gBtnLp" onclick="gLimpar()" disabled>Limpar</button>
                   </div>
@@ -8866,6 +8873,10 @@ renderVaos();
 requestAnimationFrame(function () { ceInit(); ceUpdateInfo(); });
 
 /* Registra listener de paste para extração automática G-Dis */
+function gOnPaste(e) {
+  /* Aguarda o valor ser inserido no campo antes de processar */
+  setTimeout(function () { gAtualizar(); }, 0);
+}
 (function () {
   var ginEl = document.getElementById('gin');
   if (ginEl && !ginEl._pasteRegistered) {
