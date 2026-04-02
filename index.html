@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ferramentas CSI — CEMIG</title>  <!-- Estilos externos: separados para facilitar manutenção -->
+  <title>Ferramentas CSI — CEMIG</title>
   <style>
 /* ── VARIÁVEIS DE TEMA ── */
 :root {
@@ -3289,7 +3289,7 @@ body.light .bm-link {
 .home-hero::before {
   content: '';
   position: absolute;
-  inset: -60px;
+  inset: -10px, -10px, 0, -10px; /* Fundo Ferramentas de Operação e Controle*/
   background: 
     radial-gradient(ellipse 55% 60% at 10% 50%,rgba(0, 229, 184, .1) 0%, transparent 65%),
     radial-gradient(ellipse 40% 40% at 90% 20%, rgba(0, 184, 230, .07) 0%, transparent 60%);
@@ -3913,6 +3913,50 @@ body.light .home-title span {
   }
 }
 
+/* ── HOME SVG PREVIEWS ── */
+.home-svg-group-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  padding: 5px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: fit-content;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: background .15s, border-color .15s, color .15s, transform .1s;
+  text-decoration: none;
+}
+
+.home-svg-group-label:hover {
+  background: var(--accent-dim);
+  border-color: rgba(0, 229, 184, .35);
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+.home-svg-group-label:hover svg {
+  stroke: var(--accent) !important;
+}
+
+.home-svg-group-label:active {
+  transform: translateX(1px);
+}
+
+.home-svg-sep {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 4px 0 20px;
+}
+
+
 /* ── RESPONSIVO ── */
 @media(max-width:700px) {
   #mbtn {
@@ -4391,7 +4435,7 @@ body.light .home-title span {
 }
 
 .ph-info-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text2);
   margin-bottom: 4px;
@@ -4399,7 +4443,7 @@ body.light .home-title span {
 }
 
 .ph-info-sub {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.55;
 }
@@ -4728,11 +4772,7 @@ body.light .home-title span {
               <circle cx="12" cy="9" r="2.5" />
             </svg>Coordenadas
           </div>
-          <div class="ni" id="nav-conv" onclick="navTo('conv')">
-            <svg viewBox="0 0 24 24">
-              <path d="M13 2L3 14h7l-2 8 10-12h-7l2-8z" stroke-linejoin="round" stroke-linecap="round" />
-            </svg>Conversor Elétrico
-          </div>
+
           <div class="ni" id="nav-consult" onclick="navTo('consult')">
             <svg viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8" />
@@ -4935,135 +4975,659 @@ body.light .home-title span {
                 </div>
                 <div class="home-hero-inner">
                   <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
-                  <div class="home-title">Ferramentas de<br><span>Operação e Controle</span></div>
-                  <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do controlador.
-                    Desenvolvido internamente pelo CSI para agilizar decisões e processos diários.</div>
-                  <span class="home-ver-badge">2.4 &nbsp;·&nbsp; Março 2026</span>
+                  <div class="home-title">Ferramentas de <span>Operação e Controle</span></div>
+                  <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do controlador.</div>
+                  <span class="home-ver-badge">2.5 &nbsp;·&nbsp; Abril 2026</span>
                 </div>
               </div>
 
-              <!-- FERRAMENTAS -->
-              <div class="home-section">
-                <div class="home-section-title">Ferramentas disponíveis</div>
-                <div class="home-tools-grid">
 
-                  <div class="home-tool-card" onclick="navTo('interlig')">
-                    <div class="home-tool-icon">
-                      <svg viewBox="0 0 24 24">
-                        <circle cx="6" cy="12" r="3" />
-                        <circle cx="18" cy="12" r="3" />
-                        <line x1="9" y1="12" x2="15" y2="12" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Verificação de Interligação</div>
-                      <div class="home-tool-desc">Analisa capacidade do trafo doador, cabos e janelas horárias viáveis.
-                      </div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
+              <!-- ═══════════════════════════════════════════
+                   ANIMAÇÕES SVG — PRÉVIA DAS FERRAMENTAS
+                   ═══════════════════════════════════════════ -->
+              <div class="home-section" id="home-svg-previews">
+                <div class="home-section-title"><h2>Visão geral das ferramentas</h2><br></div>
 
-                  <div class="home-tool-card" onclick="navTo('gdis')">
-                    <div class="home-tool-icon">
-                      <svg viewBox="0 0 24 24">
-                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                        <line x1="3" y1="9" x2="21" y2="9" />
-                        <line x1="9" y1="9" x2="9" y2="19" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Copiar G-Dis</div>
-                      <div class="home-tool-desc">Extrai e organiza notas do texto copiado do G-Dis, filtrando CX e poste</div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
+                <!-- ── Interligação ── -->
+                <div class="home-svg-group" style="margin-bottom:20px;">
+                  <button class="home-svg-group-label" onclick="navTo('interlig')" title="Abrir Verificação de Interligação">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+                    Interligação
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <!-- Hero decorativo — transformadores e energia -->
+              <div class="interlig-hero" id="interlig-hero">
+                <div class="ih-svg-wrap">
+                  <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" class="ih-svg">
+                    <!-- Fio de alta tensão esquerda -->
+                    <line x1="0" y1="28" x2="140" y2="28" class="ih-wire" />
+                    <!-- Torre esquerda -->
+                    <g class="ih-tower" transform="translate(140,10)">
+                      <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
+                      <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
+                      <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
+                      <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
+                      <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
+                      <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
+                      <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
+                    </g>
+                    <!-- Fio entre torres -->
+                    <path d="M 171 29 Q 250 55 345 28" class="ih-wire ih-wire-sag" />
+                    <path d="M 158 39 Q 250 65 342 40" class="ih-wire ih-wire-sag ih-wire-dim" />
+                    <!-- Torre central / Transformador -->
+                    <g transform="translate(310,5)">
+                      <!-- Base transformador -->
+                      <rect x="0" y="20" width="72" height="80" rx="6" class="ih-trafo-body" />
+                      <rect x="8" y="28" width="56" height="64" rx="4" class="ih-trafo-inner" />
+                      <!-- Núcleo do trafo (bobinas) -->
+                      <ellipse cx="36" cy="45" rx="14" ry="7" class="ih-coil" />
+                      <ellipse cx="36" cy="58" rx="14" ry="7" class="ih-coil" />
+                      <ellipse cx="36" cy="71" rx="14" ry="7" class="ih-coil" />
+                      <rect x="22" y="45" width="28" height="26" class="ih-coil-fill" />
+                      <!-- Bucha AT -->
+                      <rect x="14" y="6" width="8" height="18" rx="3" class="ih-bushing" />
+                      <rect x="50" y="6" width="8" height="18" rx="3" class="ih-bushing" />
+                      <circle cx="18" cy="5" r="4" class="ih-isolator-top" />
+                      <circle cx="54" cy="5" r="4" class="ih-isolator-top" />
+                      <!-- Bucha BT -->
+                      <rect x="28" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
+                      <rect x="38" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
+                      <!-- Radiadores -->
+                      <rect x="-10" y="30" width="8" height="50" rx="2" class="ih-radiator" />
+                      <rect x="-6" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
+                      <rect x="74" y="30" width="8" height="50" rx="2" class="ih-radiator" />
+                      <rect x="76" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
+                      <!-- Relé -->
+                      <rect x="20" y="28" width="32" height="10" rx="2" class="ih-relay" />
+                      <circle cx="30" cy="33" r="2" class="ih-relay-dot" />
+                      <circle cx="36" cy="33" r="2" class="ih-relay-dot ih-relay-active" />
+                      <circle cx="42" cy="33" r="2" class="ih-relay-dot" />
+                    </g>
+                    <!-- Fio entre transformador e torre direita -->
+                    <path d="M 390 35 Q 510 55 605 28" class="ih-wire ih-wire-sag" />
+                    <path d="M 390 45 Q 510 65 602 40" class="ih-wire ih-wire-sag ih-wire-dim" />
+                    <!-- Torre direita -->
+                    <g class="ih-tower" transform="translate(604,10)">
+                      <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
+                      <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
+                      <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
+                      <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
+                      <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
+                      <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
+                      <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
+                    </g>
+                    <!-- Fio saída direita -->
+                    <line x1="630" y1="40" x2="760" y2="40" class="ih-wire" />
+                    <!-- Labels -->
+                    <text x="70" y="25" class="ih-label">MT</text>
+                    <text x="688" y="35" class="ih-label">BT</text>
 
-                  <div class="home-tool-card" onclick="navTo('coord')">
-                    <div class="home-tool-icon">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                        <circle cx="12" cy="9" r="2.5" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Corrigir Coordenadas</div>
-                      <div class="home-tool-desc">Converte e padroniza coordenadas geográficas
-                      </div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
-
-                  <div class="home-tool-card" onclick="navTo('conv')">
-                    <div class="home-tool-icon">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M13 2L3 14h7l-2 8 10-12h-7l2-8z" stroke-linejoin="round" stroke-linecap="round" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Conversor Elétrico</div>
-                      <div class="home-tool-desc">Converte kVA, kW e Amperes — trifásico e monofásico para qualquer
-                        tensão e FP.</div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
-
-                  <div class="home-tool-card" onclick="navTo('consult')">
-                    <div class="home-tool-icon">
-                      <svg viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                        <line x1="11" y1="8" x2="11" y2="14" />
-                        <line x1="8" y1="11" x2="14" y2="11" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Consultas</div>
-                      <div class="home-tool-desc">Referência de tipos de serviço por indicador operacional CEMIG — PMAL,
-                        EMERG, PMAG.</div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
-
-                  <div class="home-tool-card" onclick="navTo('automacoes')">
-                    <div class="home-tool-icon"
-                      style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);">
-                      <svg viewBox="0 0 24 24" style="stroke:#a78bfa;">
-                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                        <line x1="16" y1="2" x2="16" y2="6" />
-                        <line x1="8" y1="2" x2="8" y2="6" />
-                        <line x1="3" y1="10" x2="21" y2="10" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Seletor de Intervalo</div>
-                      <div class="home-tool-desc">Bookmarklet que configura filtro, tempo real e 6 meses de intervalo no
-                        Digiteam com um clique.</div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
-
-                  <div class="home-tool-card" onclick="navTo('renomeador')">
-                    <div class="home-tool-icon"
-                      style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2);">
-                      <svg viewBox="0 0 24 24" style="stroke:#38bdf8;">
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="home-tool-name">Renomeador de Equipes</div>
-                      <div class="home-tool-desc">Lê um CSV e renomeia equipes no Digiteam em lote — pula bloqueadas e
-                        já renomeadas.</div>
-                    </div>
-                    <div class="home-tool-arrow">Abrir →</div>
-                  </div>
-
+                    <!-- Raios animados -->
+                    <g class="ih-sparks">
+                      <path d="M 328 2 L 322 12 L 328 10 L 322 22" class="ih-bolt" />
+                      <path 
+                        d="M 348 2 L 342 12 L 348 10 L 342 22" 
+                        class="ih-bolt ih-bolt-delay"
+                        transform="translate(20, 0)"/>
+                    </g>
+                  </svg>
                 </div>
+                <div class="ih-info">
+                  <div class="ih-info-title">Verificação de Interligação</div>
+                  <div class="ih-info-sub">Configure o transformador doador, o transformador queimado e os cabos — clique em
+                    <strong>Verificar</strong> para obter a análise completa.
+                  </div>
+                </div>
+              </div>
+                </div>
+
+                <div class="home-svg-sep"></div>
+
+                <!-- ── G-Dis ── -->
+                <div class="home-svg-group" style="margin-bottom:20px;">
+                  <button class="home-svg-group-label" onclick="navTo('gdis')" title="Abrir Copiar G-Dis">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--accent2);fill:none;stroke-width:2;flex-shrink:0;"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="19"/></svg>
+                    Copiar G-Dis
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <div class="page-hero hero-gdis" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 100" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+
+                    <!-- ── LADO ESQUERDO: tela G-Dis bruta ── -->
+                    <rect x="20" y="6" width="220" height="88" rx="8" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1.2"/>
+                    <!-- header -->
+                    <rect x="20" y="6" width="220" height="18" rx="8" fill="rgba(0,184,230,.12)"/>
+                    <rect x="20" y="16" width="220" height="8" fill="rgba(0,184,230,.06)"/>
+                    <circle cx="33" cy="15" r="3" fill="rgba(0,184,230,.5)"/>
+                    <text x="42" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">G-DIS · TEXTO BRUTO</text>
+                    <!-- linhas de dados misturados -->
+                    <rect x="32" y="30" width="110" height="4" rx="2" fill="var(--border3)" opacity=".7"/>
+                    <rect x="32" y="30" width="48"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
+                    <rect x="32" y="39" width="148" height="4" rx="2" fill="var(--border3)" opacity=".6"/>
+                    <rect x="32" y="48" width="62"  height="4" rx="2" fill="var(--accent2)" opacity=".45"/>
+                    <rect x="98" y="48" width="72"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
+                    <rect x="32" y="57" width="96"  height="4" rx="2" fill="var(--border3)" opacity=".6"/>
+                    <rect x="32" y="66" width="52"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
+                    <rect x="88" y="66" width="84"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
+                    <rect x="32" y="75" width="128" height="4" rx="2" fill="var(--border3)" opacity=".4"/>
+                    <rect x="32" y="84" width="76"  height="4" rx="2" fill="var(--border3)" opacity=".3"/>
+                    <!-- scanner -->
+                    <rect x="20" y="45" width="220" height="8" rx="0" fill="rgba(0,184,230,.06)" class="gg-scan-line"/>
+
+                    <!-- ── MEIO: processo ── -->
+                    <!-- kbd Ctrl+C -->
+                    <rect x="268" y="22" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
+                    <text x="275" y="32" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+C</text>
+                    <!-- seta para baixo -->
+                    <line x1="286" y1="36" x2="286" y2="48" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <!-- círculo central com seta -->
+                    <circle cx="286" cy="50" r="22" fill="rgba(0,229,184,.06)" stroke="rgba(0,229,184,.2)" stroke-width="1"/>
+                    <line x1="270" y1="50" x2="296" y2="50" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+                    <polygon points="296,46 304,50 296,54" fill="var(--accent)"/>
+                    <!-- seta para baixo -->
+                    <line x1="286" y1="72" x2="286" y2="60" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
+                    <!-- kbd Ctrl+V -->
+                    <rect x="268" y="72" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
+                    <text x="276" y="82" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+V</text>
+
+                    <!-- ── LADO DIREITO: resultado limpo ── -->
+                    <rect x="330" y="6" width="410" height="88" rx="8" fill="var(--surface2)" stroke="var(--accent2)" stroke-width="1.2"/>
+                    <!-- header -->
+                    <rect x="330" y="6" width="410" height="18" rx="8" fill="rgba(0,184,230,.15)"/>
+                    <rect x="330" y="16" width="410" height="8" fill="rgba(0,184,230,.08)"/>
+                    <circle cx="343" cy="15" r="3" fill="rgba(0,229,184,.7)"/>
+                    <text x="352" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">NOTAS EXTRAÍDAS · PRONTAS PARA COLAR</text>
+
+                    <!-- ROW 1: 5 chips -->
+                    <rect x="342" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="367" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">84521</text>
+                    <text x="395" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="400" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="425" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">91047</text>
+                    <text x="453" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="458" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="483" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">73812</text>
+                    <text x="511" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="516" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="541" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">55203</text>
+                    <text x="569" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="574" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="599" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">66543</text>
+
+                    <!-- ROW 2: 4 chips + cursor -->
+                    <rect x="342" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="367" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">22189</text>
+                    <text x="395" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="400" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="425" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">48830</text>
+                    <text x="453" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="458" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="483" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">10234</text>
+                    <text x="511" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <rect x="516" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
+                    <text x="541" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">77651</text>
+                    <text x="569" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
+                    <!-- cursor piscante -->
+                    <rect x="574" y="50" width="3" height="14" rx="1" fill="var(--accent2)" class="gg-cursor-blink"/>
+
+                    <!-- badge total + botão copiar -->
+                    <rect x="342" y="72" width="116" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.35)" stroke-width=".9"/>
+                    <text x="400" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">✓  8 notas extraídas</text>
+                    <rect x="468" y="72" width="80" height="14" rx="5" fill="rgba(0,184,230,.12)" stroke="rgba(0,184,230,.35)" stroke-width=".9"/>
+                    <text x="508" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">Copiar tudo</text>
+                    <rect x="558" y="72" width="80" height="14" rx="5" fill="rgba(0,229,184,.08)" stroke="rgba(0,229,184,.25)" stroke-width=".9"/>
+                    <text x="598" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">Só na CX</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Extração automática de notas G-Dis</div>
+                  <div class="ph-info-sub">Cole o texto copiado da tela — as notas são separadas automaticamente por vírgula, prontas para uso.</div>
+                </div>
+              </div>
+                </div>
+
+                <div class="home-svg-sep"></div>
+
+                <!-- ── Coordenadas ── -->
+                <div class="home-svg-group" style="margin-bottom:20px;">
+                  <button class="home-svg-group-label" onclick="navTo('coord')" title="Abrir Corrigir Coordenadas">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                    Corrigir Coordenadas
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <div class="page-hero hero-coord" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <defs>
+                      <radialGradient id="globeGrad" cx="40%" cy="35%" r="60%">
+                        <stop offset="0%" stop-color="rgba(167,139,250,.18)"/>
+                        <stop offset="100%" stop-color="rgba(167,139,250,.03)"/>
+                      </radialGradient>
+                      <clipPath id="globeClip">
+                        <circle cx="115" cy="70" r="56"/>
+                      </clipPath>
+                      <marker id="carr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M0,0 L6,3 L0,6 Z" fill="#a78bfa"/>
+                      </marker>
+                    </defs>
+
+                    <!-- ── GLOBO ── -->
+                    <!-- sombra -->
+                    <ellipse cx="115" cy="132" rx="44" ry="6" fill="rgba(0,0,0,.15)"/>
+                    <!-- esfera base -->
+                    <circle cx="115" cy="70" r="56" fill="url(#globeGrad)" stroke="rgba(167,139,250,.4)" stroke-width="1.5"/>
+                    <!-- oceano interior -->
+                    <circle cx="115" cy="70" r="55" fill="rgba(0,184,230,.05)"/>
+
+                    <!-- grade geográfica — paralelos -->
+                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="52" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="88" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="35" rx="36" ry="7"  fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <ellipse cx="115" cy="105" rx="36" ry="7" fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
+
+                    <!-- grade geográfica — meridianos -->
+                    <path d="M115,14 Q138,70 115,126" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q92,70 115,126"  fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q155,57 115,126" fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <path d="M115,14 Q75,83 115,126"  fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
+                    <!-- linha do equador destaque -->
+                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.35)" stroke-width=".8" stroke-dasharray="3 2" clip-path="url(#globeClip)"/>
+
+                    <!-- continentes simplificados (Brasil + América do Sul) -->
+                    <path d="M105,33 Q118,30 126,37 Q136,47 134,61 Q132,75 126,85 Q118,95 108,97 Q96,95 90,85 Q84,73 87,59 Q90,45 105,33 Z"
+                          fill="rgba(167,139,250,.22)" stroke="rgba(167,139,250,.5)" stroke-width=".8" clip-path="url(#globeClip)"/>
+                    <path d="M88,43 Q98,35 105,33 Q100,40 92,47 Z"
+                          fill="rgba(167,139,250,.15)" clip-path="url(#globeClip)"/>
+                    <path d="M90,85 Q84,95 86,113 Q90,120 96,113 Q98,100 96,90 Z"
+                          fill="rgba(167,139,250,.18)" stroke="rgba(167,139,250,.4)" stroke-width=".6" clip-path="url(#globeClip)"/>
+                    <!-- Minas Gerais highlight -->
+                    <path d="M112,57 Q120,55 124,61 Q126,67 122,73 Q116,77 110,73 Q106,67 108,61 Z"
+                          fill="rgba(0,229,184,.3)" stroke="rgba(0,229,184,.7)" stroke-width=".8" clip-path="url(#globeClip)"/>
+
+                    <!-- PIN animado sobre MG -->
+                    <g class="gc-pin-anim">
+                      <circle cx="117" cy="62" r="9" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.35)" stroke-width=".8"/>
+                      <path d="M117,49 Q123,49 123,55 Q123,63 117,69 Q111,63 111,55 Q111,49 117,49 Z" fill="#00e5b8" opacity=".9"/>
+                      <circle cx="117" cy="55" r="3.5" fill="rgba(0,0,0,.35)"/>
+                      <ellipse cx="117" cy="70" rx="4" ry="1.5" fill="rgba(0,0,0,.18)"/>
+                    </g>
+
+                    <!-- crosshair animado -->
+                    <line x1="117" y1="45" x2="117" y2="37" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+                    <line x1="109" y1="55" x2="101" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+                    <line x1="125" y1="55" x2="133" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
+
+                    <!-- anel de radar -->
+                    <circle cx="117" cy="55" r="14" fill="none" stroke="rgba(0,229,184,.3)" stroke-width=".8" stroke-dasharray="4 3" class="gc-rotate-dash"/>
+                    <circle cx="117" cy="55" r="22" fill="none" stroke="rgba(0,229,184,.15)" stroke-width=".6"/>
+
+                    <!-- bússola -->
+                    <circle cx="115" cy="16" r="9" fill="var(--surface2)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
+                    <text x="115" y="13" style="font-size:5.5px;fill:#a78bfa;font-family:monospace;font-weight:700;text-anchor:middle;">N</text>
+                    <text x="115" y="23" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">S</text>
+                    <text x="107" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">O</text>
+                    <text x="123" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">L</text>
+                    <line x1="115" y1="9" x2="115" y2="15" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="115" y1="22" x2="115" y2="18" stroke="var(--muted)" stroke-width="1" stroke-linecap="round"/>
+
+                    <!-- ── PAINEL DIREITO — ANTES vs DEPOIS ── -->
+                    <rect x="196" y="6" width="550" height="118" rx="10" fill="var(--surface2)" stroke="rgba(167,139,250,.35)" stroke-width="1.5"/>
+                    <!-- header -->
+                    <rect x="196" y="6" width="550" height="24" rx="10" fill="rgba(167,139,250,.18)"/>
+                    <rect x="196" y="20" width="550" height="10" fill="rgba(167,139,250,.08)"/>
+                    <circle cx="213" cy="18" r="4" fill="rgba(167,139,250,.8)"/>
+                    <text x="224" y="23" style="font-size:8.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.12em;">CONVERSOR DE COORDENADAS GEOGRÁFICAS</text>
+
+                    <!-- divisor vertical central -->
+                    <line x1="468" y1="30" x2="468" y2="118" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4 3"/>
+
+                    <!-- ══ LADO ESQUERDO: ANTES ══ -->
+                    <text x="218" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#ff6b7a;letter-spacing:.1em;">✗  SEM A FERRAMENTA</text>
+
+                    <!-- balão de mensagem do eletricista -->
+                    <rect x="210" y="48" width="245" height="42" rx="8" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
+                    <path d="M222,90 L212,100 L236,90" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
+                    <!-- avatar eletricista -->
+                    <circle cx="223" cy="62" r="7" fill="rgba(255,184,48,.2)" stroke="rgba(255,184,48,.4)" stroke-width="1"/>
+                    <text x="223" y="66" style="font-size:8px;fill:var(--warn);text-anchor:middle;">⚡</text>
+                    <!-- texto da mensagem -->
+                    <text x="236" y="61" style="font-size:7.5px;font-family:monospace;fill:var(--muted);">Eletricista  14:32 ✓✓</text>
+                    <text x="236" y="74" style="font-size:9px;font-family:monospace;font-weight:700;fill:#ffcdd2;">REF1:-20.51524-43.4646341</text>
+                    <text x="236" y="84" style="font-size:7px;font-family:monospace;fill:var(--hint);">📍 localização obra</text>
+
+                    <!-- fluxo de dor -->
+                    <text x="218" y="108" style="font-size:7.5px;font-family:monospace;fill:var(--hint);">↓ abre bloco de notas, edita na mão...</text>
+
+                    <!-- bloco de notas simulado -->
+                    <rect x="210" y="112" width="245" height="0" rx="0" fill="none"/>
+                    <!-- label embaixo explicando o sofrimento -->
+                    <text x="214" y="117" style="font-size:7px;font-family:monospace;fill:rgba(255,77,106,.7);">separa lat · ajusta vírgula · copia · repete 😩</text>
+
+                    <!-- ══ SETA CENTRAL ══ -->
+                    <circle cx="468" cy="72" r="16" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.3)" stroke-width="1.2"/>
+                    <polygon points="460,72 464,66 464,70 476,70 476,66 480,72 476,78 476,74 464,74 464,78" fill="var(--accent)" opacity=".95"/>
+
+                    <!-- ══ LADO DIREITO: DEPOIS ══ -->
+                    <text x="482" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#00e5b8;letter-spacing:.1em;">✓  COM A FERRAMENTA</text>
+
+                    <!-- campo de entrada -->
+                    <text x="482" y="55" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">COLA QUALQUER COISA:</text>
+                    <rect x="482" y="58" width="252" height="16" rx="5" fill="var(--surface3)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
+                    <text x="490" y="70" style="font-size:9px;font-family:monospace;fill:var(--text2);">REF1:-20.51524-43.4646341</text>
+
+                    <!-- boxes de resultado -->
+                    <text x="482" y="83" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">RESULTADO IMEDIATO:</text>
+
+                    <!-- box LAT -->
+                    <rect x="482" y="86" width="114" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
+                    <text x="490" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LATITUDE</text>
+                    <text x="539" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-20,51524</text>
+                    <rect x="583" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
+                    <text x="589" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
+
+                    <!-- box LON -->
+                    <rect x="604" y="86" width="130" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
+                    <text x="612" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LONGITUDE</text>
+                    <text x="669" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-43,4646341</text>
+                    <rect x="721" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
+                    <text x="727" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
+
+                    <!-- botão copiar ambos -->
+                    <rect x="482" y="112" width="252" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.4)" stroke-width=".9"/>
+                    <text x="608" y="122" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:#00e5b8;text-anchor:middle;">⎘  Copiar lat + lon juntos  →</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Conversor de Coordenadas Geográficas</div>
+                  <div class="ph-info-sub">Cole em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha latitudes e longitudes padronizados.</div>
+                </div>
+              </div>
+                </div>
+
+                <div class="home-svg-sep"></div>
+
+                <!-- ── Consultas ── -->
+                <div class="home-svg-group" style="margin-bottom:20px;">
+                  <button class="home-svg-group-label" onclick="navTo('consult')" title="Abrir Consultas de Indicadores">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#38bdf8;fill:none;stroke-width:2;flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Consultas de Indicadores
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <div class="page-hero hero-consult" style="margin-bottom:16px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <!-- BARRA DE BUSCA topo -->
+                    <rect x="160" y="8" width="440" height="24" rx="7" class="cs-search"/>
+                    <circle cx="178" cy="20" r="6" class="cs-search-icon" style="stroke:var(--accent);"/>
+                    <line x1="182" y1="24" x2="186" y2="28" class="cs-search-icon" style="stroke:var(--accent);"/>
+                    <rect x="192" y="14" width="180" height="12" rx="3" fill="var(--surface3)"/>
+                    <text x="196" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;">OSRL...</text>
+                    <rect x="566" y="12" width="24" height="16" rx="4" fill="rgba(0,229,184,.2)" stroke="rgba(0,229,184,.4)" stroke-width=".8"/>
+                    <text x="571" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;font-weight:700;">↵</text>
+
+                    <!-- CARD PMAL -->
+                    <rect x="30" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="30" y="40" width="168" height="18" rx="6" class="cs-header-pmal"/>
+                    <text x="42" y="53" style="font-size:9px;fill:var(--accent);font-family:monospace;font-weight:700;">PMAL</text>
+                    <text x="90" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção AT/BT</text>
+                    <!-- chips -->
+                    <rect x="38" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="41" y="71" class="cs-text cs-text-pmal">OSRL</text>
+                    <rect x="70" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="73" y="71" class="cs-text cs-text-pmal">RC81</text>
+                    <rect x="102" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="105" y="71" class="cs-text cs-text-pmal">RL11</text>
+                    <rect x="134" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="137" y="71" class="cs-text cs-text-pmal">RC83</text>
+                    <rect x="38" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="41" y="86" class="cs-text cs-text-pmal">RM51</text>
+                    <rect x="70" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
+                    <text x="73" y="86" class="cs-text cs-text-pmal">RC85</text>
+                    <!-- highlight animado -->
+                    <rect x="98" y="76" width="32" height="15" rx="4" class="cs-highlight cs-highlight-anim"/>
+
+                    <!-- CARD PMAR -->
+                    <rect x="210" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="210" y="40" width="168" height="18" rx="6" class="cs-header-pmar"/>
+                    <text x="222" y="53" style="font-size:9px;fill:#a78bfa;font-family:monospace;font-weight:700;">PMAR</text>
+                    <text x="265" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção Rural</text>
+                    <rect x="218" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="221" y="71" class="cs-text cs-text-pmar">RL21</text>
+                    <rect x="250" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="253" y="71" class="cs-text cs-text-pmar">RC91</text>
+                    <rect x="282" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="285" y="71" class="cs-text cs-text-pmar">RM61</text>
+                    <rect x="314" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="317" y="71" class="cs-text cs-text-pmar">RC93</text>
+                    <rect x="218" y="78" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
+                    <text x="221" y="86" class="cs-text cs-text-pmar">RM63</text>
+
+                    <!-- CARD EMERG BT -->
+                    <rect x="390" y="40" width="168" height="62" rx="6" class="cs-card"/>
+                    <rect x="390" y="40" width="168" height="18" rx="6" class="cs-header-emerg"/>
+                    <text x="402" y="53" style="font-size:9px;fill:var(--warn);font-family:monospace;font-weight:700;">EMERG·BT</text>
+                    <text x="460" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Emergência BT</text>
+                    <rect x="398" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="401" y="71" class="cs-text cs-text-emerg">EM01</text>
+                    <rect x="430" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="433" y="71" class="cs-text cs-text-emerg">EM02</text>
+                    <rect x="462" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="465" y="71" class="cs-text cs-text-emerg">EM11</text>
+                    <rect x="494" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="497" y="71" class="cs-text cs-text-emerg">EM12</text>
+                    <rect x="398" y="78" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
+                    <text x="401" y="86" class="cs-text cs-text-emerg">EM21</text>
+
+                    <!-- CARD PLACEHOLDER -->
+                    <rect x="570" y="40" width="160" height="62" rx="6" class="cs-card" style="opacity:.5;"/>
+                    <rect x="570" y="40" width="160" height="18" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="582" y="53" style="font-size:9px;fill:#38bdf8;font-family:monospace;font-weight:700;">PMAG</text>
+                    <rect x="578" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
+                    <text x="581" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG01</text>
+                    <rect x="610" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
+                    <text x="613" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG02</text>
+                    <text x="578" y="86" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">+ mais indicadores...</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Referência de Indicadores Operacionais</div>
+                  <div class="ph-info-sub">Busque qualquer tipo de serviço por código — PMAL, PMAR, EMERG·BT, EMERG·MT e PMAG classificados.</div>
+                </div>
+              </div>
+                </div>
+
+                <div class="home-svg-sep"></div>
+                <br>
+                <div class="home-section-title"><h2>Automações (Bookmarklet)</h2><br></div>
+                <!-- ── Automações ── -->
+                <div class="home-svg-group" style="margin-bottom:20px;">
+                  <button class="home-svg-group-label" onclick="navTo('automacoes')" title="Abrir Seletor de Intervalo">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Seletor de Intervalo
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <div class="page-hero hero-auto" style="margin-bottom:22px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <!-- JANELA DO NAVEGADOR -->
+                    <rect x="80" y="5" width="600" height="105" rx="8" class="au-browser" style="stroke-width:1.5"/>
+                    <!-- barra do navegador -->
+                    <rect x="80" y="5" width="600" height="22" rx="8" class="au-bar"/>
+                    <rect x="80" y="18" width="600" height="9" rx="0" class="au-bar"/>
+                    <!-- dots da janela -->
+                    <circle cx="96" cy="16" r="4" class="au-dot-r"/>
+                    <circle cx="110" cy="16" r="4" class="au-dot-y"/>
+                    <circle cx="124" cy="16" r="4" class="au-dot-g"/>
+                    <!-- barra de URL -->
+                    <rect x="140" y="9" width="320" height="14" rx="4" class="au-url"/>
+                    <text x="152" y="20" style="font-size:7px;fill:var(--muted);font-family:monospace;">digiteam.cemig.com.br/despacho</text>
+                    <!-- BARRA DE FAVORITOS -->
+                    <rect x="80" y="27" width="600" height="16" rx="0" fill="var(--surface3)" style="opacity:.7"/>
+                    <!-- estrela favorito normal -->
+                    <rect x="88" y="30" width="44" height="10" rx="3" class="au-star"/>
+                    <text x="91" y="38" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Inbox</text>
+                    <rect x="136" y="30" width="50" height="10" rx="3" class="au-star"/>
+                    <text x="139" y="38" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Digiteam</text>
+                    <!-- bookmarklet ativo com destaque -->
+                    <rect x="190" y="29" width="82" height="12" rx="4" fill="rgba(167,139,250,.3)" stroke="#a78bfa" stroke-width="1"/>
+                    <text x="197" y="38" style="font-size:7px;fill:#a78bfa;font-family:monospace;font-weight:700;">📅 6 meses</text>
+
+                    <!-- CONTEÚDO DA PÁGINA (Digiteam simulado) -->
+                    <rect x="86" y="49" width="588" height="55" rx="4" class="au-content"/>
+                    <!-- header da tabela -->
+                    <rect x="90" y="52" width="580" height="12" rx="2" fill="rgba(0,0,0,.15)"/>
+                    <text x="96" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">OS</text>
+                    <text x="140" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Tipo</text>
+                    <text x="240" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Equipe</text>
+                    <text x="380" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Status</text>
+                    <text x="490" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Data</text>
+                    <!-- linhas de dados -->
+                    <line x1="90" y1="66" x2="670" y2="66" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="68" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="68" width="55" height="7" rx="2" fill="rgba(0,229,184,.08)"/>
+                    <rect x="238" y="68" width="75" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <line x1="90" y1="78" x2="670" y2="78" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="80" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="80" width="45" height="7" rx="2" fill="rgba(255,184,48,.08)"/>
+                    <rect x="238" y="80" width="65" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <line x1="90" y1="90" x2="670" y2="90" stroke="var(--border)" stroke-width=".5"/>
+                    <rect x="92" y="92" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+                    <rect x="138" y="92" width="60" height="7" rx="2" fill="rgba(167,139,250,.08)"/>
+                    <rect x="238" y="92" width="70" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
+
+                    <!-- CURSOR animado -->
+                    <g class="au-cursor-anim">
+                      <polygon points="190,29 185,42 188,40 190,46 192,40 195,42" class="au-cursor" style="transform-origin:190px 37px;"/>
+                    </g>
+                    <!-- ripple do clique -->
+                    <circle cx="231" cy="35" r="0" fill="none" stroke="#a78bfa" stroke-width="1.5" class="au-ripple"/>
+
+                    <!-- BARRA DE PROGRESSO aparece após clique -->
+                    <rect x="460" y="52" width="100" height="8" rx="4" class="au-content" style="fill:var(--surface3);"/>
+                    <rect x="460" y="52" width="4" height="8" rx="4" class="au-progress au-prog-fill"/>
+                    <text x="565" y="59" style="font-size:6.5px;fill:var(--accent);font-family:monospace;" class="au-check-anim">✓ Pronto!</text>
+
+                    <!-- badge resultado -->
+                    <rect x="430" y="29" width="105" height="12" rx="4" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.3)" stroke-width=".8" class="au-check-anim"/>
+                    <text x="436" y="38" style="font-size:7px;fill:var(--accent);font-family:monospace;font-weight:700;" class="au-check-anim">✓ Intervalo: 6 meses · 1min</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Automações com Bookmarklets</div>
+                  <div class="ph-info-sub">Arraste uma vez para os favoritos — clique com o Digiteam aberto e tudo configura sozinho.</div>
+                </div>
+              </div>
+                </div>
+
+                <div class="home-svg-sep"></div>
+
+                <!-- ── Renomeador ── -->
+                <div class="home-svg-group" style="margin-bottom:4px;">
+                  <button class="home-svg-group-label" onclick="navTo('renomeador')" title="Abrir Renomeador de Equipes">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#38bdf8;fill:none;stroke-width:2;flex-shrink:0;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    Renomeador de Equipes
+                    <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+              <div class="page-hero hero-rename" style="margin-bottom:22px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <defs>
+                      <marker id="rnarr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                        <path d="M0,0 L5,2.5 L0,5 Z" fill="var(--accent)"/>
+                      </marker>
+                    </defs>
+
+                    <!-- CSV INPUT esquerdo -->
+                    <rect x="30" y="8" width="170" height="98" rx="6" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                    <rect x="30" y="8" width="170" height="16" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="42" y="20" style="font-size:7.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">equipes.csv</text>
+                    <!-- header CSV -->
+                    <text x="40" y="34" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">veiculo,localdecadastro,termino</text>
+                    <line x1="36" y1="37" x2="194" y2="37" stroke="var(--border2)" stroke-width=".7"/>
+                    <!-- rows CSV -->
+                    <text x="40" y="48" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1023</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">BOM DESPACHO</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">17H</tspan>
+                    </text>
+                    <text x="40" y="60" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1047</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">DIVINOPOLIS</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">16H</tspan>
+                    </text>
+                    <text x="40" y="72" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1088</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">PARA DE MINAS</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">17H</tspan>
+                    </text>
+                    <text x="40" y="84" style="font-size:7px;font-family:monospace;">
+                      <tspan fill="var(--accent)">1102</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="var(--accent2)">ITAUNA</tspan><tspan fill="var(--muted)">,</tspan><tspan fill="#a78bfa">18H</tspan>
+                    </text>
+                    <text x="40" y="96" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">+ mais linhas...</text>
+
+                    <!-- SETA processo -->
+                    <line x1="205" y1="57" x2="255" y2="57" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" marker-end="url(#rnarr)"/>
+                    <!-- ícone caneta -->
+                    <g class="rn-pen-anim">
+                      <path d="M218,48 L228,38 L234,44 L224,54 Z" class="rn-pen" style="stroke:#38bdf8;fill:rgba(56,189,248,.1);"/>
+                      <line x1="222" y1="52" x2="214" y2="60" class="rn-pen"/>
+                    </g>
+
+                    <!-- RESULTADO — tabela Digiteam -->
+                    <rect x="262" y="8" width="468" height="98" rx="6" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                    <rect x="262" y="8" width="468" height="16" rx="6" fill="rgba(56,189,248,.1)"/>
+                    <text x="274" y="20" style="font-size:7.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">DIGITEAM · EQUIPES</text>
+                    <!-- barra de progresso -->
+                    <rect x="580" y="11" width="140" height="10" rx="3" class="rn-progress-bg"/>
+                    <rect x="580" y="11" width="4" height="10" rx="3" class="rn-progress-fill rn-prog-anim"/>
+                    <!-- header tabela -->
+                    <rect x="266" y="26" width="460" height="10" rx="2" fill="rgba(0,0,0,.15)"/>
+                    <text x="272" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">VEÍCULO</text>
+                    <text x="330" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">NOME ATUAL</text>
+                    <text x="490" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">NOVO NOME</text>
+                    <text x="660" y="34" style="font-size:6px;fill:var(--muted);font-family:monospace;">STATUS</text>
+
+                    <!-- ROW 1 — renomeado OK -->
+                    <rect x="266" y="38" width="460" height="14" rx="2" class="rn-row-active rn-highlight-anim"/>
+                    <text x="272" y="48" style="font-size:7.5px;fill:var(--accent);font-family:monospace;font-weight:700;">1023</text>
+                    <text x="330" y="48" class="rn-text-old">VEICULO-1023</text>
+                    <text x="490" y="48" class="rn-text-new">BOM DESPACHO-1023-17H</text>
+                    <rect x="658" y="40" width="28" height="10" rx="3" class="rn-badge-ok"/>
+                    <text x="662" y="48" class="rn-badge-text-ok">✓ OK</text>
+
+                    <!-- ROW 2 — já correto, skip -->
+                    <rect x="266" y="54" width="460" height="14" rx="2" class="rn-row"/>
+                    <text x="272" y="64" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1047</text>
+                    <text x="330" y="64" class="rn-text-new" style="fill:var(--muted);">DIVINOPOLIS-1047-16H</text>
+                    <text x="490" y="64" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">sem alteração</text>
+                    <rect x="658" y="56" width="36" height="10" rx="3" class="rn-badge-skip"/>
+                    <text x="661" y="64" class="rn-badge-text-skip">⏭ SKIP</text>
+
+                    <!-- ROW 3 — bloqueado -->
+                    <rect x="266" y="70" width="460" height="14" rx="2" class="rn-row"/>
+                    <text x="272" y="80" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1088</text>
+                    <text x="330" y="80" class="rn-text-old">EQUIPE-1088</text>
+                    <text x="490" y="80" style="font-size:7px;fill:var(--danger);font-family:monospace;">🔒 Bloqueada</text>
+                    <rect x="658" y="72" width="42" height="10" rx="3" class="rn-badge-lock"/>
+                    <text x="661" y="80" class="rn-badge-text-lock">🔒 LOCK</text>
+
+                    <!-- ROW 4 — processando -->
+                    <rect x="266" y="86" width="460" height="14" rx="2" class="rn-row-active" style="opacity:.4;"/>
+                    <text x="272" y="96" style="font-size:7.5px;fill:var(--muted);font-family:monospace;">1102</text>
+                    <text x="330" y="96" class="rn-text-old">VEICULO-1102</text>
+                    <text x="490" y="96" style="font-size:7px;fill:#38bdf8;font-family:monospace;font-style:italic;">processando...</text>
+                  </svg>
+                </div>
+                <div class="ph-info">
+                  <div class="ph-info-title">Renomeador de Equipes em Lote</div>
+                  <div class="ph-info-sub">Carregue o CSV, clique no bookmarklet e o Digiteam é renomeado automaticamente — pulando bloqueadas e já atualizadas.</div>
+                </div>
+              </div>
+                </div>
+
               </div>
 
               <!-- DASHBOARDS -->
+              <br>
+              <div class="home-section-title"><h2>Dashboards Power BI</h2><br></div>
+
               <div class="home-section" id="home-dashboards-section">
-                <div class="home-section-title">Dashboards Power BI</div>
                 <div class="home-dash-grid">
 
                   <a class="home-dash-card"
@@ -5210,9 +5774,17 @@ body.light .home-title span {
               <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:20px;">
 
                 <!-- CHANGELOG compacto -->
+                 <br>
                 <div class="card" style="margin-bottom:0;">
                   <div class="ct">Histórico de versões</div>
-                  <div class="home-changelog">
+                  <div class="home-changelog" style="max-height:220px;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--border3) transparent;">
+                    <div class="home-cl-item">
+                      <div class="home-cl-ver cl-new">v2.5</div>
+                      <div class="home-cl-body">
+                        <div class="home-cl-title">Layout</div>
+                        <div class="home-cl-tags"><span class="home-cl-tag t-ui">UI</span></div>
+                      </div>
+                    </div>
                     <div class="home-cl-item">
                       <div class="home-cl-ver cl-new">v2.4</div>
                       <div class="home-cl-body">
@@ -5235,16 +5807,15 @@ body.light .home-title span {
                       <div class="home-cl-body">
                         <div class="home-cl-title">Interligação step-by-step · G-Dis auto-extração · Bookmarklet v2
                         </div>
-                        <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span
-                            class="home-cl-tag t-ui">UI</span><span class="home-cl-tag t-fix">FIX</span></div>
+                        <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span>
+                        </div>
                       </div>
                     </div>
                     <div class="home-cl-item">
                       <div class="home-cl-ver cl-mid">v2.1</div>
                       <div class="home-cl-body">
                         <div class="home-cl-title">Home · KPIs ao vivo · Gauge animado · Empty state G-Dis</div>
-                        <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span><span
-                            class="home-cl-tag t-ui">UI</span><span class="home-cl-tag t-fix">FIX</span></div>
+                        <div class="home-cl-tags"><span class="home-cl-tag t-new">NOVO</span></div>
                       </div>
                     </div>
                     <div class="home-cl-item">
@@ -5314,81 +5885,6 @@ body.light .home-title span {
 
               <!-- Hero decorativo — transformadores e energia -->
               <div class="interlig-hero" id="interlig-hero">
-                <div class="ih-svg-wrap">
-                  <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" class="ih-svg">
-                    <!-- Fio de alta tensão esquerda -->
-                    <line x1="0" y1="28" x2="140" y2="28" class="ih-wire" />
-                    <!-- Torre esquerda -->
-                    <g class="ih-tower" transform="translate(140,10)">
-                      <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
-                      <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
-                      <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
-                      <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
-                      <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
-                      <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
-                      <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
-                    </g>
-                    <!-- Fio entre torres -->
-                    <path d="M 171 29 Q 250 55 345 28" class="ih-wire ih-wire-sag" />
-                    <path d="M 158 39 Q 250 65 342 40" class="ih-wire ih-wire-sag ih-wire-dim" />
-                    <!-- Torre central / Transformador -->
-                    <g transform="translate(310,5)">
-                      <!-- Base transformador -->
-                      <rect x="0" y="20" width="72" height="80" rx="6" class="ih-trafo-body" />
-                      <rect x="8" y="28" width="56" height="64" rx="4" class="ih-trafo-inner" />
-                      <!-- Núcleo do trafo (bobinas) -->
-                      <ellipse cx="36" cy="45" rx="14" ry="7" class="ih-coil" />
-                      <ellipse cx="36" cy="58" rx="14" ry="7" class="ih-coil" />
-                      <ellipse cx="36" cy="71" rx="14" ry="7" class="ih-coil" />
-                      <rect x="22" y="45" width="28" height="26" class="ih-coil-fill" />
-                      <!-- Bucha AT -->
-                      <rect x="14" y="6" width="8" height="18" rx="3" class="ih-bushing" />
-                      <rect x="50" y="6" width="8" height="18" rx="3" class="ih-bushing" />
-                      <circle cx="18" cy="5" r="4" class="ih-isolator-top" />
-                      <circle cx="54" cy="5" r="4" class="ih-isolator-top" />
-                      <!-- Bucha BT -->
-                      <rect x="28" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
-                      <rect x="38" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
-                      <!-- Radiadores -->
-                      <rect x="-10" y="30" width="8" height="50" rx="2" class="ih-radiator" />
-                      <rect x="-6" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
-                      <rect x="74" y="30" width="8" height="50" rx="2" class="ih-radiator" />
-                      <rect x="76" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
-                      <!-- Relé -->
-                      <rect x="20" y="28" width="32" height="10" rx="2" class="ih-relay" />
-                      <circle cx="30" cy="33" r="2" class="ih-relay-dot" />
-                      <circle cx="36" cy="33" r="2" class="ih-relay-dot ih-relay-active" />
-                      <circle cx="42" cy="33" r="2" class="ih-relay-dot" />
-                    </g>
-                    <!-- Fio entre transformador e torre direita -->
-                    <path d="M 390 35 Q 510 55 605 28" class="ih-wire ih-wire-sag" />
-                    <path d="M 390 45 Q 510 65 602 40" class="ih-wire ih-wire-sag ih-wire-dim" />
-                    <!-- Torre direita -->
-                    <g class="ih-tower" transform="translate(604,10)">
-                      <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
-                      <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
-                      <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
-                      <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
-                      <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
-                      <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
-                      <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
-                    </g>
-                    <!-- Fio saída direita -->
-                    <line x1="630" y1="40" x2="760" y2="40" class="ih-wire" />
-                    <!-- Labels -->
-                    <text x="70" y="25" class="ih-label">MT</text>
-                    <text x="688" y="35" class="ih-label">BT</text>
-
-                    <!-- Raios animados -->
-                    <g class="ih-sparks">
-                      <path d="M 328 2 L 322 12 L 328 10 L 322 22" class="ih-bolt" />
-                      <path 
-                        d="M 348 2 L 342 12 L 348 10 L 342 22" 
-                        class="ih-bolt ih-bolt-delay"
-                        transform="translate(20, 0)"/>
-                    </g>
-                  </svg>
-                </div>
                 <div class="ih-info">
                   <div class="ih-info-title">Verificação de Interligação</div>
                   <div class="ih-info-sub">Configure o transformador doador, o transformador queimado e os cabos — clique em
@@ -5438,8 +5934,8 @@ body.light .home-title span {
                   <input type="number" id="pot-doador" placeholder="ex: 75" min="1" oninput="calcular()">
                   <span class="lbl">Proteção</span>
                   <div class="rg">
-                    <div class="rb on" id="tp-doador-conv" onclick="setP('doador','conv')">🔻 Convencional</div>
-                    <div class="rb" id="tp-doador-prot" onclick="setP('doador','prot')">🔰 Auto-protegido</div>
+                    <div class="rb on" id="tp-doador-conv" onclick="setP('doador','conv')">▼ Convencional</div>
+                    <div class="rb" id="tp-doador-prot" onclick="setP('doador','prot')">▽ Auto-protegido</div>
                   </div>
                   <span class="lbl">Fase</span>
                   <div class="rg">
@@ -5455,8 +5951,8 @@ body.light .home-title span {
                   <input type="number" id="pot-queimado" placeholder="ex: 30" min="1" oninput="calcular()">
                   <span class="lbl">Proteção</span>
                   <div class="rg">
-                    <div class="rb on" id="tp-queimado-conv" onclick="setP('queimado','conv')">🔻 Convencional</div>
-                    <div class="rb" id="tp-queimado-prot" onclick="setP('queimado','prot')">🔰 Auto-protegido</div>
+                    <div class="rb on" id="tp-queimado-conv" onclick="setP('queimado','conv')">▼ Convencional</div>
+                    <div class="rb" id="tp-queimado-prot" onclick="setP('queimado','prot')">▽ Auto-protegido</div>
                   </div>
                   <span class="lbl">Fase</span>
                   <div class="rg">
@@ -5541,98 +6037,10 @@ body.light .home-title span {
             <div class="pg-inner">
               <!-- Hero G-Dis -->
               <div class="page-hero hero-gdis" style="margin-bottom:16px;">
-                <div class="ph-svg-wrap">
-                  <svg viewBox="0 0 760 100" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
-
-                    <!-- ── LADO ESQUERDO: tela G-Dis bruta ── -->
-                    <rect x="20" y="6" width="220" height="88" rx="8" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1.2"/>
-                    <!-- header -->
-                    <rect x="20" y="6" width="220" height="18" rx="8" fill="rgba(0,184,230,.12)"/>
-                    <rect x="20" y="16" width="220" height="8" fill="rgba(0,184,230,.06)"/>
-                    <circle cx="33" cy="15" r="3" fill="rgba(0,184,230,.5)"/>
-                    <text x="42" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">G-DIS · TEXTO BRUTO</text>
-                    <!-- linhas de dados misturados -->
-                    <rect x="32" y="30" width="110" height="4" rx="2" fill="var(--border3)" opacity=".7"/>
-                    <rect x="32" y="30" width="48"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
-                    <rect x="32" y="39" width="148" height="4" rx="2" fill="var(--border3)" opacity=".6"/>
-                    <rect x="32" y="48" width="62"  height="4" rx="2" fill="var(--accent2)" opacity=".45"/>
-                    <rect x="98" y="48" width="72"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
-                    <rect x="32" y="57" width="96"  height="4" rx="2" fill="var(--border3)" opacity=".6"/>
-                    <rect x="32" y="66" width="52"  height="4" rx="2" fill="var(--accent2)" opacity=".4"/>
-                    <rect x="88" y="66" width="84"  height="4" rx="2" fill="var(--border3)" opacity=".5"/>
-                    <rect x="32" y="75" width="128" height="4" rx="2" fill="var(--border3)" opacity=".4"/>
-                    <rect x="32" y="84" width="76"  height="4" rx="2" fill="var(--border3)" opacity=".3"/>
-                    <!-- scanner -->
-                    <rect x="20" y="45" width="220" height="8" rx="0" fill="rgba(0,184,230,.06)" class="gg-scan-line"/>
-
-                    <!-- ── MEIO: processo ── -->
-                    <!-- kbd Ctrl+C -->
-                    <rect x="268" y="22" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
-                    <text x="275" y="32" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+C</text>
-                    <!-- seta para baixo -->
-                    <line x1="286" y1="36" x2="286" y2="48" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
-                    <!-- círculo central com seta -->
-                    <circle cx="286" cy="50" r="22" fill="rgba(0,229,184,.06)" stroke="rgba(0,229,184,.2)" stroke-width="1"/>
-                    <line x1="270" y1="50" x2="296" y2="50" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
-                    <polygon points="296,46 304,50 296,54" fill="var(--accent)"/>
-                    <!-- seta para baixo -->
-                    <line x1="286" y1="72" x2="286" y2="60" stroke="var(--border3)" stroke-width="1" stroke-dasharray="2 2"/>
-                    <!-- kbd Ctrl+V -->
-                    <rect x="268" y="72" width="36" height="14" rx="4" fill="var(--surface3)" stroke="var(--border2)" stroke-width="1"/>
-                    <text x="276" y="82" style="font-size:7px;font-family:monospace;fill:var(--muted);">Ctrl+V</text>
-
-                    <!-- ── LADO DIREITO: resultado limpo ── -->
-                    <rect x="330" y="6" width="410" height="88" rx="8" fill="var(--surface2)" stroke="var(--accent2)" stroke-width="1.2"/>
-                    <!-- header -->
-                    <rect x="330" y="6" width="410" height="18" rx="8" fill="rgba(0,184,230,.15)"/>
-                    <rect x="330" y="16" width="410" height="8" fill="rgba(0,184,230,.08)"/>
-                    <circle cx="343" cy="15" r="3" fill="rgba(0,229,184,.7)"/>
-                    <text x="352" y="19" style="font-size:7px;font-family:monospace;font-weight:700;fill:var(--accent2);letter-spacing:.1em;">NOTAS EXTRAÍDAS · PRONTAS PARA COLAR</text>
-
-                    <!-- ROW 1: 5 chips -->
-                    <rect x="342" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="367" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">84521</text>
-                    <text x="395" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="400" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="425" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">91047</text>
-                    <text x="453" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="458" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="483" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">73812</text>
-                    <text x="511" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="516" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="541" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">55203</text>
-                    <text x="569" y="40" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="574" y="30" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="599" y="40" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">66543</text>
-
-                    <!-- ROW 2: 4 chips + cursor -->
-                    <rect x="342" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="367" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">22189</text>
-                    <text x="395" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="400" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="425" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">48830</text>
-                    <text x="453" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="458" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="483" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">10234</text>
-                    <text x="511" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <rect x="516" y="50" width="50" height="14" rx="4" fill="rgba(0,184,230,.15)" stroke="rgba(0,184,230,.4)" stroke-width=".9"/>
-                    <text x="541" y="60" style="font-size:8px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">77651</text>
-                    <text x="569" y="60" style="font-size:11px;font-family:monospace;font-weight:900;fill:var(--accent);">,</text>
-                    <!-- cursor piscante -->
-                    <rect x="574" y="50" width="3" height="14" rx="1" fill="var(--accent2)" class="gg-cursor-blink"/>
-
-                    <!-- badge total + botão copiar -->
-                    <rect x="342" y="72" width="116" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.35)" stroke-width=".9"/>
-                    <text x="400" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">✓  8 notas extraídas</text>
-                    <rect x="468" y="72" width="80" height="14" rx="5" fill="rgba(0,184,230,.12)" stroke="rgba(0,184,230,.35)" stroke-width=".9"/>
-                    <text x="508" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent2);text-anchor:middle;">Copiar tudo</text>
-                    <rect x="558" y="72" width="80" height="14" rx="5" fill="rgba(0,229,184,.08)" stroke="rgba(0,229,184,.25)" stroke-width=".9"/>
-                    <text x="598" y="82" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:var(--accent);text-anchor:middle;">Só na CX</text>
-                  </svg>
-                </div>
                 <div class="ph-info">
                   <div class="ph-info-title">Extração automática de notas G-Dis</div>
                   <div class="ph-info-sub">Cole o texto copiado da tela — as notas são separadas automaticamente por vírgula, prontas para uso.</div>
+                  <div class="ph-info-sub">⚠️ Notas de MT não são copiadas!</div>
                 </div>
               </div>
               <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
@@ -5640,27 +6048,13 @@ body.light .home-title span {
               <div class="g2">
                 <div class="card">
                   <div class="ct">Entrada: texto do G-Dis</div>
-                  <!-- Empty state: shown when textarea is empty -->
-                  <div class="gdis-empty" id="gdis-empty-state">
-                    <div class="gdis-empty-hint">Instruções:</div>
-                    <div class="gdis-empty-steps">
-                      <div class="gdis-empty-step">
-                        <div class="gdis-empty-step-num">1</div>
-                        <span>Abra o G-Dis e selecione as notas desejadas</span>
-                      </div>
-                      <div class="gdis-empty-step">
-                        <div class="gdis-empty-step-num">2</div>
-                        <span>Copie o texto da tela (<strong>Ctrl+A</strong> → <strong>Ctrl+C</strong>)</span>
-                      </div>
-                      <div class="gdis-empty-step">
-                        <div class="gdis-empty-step-num">3</div>
-                        <span>Cole no campo abaixo</span>
-                      </div>
-                    </div>
-                  </div>
                   <span class="lbl">Cole o texto copiado do G-Dis</span>
-                  <textarea id="gin" placeholder="Cole aqui o texto copiado do G-Dis. As notas serão extraídas automaticamente" rows="4"
-                    oninput="gAtualizar()"></textarea>
+                  <textarea
+                    id="gin"
+                    placeholder="1. Abra o G-Dis e selecione as notas desejadas &#10;2. Copie o texto da tela &#10;3. Cole nesse campo"
+                    rows= "4"
+                    oninput="gAtualizar()">
+                  </textarea>
                   <div class="brow">
                     <button class="bdel" id="gBtnLp" onclick="gLimpar()" disabled>Limpar</button>
                   </div>
@@ -5725,148 +6119,6 @@ body.light .home-title span {
             <div class="pg-inner">
               <!-- Hero Coordenadas -->
               <div class="page-hero hero-coord" style="margin-bottom:16px;">
-                <div class="ph-svg-wrap">
-                  <svg viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
-                    <defs>
-                      <radialGradient id="globeGrad" cx="40%" cy="35%" r="60%">
-                        <stop offset="0%" stop-color="rgba(167,139,250,.18)"/>
-                        <stop offset="100%" stop-color="rgba(167,139,250,.03)"/>
-                      </radialGradient>
-                      <clipPath id="globeClip">
-                        <circle cx="115" cy="70" r="56"/>
-                      </clipPath>
-                      <marker id="carr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                        <path d="M0,0 L6,3 L0,6 Z" fill="#a78bfa"/>
-                      </marker>
-                    </defs>
-
-                    <!-- ── GLOBO ── -->
-                    <!-- sombra -->
-                    <ellipse cx="115" cy="132" rx="44" ry="6" fill="rgba(0,0,0,.15)"/>
-                    <!-- esfera base -->
-                    <circle cx="115" cy="70" r="56" fill="url(#globeGrad)" stroke="rgba(167,139,250,.4)" stroke-width="1.5"/>
-                    <!-- oceano interior -->
-                    <circle cx="115" cy="70" r="55" fill="rgba(0,184,230,.05)"/>
-
-                    <!-- grade geográfica — paralelos -->
-                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
-                    <ellipse cx="115" cy="52" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
-                    <ellipse cx="115" cy="88" rx="50" ry="9"  fill="none" stroke="rgba(167,139,250,.15)" stroke-width=".5" clip-path="url(#globeClip)"/>
-                    <ellipse cx="115" cy="35" rx="36" ry="7"  fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
-                    <ellipse cx="115" cy="105" rx="36" ry="7" fill="none" stroke="rgba(167,139,250,.1)" stroke-width=".4" clip-path="url(#globeClip)"/>
-
-                    <!-- grade geográfica — meridianos -->
-                    <path d="M115,14 Q138,70 115,126" fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
-                    <path d="M115,14 Q92,70 115,126"  fill="none" stroke="rgba(167,139,250,.2)" stroke-width=".6" clip-path="url(#globeClip)"/>
-                    <path d="M115,14 Q155,57 115,126" fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
-                    <path d="M115,14 Q75,83 115,126"  fill="none" stroke="rgba(167,139,250,.12)" stroke-width=".4" clip-path="url(#globeClip)"/>
-                    <!-- linha do equador destaque -->
-                    <ellipse cx="115" cy="70" rx="56" ry="10" fill="none" stroke="rgba(167,139,250,.35)" stroke-width=".8" stroke-dasharray="3 2" clip-path="url(#globeClip)"/>
-
-                    <!-- continentes simplificados (Brasil + América do Sul) -->
-                    <path d="M105,33 Q118,30 126,37 Q136,47 134,61 Q132,75 126,85 Q118,95 108,97 Q96,95 90,85 Q84,73 87,59 Q90,45 105,33 Z"
-                          fill="rgba(167,139,250,.22)" stroke="rgba(167,139,250,.5)" stroke-width=".8" clip-path="url(#globeClip)"/>
-                    <path d="M88,43 Q98,35 105,33 Q100,40 92,47 Z"
-                          fill="rgba(167,139,250,.15)" clip-path="url(#globeClip)"/>
-                    <path d="M90,85 Q84,95 86,113 Q90,120 96,113 Q98,100 96,90 Z"
-                          fill="rgba(167,139,250,.18)" stroke="rgba(167,139,250,.4)" stroke-width=".6" clip-path="url(#globeClip)"/>
-                    <!-- Minas Gerais highlight -->
-                    <path d="M112,57 Q120,55 124,61 Q126,67 122,73 Q116,77 110,73 Q106,67 108,61 Z"
-                          fill="rgba(0,229,184,.3)" stroke="rgba(0,229,184,.7)" stroke-width=".8" clip-path="url(#globeClip)"/>
-
-                    <!-- PIN animado sobre MG -->
-                    <g class="gc-pin-anim">
-                      <circle cx="117" cy="62" r="9" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.35)" stroke-width=".8"/>
-                      <path d="M117,49 Q123,49 123,55 Q123,63 117,69 Q111,63 111,55 Q111,49 117,49 Z" fill="#00e5b8" opacity=".9"/>
-                      <circle cx="117" cy="55" r="3.5" fill="rgba(0,0,0,.35)"/>
-                      <ellipse cx="117" cy="70" rx="4" ry="1.5" fill="rgba(0,0,0,.18)"/>
-                    </g>
-
-                    <!-- crosshair animado -->
-                    <line x1="117" y1="45" x2="117" y2="37" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
-                    <line x1="109" y1="55" x2="101" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
-                    <line x1="125" y1="55" x2="133" y2="55" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" class="gc-blink"/>
-
-                    <!-- anel de radar -->
-                    <circle cx="117" cy="55" r="14" fill="none" stroke="rgba(0,229,184,.3)" stroke-width=".8" stroke-dasharray="4 3" class="gc-rotate-dash"/>
-                    <circle cx="117" cy="55" r="22" fill="none" stroke="rgba(0,229,184,.15)" stroke-width=".6"/>
-
-                    <!-- bússola -->
-                    <circle cx="115" cy="16" r="9" fill="var(--surface2)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
-                    <text x="115" y="13" style="font-size:5.5px;fill:#a78bfa;font-family:monospace;font-weight:700;text-anchor:middle;">N</text>
-                    <text x="115" y="23" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">S</text>
-                    <text x="107" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">O</text>
-                    <text x="123" y="19" style="font-size:5px;fill:var(--muted);font-family:monospace;text-anchor:middle;">L</text>
-                    <line x1="115" y1="9" x2="115" y2="15" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="115" y1="22" x2="115" y2="18" stroke="var(--muted)" stroke-width="1" stroke-linecap="round"/>
-
-                    <!-- ── PAINEL DIREITO — ANTES vs DEPOIS ── -->
-                    <rect x="196" y="6" width="550" height="118" rx="10" fill="var(--surface2)" stroke="rgba(167,139,250,.35)" stroke-width="1.5"/>
-                    <!-- header -->
-                    <rect x="196" y="6" width="550" height="24" rx="10" fill="rgba(167,139,250,.18)"/>
-                    <rect x="196" y="20" width="550" height="10" fill="rgba(167,139,250,.08)"/>
-                    <circle cx="213" cy="18" r="4" fill="rgba(167,139,250,.8)"/>
-                    <text x="224" y="23" style="font-size:8.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.12em;">CONVERSOR DE COORDENADAS GEOGRÁFICAS</text>
-
-                    <!-- divisor vertical central -->
-                    <line x1="468" y1="30" x2="468" y2="118" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4 3"/>
-
-                    <!-- ══ LADO ESQUERDO: ANTES ══ -->
-                    <text x="218" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#ff6b7a;letter-spacing:.1em;">✗  SEM A FERRAMENTA</text>
-
-                    <!-- balão de mensagem do eletricista -->
-                    <rect x="210" y="48" width="245" height="42" rx="8" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
-                    <path d="M222,90 L212,100 L236,90" fill="rgba(255,77,106,.1)" stroke="rgba(255,77,106,.35)" stroke-width="1"/>
-                    <!-- avatar eletricista -->
-                    <circle cx="223" cy="62" r="7" fill="rgba(255,184,48,.2)" stroke="rgba(255,184,48,.4)" stroke-width="1"/>
-                    <text x="223" y="66" style="font-size:8px;fill:var(--warn);text-anchor:middle;">⚡</text>
-                    <!-- texto da mensagem -->
-                    <text x="236" y="61" style="font-size:7.5px;font-family:monospace;fill:var(--muted);">Eletricista  14:32 ✓✓</text>
-                    <text x="236" y="74" style="font-size:9px;font-family:monospace;font-weight:700;fill:#ffcdd2;">REF1:-20.51524-43.4646341</text>
-                    <text x="236" y="84" style="font-size:7px;font-family:monospace;fill:var(--hint);">📍 localização obra</text>
-
-                    <!-- fluxo de dor -->
-                    <text x="218" y="108" style="font-size:7.5px;font-family:monospace;fill:var(--hint);">↓ abre bloco de notas, edita na mão...</text>
-
-                    <!-- bloco de notas simulado -->
-                    <rect x="210" y="112" width="245" height="0" rx="0" fill="none"/>
-                    <!-- label embaixo explicando o sofrimento -->
-                    <text x="214" y="117" style="font-size:7px;font-family:monospace;fill:rgba(255,77,106,.7);">separa lat · ajusta vírgula · copia · repete 😩</text>
-
-                    <!-- ══ SETA CENTRAL ══ -->
-                    <circle cx="468" cy="72" r="16" fill="rgba(0,229,184,.1)" stroke="rgba(0,229,184,.3)" stroke-width="1.2"/>
-                    <polygon points="460,72 464,66 464,70 476,70 476,66 480,72 476,78 476,74 464,74 464,78" fill="var(--accent)" opacity=".95"/>
-
-                    <!-- ══ LADO DIREITO: DEPOIS ══ -->
-                    <text x="482" y="43" style="font-size:8px;font-family:monospace;font-weight:700;fill:#00e5b8;letter-spacing:.1em;">✓  COM A FERRAMENTA</text>
-
-                    <!-- campo de entrada -->
-                    <text x="482" y="55" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">COLA QUALQUER COISA:</text>
-                    <rect x="482" y="58" width="252" height="16" rx="5" fill="var(--surface3)" stroke="rgba(167,139,250,.4)" stroke-width="1"/>
-                    <text x="490" y="70" style="font-size:9px;font-family:monospace;fill:var(--text2);">REF1:-20.51524-43.4646341</text>
-
-                    <!-- boxes de resultado -->
-                    <text x="482" y="83" style="font-size:7px;font-family:monospace;fill:var(--muted);letter-spacing:.06em;">RESULTADO IMEDIATO:</text>
-
-                    <!-- box LAT -->
-                    <rect x="482" y="86" width="114" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
-                    <text x="490" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LATITUDE</text>
-                    <text x="539" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-20,51524</text>
-                    <rect x="583" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
-                    <text x="589" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
-
-                    <!-- box LON -->
-                    <rect x="604" y="86" width="130" height="22" rx="6" fill="rgba(167,139,250,.15)" stroke="rgba(167,139,250,.55)" stroke-width="1.1"/>
-                    <text x="612" y="94" style="font-size:6.5px;font-family:monospace;font-weight:700;fill:#c4b0ff;letter-spacing:.1em;">LONGITUDE</text>
-                    <text x="669" y="104" style="font-size:11px;font-family:monospace;font-weight:700;fill:#d8b4fe;text-anchor:middle;">-43,4646341</text>
-                    <rect x="721" y="88" width="13" height="11" rx="3" fill="rgba(167,139,250,.25)" stroke="rgba(167,139,250,.5)" stroke-width=".8"/>
-                    <text x="727" y="96" style="font-size:8px;fill:#a78bfa;text-anchor:middle;">⎘</text>
-
-                    <!-- botão copiar ambos -->
-                    <rect x="482" y="112" width="252" height="14" rx="5" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.4)" stroke-width=".9"/>
-                    <text x="608" y="122" style="font-size:7.5px;font-family:monospace;font-weight:700;fill:#00e5b8;text-anchor:middle;">⎘  Copiar lat + lon juntos  →</text>
-                  </svg>
-                </div>
                 <div class="ph-info">
                   <div class="ph-info-title">Conversor de Coordenadas Geográficas</div>
                   <div class="ph-info-sub">Cole em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha lat/lon padronizados.</div>
@@ -6109,90 +6361,10 @@ body.light .home-title span {
 
               <!-- Hero Consultas -->
               <div class="page-hero hero-consult" style="margin-bottom:16px;">
-                <div class="ph-svg-wrap">
-                  <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
-                    <!-- BARRA DE BUSCA topo -->
-                    <rect x="160" y="8" width="440" height="24" rx="7" class="cs-search"/>
-                    <circle cx="178" cy="20" r="6" class="cs-search-icon" style="stroke:var(--accent);"/>
-                    <line x1="182" y1="24" x2="186" y2="28" class="cs-search-icon" style="stroke:var(--accent);"/>
-                    <rect x="192" y="14" width="180" height="12" rx="3" fill="var(--surface3)"/>
-                    <text x="196" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;">OSRL...</text>
-                    <rect x="566" y="12" width="24" height="16" rx="4" fill="rgba(0,229,184,.2)" stroke="rgba(0,229,184,.4)" stroke-width=".8"/>
-                    <text x="571" y="23" style="font-size:8px;fill:var(--accent);font-family:monospace;font-weight:700;">↵</text>
-
-                    <!-- CARD PMAL -->
-                    <rect x="30" y="40" width="168" height="62" rx="6" class="cs-card"/>
-                    <rect x="30" y="40" width="168" height="18" rx="6" class="cs-header-pmal"/>
-                    <text x="42" y="53" style="font-size:9px;fill:var(--accent);font-family:monospace;font-weight:700;">PMAL</text>
-                    <text x="90" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção AT/BT</text>
-                    <!-- chips -->
-                    <rect x="38" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="41" y="71" class="cs-text cs-text-pmal">OSRL</text>
-                    <rect x="70" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="73" y="71" class="cs-text cs-text-pmal">RC81</text>
-                    <rect x="102" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="105" y="71" class="cs-text cs-text-pmal">RL11</text>
-                    <rect x="134" y="63" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="137" y="71" class="cs-text cs-text-pmal">RC83</text>
-                    <rect x="38" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="41" y="86" class="cs-text cs-text-pmal">RM51</text>
-                    <rect x="70" y="78" width="28" height="11" rx="3" class="cs-chip-pmal cs-chip"/>
-                    <text x="73" y="86" class="cs-text cs-text-pmal">RC85</text>
-                    <!-- highlight animado -->
-                    <rect x="98" y="76" width="32" height="15" rx="4" class="cs-highlight cs-highlight-anim"/>
-
-                    <!-- CARD PMAR -->
-                    <rect x="210" y="40" width="168" height="62" rx="6" class="cs-card"/>
-                    <rect x="210" y="40" width="168" height="18" rx="6" class="cs-header-pmar"/>
-                    <text x="222" y="53" style="font-size:9px;fill:#a78bfa;font-family:monospace;font-weight:700;">PMAR</text>
-                    <text x="265" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Manutenção Rural</text>
-                    <rect x="218" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
-                    <text x="221" y="71" class="cs-text cs-text-pmar">RL21</text>
-                    <rect x="250" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
-                    <text x="253" y="71" class="cs-text cs-text-pmar">RC91</text>
-                    <rect x="282" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
-                    <text x="285" y="71" class="cs-text cs-text-pmar">RM61</text>
-                    <rect x="314" y="63" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
-                    <text x="317" y="71" class="cs-text cs-text-pmar">RC93</text>
-                    <rect x="218" y="78" width="28" height="11" rx="3" class="cs-chip-pmar cs-chip"/>
-                    <text x="221" y="86" class="cs-text cs-text-pmar">RM63</text>
-
-                    <!-- CARD EMERG BT -->
-                    <rect x="390" y="40" width="168" height="62" rx="6" class="cs-card"/>
-                    <rect x="390" y="40" width="168" height="18" rx="6" class="cs-header-emerg"/>
-                    <text x="402" y="53" style="font-size:9px;fill:var(--warn);font-family:monospace;font-weight:700;">EMERG·BT</text>
-                    <text x="460" y="53" style="font-size:7px;fill:var(--muted);font-family:monospace;">Emergência BT</text>
-                    <rect x="398" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
-                    <text x="401" y="71" class="cs-text cs-text-emerg">EM01</text>
-                    <rect x="430" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
-                    <text x="433" y="71" class="cs-text cs-text-emerg">EM02</text>
-                    <rect x="462" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
-                    <text x="465" y="71" class="cs-text cs-text-emerg">EM11</text>
-                    <rect x="494" y="63" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
-                    <text x="497" y="71" class="cs-text cs-text-emerg">EM12</text>
-                    <rect x="398" y="78" width="28" height="11" rx="3" class="cs-chip-emerg cs-chip"/>
-                    <text x="401" y="86" class="cs-text cs-text-emerg">EM21</text>
-
-                    <!-- CARD PLACEHOLDER -->
-                    <rect x="570" y="40" width="160" height="62" rx="6" class="cs-card" style="opacity:.5;"/>
-                    <rect x="570" y="40" width="160" height="18" rx="6" fill="rgba(56,189,248,.1)"/>
-                    <text x="582" y="53" style="font-size:9px;fill:#38bdf8;font-family:monospace;font-weight:700;">PMAG</text>
-                    <rect x="578" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
-                    <text x="581" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG01</text>
-                    <rect x="610" y="63" width="28" height="11" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.25)" stroke-width=".7"/>
-                    <text x="613" y="71" style="font-size:6.5px;fill:#38bdf8;font-family:monospace;font-weight:700;">AG02</text>
-                    <text x="578" y="86" style="font-size:7px;fill:var(--hint);font-family:monospace;font-style:italic;">+ mais indicadores...</text>
-                  </svg>
-                </div>
                 <div class="ph-info">
                   <div class="ph-info-title">Referência de Indicadores Operacionais</div>
-                  <div class="ph-info-sub">Busque qualquer tipo de serviço por código — PMAL, PMAR, EMERG·BT, EMERG·MT e PMAG classificados.</div>
+                  <div class="ph-info-sub">Busque qualquer tipo de serviço por código — PMAL, PMAR, EMERG·BT, EMERG·MT e PMAG classificados. Use o campo de busca para localizar um tipo de serviço rapidamente. </div>
                 </div>
-              </div>
-
-              <div class="info" style="margin-bottom:16px;">
-                Referência de classificação de serviços por indicador operacional CEMIG. Use o campo de busca para
-                localizar um tipo de serviço rapidamente.
               </div>
 
               <!-- Busca -->
