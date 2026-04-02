@@ -549,11 +549,11 @@ body.light .tbadge::before {
 }
 
 body.light .bok {
-  color: #002b22;
+  color: #fff;
 }
 
 body.light .bokw {
-  color: #002b22;
+  color: #fff;
 }
 
 /* ── PÁGINAS ── */
@@ -1118,22 +1118,29 @@ body.light .rb2.danger {
 /* ── BOTÕES ── */
 .badd {
   width: 100%;
-  padding: 8px;
-  background: transparent;
-  border: 1.5px dashed var(--border2);
+  padding: 11px;
+  background: var(--accent-dim);
+  border: 1.5px solid var(--accent);
   border-radius: 9px;
-  color: var(--muted);
+  color: var(--accent);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 700;
   font-family: var(--sans);
+  letter-spacing: .01em;
   transition: all .15s;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .badd:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-glow);
+  background: rgba(0,229,184,.18);
+  box-shadow: 0 4px 16px rgba(0,229,184,.22);
+  transform: translateY(-1px);
+}
+
+.badd:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .bok {
@@ -3177,10 +3184,23 @@ body.light .ih-wire-sag {
 /* ── LIGHT MODE FIXES ── */
 body.light .bok {
   background: linear-gradient(135deg, var(--accent), #005e48);
+  color: #fff;
 }
 
 body.light .bokw {
   background: linear-gradient(135deg, var(--accent), #005e48);
+  color: #fff;
+}
+
+body.light .badd {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+body.light .badd:hover {
+  background: rgba(0, 122, 96, .10);
+  border-style: solid;
 }
 
 body.light .kpi-card {
@@ -7510,6 +7530,10 @@ function toast(msg) {
 var INTERLIG_VERIFICADO = false;
 
 function verificarInterligacao() {
+  if (!S.vaos.length) {
+    toast("Adicione pelo menos um vão de cabo antes de verificar.");
+    return;
+  }
   INTERLIG_VERIFICADO = true;
   calcular();
   /* Reveal chart card and resultado */
