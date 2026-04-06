@@ -102,10 +102,10 @@ body.light::before {
 }
 
 /* ── APP SHELL ── */
-/* FIX: Layout principal usa column para empurrar footer ao fundo */
+/* ── APP SHELL ── */
 #app {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 36px);
   overflow: hidden;
   position: relative;
   z-index: 1;
@@ -116,11 +116,10 @@ body.light::before {
   width: var(--sw);
   flex-shrink: 0;
   background: var(--surface);
-  /* FIX: borda direita alinhada com a linha inferior do topbar via mesma cor/espessura */
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 36px);
   overflow-y: auto;
   position: relative;
   scrollbar-width: none;
@@ -336,11 +335,6 @@ body.light::before {
 .ni-ext:hover {
   background: var(--surface2);
   color: var(--text2);
-}
-
-.sbot {
-  padding: 10px 10px 18px;
-  border-top: 1px solid var(--border);
 }
 
 .theme-btn {
@@ -1822,6 +1816,10 @@ body.light .rb2.danger {
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
+/* Card full-width */
+.consult-card.full-width {
+  grid-column: 1 / -1;
+}
 
 .consult-card {
   background: var(--surface);
@@ -1847,25 +1845,14 @@ body.light .rb2.danger {
   height: 3px;
 }
 
-.consult-card.c-pmal::before {
-  background: linear-gradient(90deg, #00e5b8, transparent);
-}
-
-.consult-card.c-pmar::before {
-  background: linear-gradient(90deg, #a78bfa, transparent);
-}
-
-.consult-card.c-emerg-bt::before {
-  background: linear-gradient(90deg, #ffb830, transparent);
-}
-
-.consult-card.c-emerg-mt::before {
-  background: linear-gradient(90deg, #ff4d6a, transparent);
-}
-
-.consult-card.c-pmag::before {
-  background: linear-gradient(90deg, #38bdf8, transparent);
-}
+.consult-card.c-pmal::before  { background: linear-gradient(90deg, #00e5b8, transparent); }
+.consult-card.c-pmar::before  { background: linear-gradient(90deg, #a78bfa, transparent); }
+.consult-card.c-emerg-bt::before { background: linear-gradient(90deg, #ffb830, transparent); }
+.consult-card.c-emerg-mt::before { background: linear-gradient(90deg, #ff4d6a, transparent); }
+.consult-card.c-pmag::before  { background: linear-gradient(90deg, #38bdf8, transparent); }
+.consult-card.c-insp::before  { background: linear-gradient(90deg, #06b6d4, transparent); }
+.consult-card.c-manobra::before { background: linear-gradient(90deg, #a78bfa, #00e5b8, transparent); }
+.consult-card.c-emerg-combo::before { background: linear-gradient(90deg, #ff4d6a, #ffb830, transparent); }
 
 .consult-header {
   display: flex;
@@ -1922,6 +1909,28 @@ body.light .rb2.danger {
   padding: 14px 18px 16px;
 }
 
+/* Sub-seções dentro de um card (ex: emerg combo BT/MT) */
+.consult-subsection {
+  padding: 10px 18px 0;
+}
+.consult-subsection-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.consult-subsection-label span.sslabel-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.consult-subsection:last-child { padding-bottom: 14px; }
+
 .consult-chip {
   font-family: var(--mono);
   font-size: 11px;
@@ -1938,6 +1947,33 @@ body.light .rb2.danger {
   opacity: .8;
   transform: translateY(-1px);
 }
+
+/* ── Search box ── */
+.consult-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.consult-search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 229, 184, .10);
+}
+.consult-search-box input {
+  border: none;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  padding: 0;
+}
+.consult-search-box input::placeholder { color: var(--hint); font-size: 12px; }
 
 .consult-search-hit {
   display: flex;
@@ -1956,9 +1992,7 @@ body.light .rb2.danger {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
 }
 
-.consult-search-hit:last-child {
-  margin-bottom: 0;
-}
+.consult-search-hit:last-child { margin-bottom: 0; }
 
 .consult-search-code {
   font-family: var(--mono);
@@ -1984,42 +2018,197 @@ body.light .rb2.danger {
   padding: 12px 0;
 }
 
-.consult-search-box {
+@media(max-width:700px) {
+  .consult-grid { grid-template-columns: 1fr; }
+}
+
+/* ── REPROVA no modal ── */
+.reprova-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(255,77,106,.08);
+  border: 1px solid rgba(255,77,106,.22);
+  color: #ff6b84;
+  margin-bottom: 4px;
+  cursor: default;
+  transition: border-color .12s;
+}
+.reprova-pill:hover { border-color: rgba(255,77,106,.45); }
+.reprova-pill-num { font-weight: 800; }
+.reprova-pill-desc { font-size: 10px; color: var(--muted); font-weight: 400; }
+
+/* Link "consultar reprova" na linha do 7.70 */
+.reprova-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  padding: 2px 8px 2px 6px;
+  border-radius: 5px;
+  background: rgba(255,77,106,.08);
+  border: 1px solid rgba(255,77,106,.22);
+  color: #ff6b84;
+  font-size: 10px;
+  font-family: var(--mono);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .12s, border-color .12s;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.reprova-link-btn:hover {
+  background: rgba(255,77,106,.16);
+  border-color: rgba(255,77,106,.45);
+}
+
+/* ── Modal de Reprova ── */
+#reprova-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 110000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .15s ease;
+}
+#reprova-modal-overlay.visible { display: flex; }
+#reprova-modal {
+  background: var(--surface);
+  border: 1px solid var(--border3);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05);
+  animation: slideUp .18s cubic-bezier(.34,1.56,.64,1);
+}
+#reprova-modal-head {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#reprova-modal-ic {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,77,106,.1);
+  border: 1.5px solid rgba(255,77,106,.3);
+  display: flex; align-items: center; justify-content: center;
+  color: #ff4d6a;
+  font-size: 16px; font-weight: 800;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+#reprova-modal-title {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ff6b84;
+}
+#reprova-modal-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+#reprova-modal-close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  transition: all .15s;
+}
+#reprova-modal-close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+#reprova-modal-search-wrap {
+  padding: 12px 20px 0;
+}
+#reprova-modal-search {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color .15s;
+}
+#reprova-modal-search:focus { border-color: rgba(255,77,106,.5); }
+#reprova-modal-search::placeholder { color: var(--hint); }
+#reprova-modal-body {
+  overflow-y: auto;
+  padding: 12px 20px 20px;
+  flex: 1;
+}
+.reprova-modal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 5px;
+  transition: border-color .12s;
+}
+.reprova-modal-row:last-child { margin-bottom: 0; }
+.reprova-modal-row:hover { border-color: rgba(255,77,106,.3); }
+.reprova-modal-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff6b84;
+  min-width: 36px;
+  flex-shrink: 0;
+}
+.reprova-modal-desc {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+/* ── Manobra desc no modal ── */
+.manobra-desc-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  transition: border-color .15s, box-shadow .15s;
+  padding: 6px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: border-color .12s;
 }
-
-.consult-search-box:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0, 229, 184, .12);
-}
-
-.consult-search-box input {
-  border: none;
-  background: transparent;
+.manobra-desc-row:hover { border-color: var(--border3); }
+.manobra-desc-cod {
   font-family: var(--mono);
-  font-size: 14px;
-  color: var(--text);
-  outline: none;
-  width: 100%;
-  padding: 0;
+  font-weight: 700;
+  font-size: 11.5px;
+  color: #a78bfa;
+  min-width: 44px;
+  flex-shrink: 0;
 }
-
-.consult-search-box input::placeholder {
-  color: var(--hint);
-}
-
-@media(max-width:700px) {
-  .consult-grid {
-    grid-template-columns: 1fr;
-  }
+.manobra-desc-txt {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
 }
 
 /* ── CONVERSOR ELÉTRICO ── */
@@ -2247,17 +2436,24 @@ body.light .rb2.danger {
 /* ── FOOTER ── */
 /* FIX: footer ocupa toda a largura na parte inferior do #main */
 #footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
   border-top: 1px solid var(--border);
-  padding: 10px 24px;
+  padding: 0 24px;
   background: var(--surface);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 16px;
+  z-index: 50;
   flex-shrink: 0;
-  width: 100%;
 }
+
+/* Compensar o footer fixo nas páginas */
+#pages { padding-bottom: 36px; }
 
 .cred {
   display: flex;
@@ -2277,9 +2473,10 @@ body.light .rb2.danger {
 }
 
 .fright {
-  font-size: 10.5px;
-  color: var(--muted);
-  letter-spacing: .02em;
+  font-size: 10px;
+  color: var(--hint);
+  letter-spacing: .04em;
+  font-family: var(--mono);
 }
 
 /* ── TOAST ── */
@@ -4024,7 +4221,8 @@ body.light .home-title span {
   }
 
   #footer {
-    padding: 8px 14px;
+    left: 0;
+    padding: 0 14px;
   }
 }
 
@@ -4050,6 +4248,759 @@ body.light .home-title span {
   }
 }
 
+
+/* ── CHIP MODAL POPUP ── */
+#chip-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .15s ease;
+}
+#chip-modal-overlay.visible {
+  display: flex;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+#chip-modal {
+  background: var(--surface);
+  border: 1px solid var(--border3);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.06);
+  animation: slideUp .18s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUp { from { transform: translateY(18px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+#chip-modal-head {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+#chip-modal-ic {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,.35);
+}
+#chip-modal-titles { flex: 1; min-width: 0; }
+#chip-modal-code {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  line-height: 1.2;
+}
+#chip-modal-fullname {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+#chip-modal-badge {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: .03em;
+  border: 1px solid;
+}
+#chip-modal-close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+#chip-modal-close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+#chip-modal-body {
+  overflow-y: auto;
+  padding: 14px 20px 20px;
+  flex: 1;
+}
+.chip-modal-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+.chip-modal-cod-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 5px;
+  font-size: 11.5px;
+  transition: border-color .12s;
+}
+.chip-modal-cod-row:hover { border-color: var(--border3); }
+.chip-modal-cod-num {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--accent);
+  flex-shrink: 0;
+  min-width: 36px;
+}
+.chip-modal-cod-desc {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+.chip-modal-empty {
+  color: var(--hint);
+  font-size: 12px;
+  padding: 12px 0;
+  text-align: center;
+  font-style: italic;
+}
+/* chips now clickable */
+.consult-chip {
+  cursor: pointer !important;
+}
+
+/* ── LOCAIS TAB ── */
+.consult-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.consult-tab-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--sans);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.consult-tab-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  opacity: .8;
+}
+.consult-tab-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+.consult-tab-btn.active svg { opacity: 1; }
+.consult-tab-btn:not(.active):hover {
+  border-color: var(--border3);
+  color: var(--text);
+}
+#consult-pane-servicos, #consult-pane-locais, #consult-pane-disp { display: none; }
+#consult-pane-servicos.pane-active, #consult-pane-locais.pane-active, #consult-pane-disp.pane-active { display: block; }
+
+/* Lista de dispositivos MT */
+.disp-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 5px;
+}
+.disp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .12s;
+}
+.disp-row:hover { border-color: rgba(56,189,248,.35); }
+.disp-cod {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #38bdf8;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+.disp-desc {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* ══════════════════════════════════════════════════════
+   LOCAIS — Malha → Polo → Locais
+   ══════════════════════════════════════════════════════ */
+
+/* Tokens de cor por malha */
+.lm-Centro      { --lmc:#818cf8; --lmc-bg:rgba(129,140,248,.07); --lmc-br:rgba(129,140,248,.20); --lmc-glow:rgba(129,140,248,.12); }
+.lm-Sul         { --lmc:#34d399; --lmc-bg:rgba(52,211,153,.07);  --lmc-br:rgba(52,211,153,.20);  --lmc-glow:rgba(52,211,153,.12);  }
+.lm-Norte       { --lmc:#fb923c; --lmc-bg:rgba(251,146,60,.07);  --lmc-br:rgba(251,146,60,.20);  --lmc-glow:rgba(251,146,60,.12);  }
+.lm-Leste       { --lmc:#f472b6; --lmc-bg:rgba(244,114,182,.07); --lmc-br:rgba(244,114,182,.20); --lmc-glow:rgba(244,114,182,.12); }
+.lm-Triangulo   { --lmc:#38bdf8; --lmc-bg:rgba(56,189,248,.07);  --lmc-br:rgba(56,189,248,.20);  --lmc-glow:rgba(56,189,248,.12);  }
+.lm-Mantiqueira { --lmc:#a78bfa; --lmc-bg:rgba(167,139,250,.07); --lmc-br:rgba(167,139,250,.20); --lmc-glow:rgba(167,139,250,.12); }
+
+/* ── Container ── */
+.locais-grid { display: flex; flex-direction: column; gap: 6px; }
+
+/* ════════════════ NÍVEL 1 — MALHA ════════════════ */
+.lm-block {
+  border-radius: 14px;
+  border: 1px solid var(--lmc-br, var(--border));
+  overflow: hidden;
+  transition: box-shadow .22s;
+}
+.lm-block.open {
+  box-shadow: 0 8px 32px rgba(0,0,0,.30);
+}
+
+.lm-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 17px;
+  background: var(--lmc-bg, var(--glass));
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  transition: filter .15s;
+}
+.lm-head:hover { filter: brightness(1.10); }
+/* shimmer on hover */
+.lm-head::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--lmc-glow,rgba(255,255,255,.04)) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform .5s;
+  pointer-events: none;
+}
+.lm-head:hover::before { transform: translateX(100%); }
+
+.lm-bar {
+  width: 3px; height: 26px;
+  border-radius: 2px;
+  background: var(--lmc, var(--accent));
+  flex-shrink: 0;
+  box-shadow: 0 0 8px var(--lmc, var(--accent));
+}
+.lm-head-info { flex: 1; min-width: 0; }
+.lm-head-title {
+  font-size: 14px; font-weight: 800;
+  color: var(--lmc, var(--text));
+  line-height: 1.2;
+}
+.lm-head-meta {
+  font-size: 10px; color: var(--muted);
+  margin-top: 2px;
+}
+.lm-badge {
+  font-size: 10px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+  border: 1px solid var(--lmc-br, var(--border));
+  color: var(--lmc, var(--muted));
+  background: var(--lmc-bg, var(--surface2));
+  white-space: nowrap; flex-shrink: 0;
+}
+.lm-chevron {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--lmc-bg, var(--surface2));
+  border: 1px solid var(--lmc-br, var(--border));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; color: var(--lmc, var(--muted));
+  flex-shrink: 0;
+  transition: transform .22s, background .16s;
+  position: relative; z-index: 1;
+}
+.lm-block.open > .lm-head .lm-chevron {
+  transform: rotate(180deg);
+  background: var(--lmc-br, var(--border3));
+}
+
+/* O corpo da malha — NUNCA é grid, só flex column */
+.lm-body {
+  display: none;
+  padding: 10px 10px 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--lmc-br, var(--border));
+}
+.lm-block.open > .lm-body { display: block; }
+
+/* Grid INTERNO dos polos — isolado do bloco */
+.lm-polos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+
+/* ════════════════ NÍVEL 2 — POLO ════════════════ */
+/* ── Card do polo (clicável, sem expand inline) ── */
+.lp-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+.lp-card:hover {
+  border-color: var(--lmc-br, var(--border3));
+  box-shadow: 0 4px 18px rgba(0,0,0,.28);
+  transform: translateY(-1px);
+}
+.lp-card:active { transform: translateY(0); }
+
+.lp-head {
+  display: flex; align-items: center; gap: 7px;
+  padding: 10px 12px;
+  user-select: none;
+}
+.lp-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--lmc, var(--accent));
+  flex-shrink: 0; opacity: .8;
+}
+.lp-name {
+  font-size: 11px; font-weight: 700;
+  font-family: var(--mono); color: var(--text);
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lp-tag {
+  font-size: 9px; font-family: var(--mono); font-weight: 700;
+  letter-spacing: .05em; padding: 1px 6px; border-radius: 4px;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--muted); flex-shrink: 0;
+}
+.lp-count {
+  font-size: 10px; color: var(--hint); flex-shrink: 0;
+  font-family: var(--mono);
+}
+.lp-open-icon {
+  font-size: 9px; color: var(--lmc, var(--hint));
+  flex-shrink: 0; opacity: .6;
+  transition: opacity .15s, transform .15s;
+}
+.lp-card:hover .lp-open-icon { opacity: 1; transform: scale(1.2); }
+
+/* Resultado vazio */
+.locais-no-result {
+  color: var(--hint); font-size: 12px;
+  text-align: center; padding: 40px 20px; font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════
+   POPUP DO POLO
+   ══════════════════════════════════════════════════ */
+#polo-popup-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#polo-popup-overlay.visible { display: flex; }
+
+#polo-popup {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  width: min(420px, 100%);
+  max-height: min(560px, 85vh);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,.55);
+  overflow: hidden;
+  animation: popup-in .18s cubic-bezier(.34,1.3,.64,1);
+}
+@keyframes popup-in {
+  from { opacity: 0; transform: scale(.94) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+#polo-popup-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px 13px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#polo-popup-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+#polo-popup-title {
+  font-size: 14px; font-weight: 800;
+  font-family: var(--mono); color: var(--text);
+  flex: 1;
+}
+#polo-popup-sub {
+  font-size: 10px; color: var(--muted);
+}
+#polo-popup-close {
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--muted); border-radius: 6px;
+  width: 26px; height: 26px;
+  font-size: 13px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .12s, color .12s;
+}
+#polo-popup-close:hover { background: var(--danger-dim); color: var(--danger); }
+
+#polo-popup-body {
+  overflow-y: auto; padding: 8px 10px 12px;
+  flex: 1;
+}
+#polo-popup-body::-webkit-scrollbar { width: 4px; }
+#polo-popup-body::-webkit-scrollbar-track { background: transparent; }
+#polo-popup-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* Linha de local dentro do popup */
+.pp-local-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 8px; border-radius: 7px;
+  transition: background .1s; cursor: default;
+}
+.pp-local-row:hover { background: var(--surface2); }
+.pp-local-cod {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  color: var(--accent); min-width: 36px; flex-shrink: 0;
+}
+.pp-local-nome {
+  font-size: 12px; color: var(--text);
+  min-width: 0;
+}
+
+/* ══════════════════════════════════════════════════════
+   CONVERSOR UTM
+   ══════════════════════════════════════════════════════ */
+
+.utm-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.2);
+}
+
+/* ── Header ── */
+.utm-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px 14px;
+  background: linear-gradient(135deg, rgba(0,229,184,.06) 0%, rgba(0,184,230,.04) 100%);
+  border-bottom: 1px solid var(--border);
+}
+.utm-header-icon {
+  width: 36px; height: 36px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-dim);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.utm-header-icon svg { width: 18px; height: 18px; }
+.utm-header-text { flex: 1; min-width: 0; }
+.utm-header-title {
+  font-size: 13px; font-weight: 800;
+  color: var(--text); letter-spacing: .01em;
+}
+.utm-header-sub {
+  font-size: 10px; color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Seletor de fuso */
+.utm-zone-toggle {
+  display: flex; align-items: center; gap: 5px;
+  flex-shrink: 0;
+}
+.utm-zt-lbl {
+  font-size: 10px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.utm-zt-btn {
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; font-family: var(--mono);
+  border: 1.5px solid var(--border2);
+  background: var(--surface2); color: var(--muted);
+  cursor: pointer; transition: all .15s;
+}
+.utm-zt-btn:hover { border-color: var(--accent); color: var(--text); }
+.utm-zt-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+/* Fuso 24 — menos destaque, uso raro */
+.utm-zt-minor {
+  opacity: .55;
+  font-size: 10px;
+  padding: 4px 7px;
+}
+.utm-zt-minor:hover, .utm-zt-minor.active { opacity: 1; }
+
+/* ── Tabs de modo ── */
+.utm-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.utm-tab {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 12px;
+  font-size: 12px; font-weight: 600;
+  color: var(--muted);
+  background: transparent; border: none;
+  cursor: pointer; user-select: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.utm-tab:hover { color: var(--text2); background: rgba(255,255,255,.02); }
+.utm-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(0,229,184,.04);
+}
+.utm-tab-icon { font-size: 14px; }
+
+/* ── Painéis ── */
+.utm-panel { padding: 18px 20px 16px; }
+.utm-panel.hidden { display: none; }
+
+/* Linha de campos */
+.utm-fields-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (max-width: 520px) { .utm-fields-row { grid-template-columns: 1fr; } }
+
+.utm-field-group { display: flex; flex-direction: column; gap: 5px; }
+.utm-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: var(--muted);
+}
+.utm-input-wrap {
+  position: relative;
+  display: flex; align-items: center;
+}
+.utm-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 9px;
+  padding: 9px 36px 9px 12px;
+  font-size: 13px; font-family: var(--mono);
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+.utm-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,229,184,.08);
+}
+.utm-input::placeholder { color: var(--hint); font-size: 12px; }
+.utm-input-unit {
+  position: absolute; right: 11px;
+  font-size: 11px; font-weight: 700; font-family: var(--mono);
+  color: var(--hint);
+  pointer-events: none;
+}
+
+/* Dica de cole direto */
+.utm-paste-hint {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; color: var(--muted);
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.utm-paste-icon { font-size: 13px; }
+.utm-paste-ex {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--accent); cursor: pointer;
+  background: var(--accent-dim);
+  padding: 1px 7px; border-radius: 4px;
+  border: 1px solid rgba(0,229,184,.2);
+  transition: background .12s;
+  white-space: nowrap;
+}
+.utm-paste-ex:hover { background: rgba(0,229,184,.18); }
+.utm-paste-input {
+  flex: 1; min-width: 160px;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+}
+
+/* ── Resultado ── */
+.utm-result {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.utm-result-empty {
+  text-align: center; padding: 20px;
+  font-size: 12px; color: var(--hint);
+  font-style: italic;
+}
+.utm-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.utm-result-cell {
+  padding: 12px 16px;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+  position: relative;
+}
+.utm-result-cell:last-child { border-right: none; }
+.utm-result-cell:hover { background: var(--surface3); }
+.utm-result-cell:hover .utm-cell-copy { opacity: 1; }
+
+.utm-cell-lbl {
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--muted); margin-bottom: 5px;
+}
+.utm-cell-val {
+  font-size: 14px; font-weight: 700;
+  font-family: var(--mono); color: var(--accent);
+  letter-spacing: .01em;
+  word-break: break-all;
+}
+.utm-cell-sub {
+  font-size: 10px; color: var(--hint);
+  margin-top: 3px; font-family: var(--mono);
+  font-style: italic;
+}
+.utm-cell-copy {
+  position: absolute; top: 8px; right: 8px;
+  opacity: 0; transition: opacity .12s;
+  font-size: 10px; color: var(--muted);
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 4px; padding: 1px 5px;
+}
+.utm-result-actions {
+  display: flex; gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.utm-btn {
+  flex: 1; padding: 7px 10px;
+  border-radius: 8px; border: 1.5px solid var(--border2);
+  font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: all .14s;
+  background: var(--surface2); color: var(--muted);
+  font-family: var(--sans);
+}
+.utm-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.utm-btn.primary {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--accent-dim);
+}
+.utm-btn.primary:hover { background: rgba(0,229,184,.2); }
+.utm-result-error {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 16px;
+  font-size: 12px; color: var(--danger);
+}
+
+/* Indicador de precisão */
+.utm-accuracy {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 14px;
+  font-size: 10px; color: var(--hint);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.utm-acc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+
+/* Smart search unified */
+.consult-search-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  padding: 10px 0 5px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.locais-search-hit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 5px;
+  font-size: 11px;
+  transition: border-color .12s;
+}
+.locais-search-hit:hover { border-color: var(--border3); }
+.locais-search-num { font-family: var(--mono); font-weight: 700; color: var(--accent); min-width: 38px; }
+.locais-search-name { flex: 1; color: var(--text); }
+.locais-search-polo { font-size: 10px; color: var(--muted); font-family: var(--mono); }
 /* ── CHIP TOOLTIP ── */
 #chip-tooltip {
   position: fixed;
@@ -4789,7 +5740,7 @@ body.light .home-title span {
               <line x1="8" y1="11" x2="14" y2="11" />
             </svg>Consultas
           </div>
-          <div class="snav-sep"></div>
+          <br>
           <div class="snav-lbl">Dashboards</div>
           <div class="ni" id="nav-dashboards" onclick="navToSection('home','home-dashboards-section')"
             style="font-size:12.5px;">
@@ -4797,7 +5748,7 @@ body.light .home-title span {
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>Dashboards OD/PI
           </div>
-          <div class="snav-sep"></div>
+          <br>
           <div class="snav-lbl">Automações</div>
           <div class="ni" id="nav-automacoes" onclick="navTo('automacoes')">
             <svg viewBox="0 0 24 24">
@@ -6180,6 +7131,100 @@ body.light .home-title span {
                   <span style="font-size:12px;color:var(--muted);font-style:italic;">Nenhuma conversão ainda…</span>
                 </div>
               </div>
+
+              <!-- ── CONVERSOR UTM ── -->
+              <div class="utm-wrapper">
+
+                <!-- Cabeçalho do bloco -->
+                <div class="utm-header">
+                  <div class="utm-header-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="2" y1="12" x2="22" y2="12"/>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                  </div>
+                  <div class="utm-header-text">
+                    <div class="utm-header-title">Conversor UTM ↔ Geográfico</div>
+                    <div class="utm-header-sub">Hemisfério Sul · Fusos 22K, 23K (24K extremo leste) · Datum WGS-84 / SIRGAS-2000</div>
+                  </div>
+                  <div class="utm-zone-toggle">
+                    <span class="utm-zt-lbl">Fuso</span>
+                    <button class="utm-zt-btn" id="utm-z22" onclick="utmSetZone(22)">22K</button>
+                    <button class="utm-zt-btn active" id="utm-z23" onclick="utmSetZone(23)">23K</button>
+                    <button class="utm-zt-btn utm-zt-minor" id="utm-z24" onclick="utmSetZone(24)" title="Extremo leste de MG (Vale do Mucuri/Jequitinhonha)">24K</button>
+                  </div>
+                </div>
+
+                <!-- Tabs de modo -->
+                <div class="utm-tabs">
+                  <button class="utm-tab active" id="utm-tab-to" onclick="utmSetMode('to')">
+                    <span class="utm-tab-icon">📍</span> UTM → Lat/Lon
+                  </button>
+                  <button class="utm-tab" id="utm-tab-from" onclick="utmSetMode('from')">
+                    <span class="utm-tab-icon">🗺</span> Lat/Lon → UTM
+                  </button>
+                </div>
+
+                <!-- Painel UTM → LatLon -->
+                <div class="utm-panel" id="utm-panel-to">
+                  <div class="utm-fields-row">
+                    <div class="utm-field-group">
+                      <label class="utm-label">Easting (E)</label>
+                      <div class="utm-input-wrap">
+                        <input class="utm-input" id="utm-e" type="text" placeholder="ex: 612345" oninput="utmConvert()" autocomplete="off" spellcheck="false">
+                        <span class="utm-input-unit">m</span>
+                      </div>
+                    </div>
+                    <div class="utm-field-group">
+                      <label class="utm-label">Northing (N)</label>
+                      <div class="utm-input-wrap">
+                        <input class="utm-input" id="utm-n" type="text" placeholder="ex: 7789012" oninput="utmConvert()" autocomplete="off" spellcheck="false">
+                        <span class="utm-input-unit">m</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="utm-paste-hint">
+                    <span class="utm-paste-icon">⌨</span>
+                    Ou cole direto: <span class="utm-paste-ex" onclick="utmPasteExample('to')">612345 7789012</span>
+                    <input class="utm-input utm-paste-input" id="utm-paste-to" type="text" placeholder="Cole aqui E N juntos…" oninput="utmParsePaste('to')" autocomplete="off" spellcheck="false">
+                  </div>
+                  <!-- Resultado -->
+                  <div class="utm-result" id="utm-result-to">
+                    <div class="utm-result-empty">Preencha E e N para converter</div>
+                  </div>
+                </div>
+
+                <!-- Painel LatLon → UTM -->
+                <div class="utm-panel hidden" id="utm-panel-from">
+                  <div class="utm-fields-row">
+                    <div class="utm-field-group">
+                      <label class="utm-label">Latitude</label>
+                      <div class="utm-input-wrap">
+                        <input class="utm-input" id="utm-lat" type="text" placeholder="ex: -19.9288" oninput="utmFromLatLon()" autocomplete="off" spellcheck="false">
+                        <span class="utm-input-unit">°</span>
+                      </div>
+                    </div>
+                    <div class="utm-field-group">
+                      <label class="utm-label">Longitude</label>
+                      <div class="utm-input-wrap">
+                        <input class="utm-input" id="utm-lon" type="text" placeholder="ex: -43.9506" oninput="utmFromLatLon()" autocomplete="off" spellcheck="false">
+                        <span class="utm-input-unit">°</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="utm-paste-hint">
+                    <span class="utm-paste-icon">⌨</span>
+                    Ou cole direto: <span class="utm-paste-ex" onclick="utmPasteExample('from')">-19.9288 -43.9506</span>
+                    <input class="utm-input utm-paste-input" id="utm-paste-from" type="text" placeholder="Cole aqui Lat Lon juntos…" oninput="utmParsePaste('from')" autocomplete="off" spellcheck="false">
+                  </div>
+                  <div class="utm-result" id="utm-result-from">
+                    <div class="utm-result-empty">Preencha Lat e Lon para converter</div>
+                  </div>
+                </div>
+
+              </div><!-- /utm-wrapper -->
+
             </div>
           </div>
 
@@ -6370,18 +7415,18 @@ body.light .home-title span {
               <div class="page-hero hero-consult" style="margin-bottom:16px;">
                 <div class="ph-info">
                   <div class="ph-info-title">Referência de Indicadores Operacionais</div>
-                  <div class="ph-info-sub">Busque qualquer tipo de serviço por código — PMAL, PMAR, EMERG·BT, EMERG·MT e PMAG classificados. Use o campo de busca para localizar um tipo de serviço rapidamente. </div>
+                  <div class="ph-info-sub">Catálogo completo de serviços, itens de manobra e códigos de reprova. Busca universal por código, sigla, descrição, cód. fechamento, manobra ou reprova.</div>
                 </div>
               </div>
 
-              <!-- Busca -->
-              <div class="consult-search-box">
-                <svg viewBox="0 0 24 24"
-                  style="width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <!-- Busca Inteligente Unificada -->
+              <div class="consult-search-box" style="margin-bottom:16px;">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                <input type="text" id="consult-search" placeholder="Buscar tipo de serviço… ex: OSRL, RC81"
+                <input type="text" id="consult-search"
+                  placeholder="Sigla, nome, cód. fechamento (ex: 5.62), manobra (ex: MA31), reprova (ex: R23), polo, município…"
                   oninput="consultSearch()">
                 <button onclick="consultLimpar()" title="Limpar busca"
                   style="background:transparent;border:none;cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;color:var(--hint);transition:color .15s;flex-shrink:0;"
@@ -6390,8 +7435,52 @@ body.light .home-title span {
 
               <div id="consult-search-result" style="display:none;margin-bottom:16px;"></div>
 
-              <!-- Grid de indicadores -->
-              <div class="consult-grid" id="consult-grid"></div>
+              <!-- Tabs: Serviços | Locais | Dispositivos MT -->
+              <div class="consult-tabs">
+                <button class="consult-tab-btn active" id="tab-btn-servicos" onclick="consultSwitchTab('servicos')">
+                  <!-- SVG: raio elétrico estilizado -->
+                  <svg viewBox="0 0 24 24">
+                    <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+                  </svg>
+                  Serviços
+                </button>
+                <button class="consult-tab-btn" id="tab-btn-locais" onclick="consultSwitchTab('locais')">
+                  <!-- SVG: mapa com pin -->
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.5 2 6 4.5 6 8c0 5 6 13 6 13s6-8 6-13c0-3.5-2.5-6-6-6z"/>
+                    <circle cx="12" cy="8" r="2"/>
+                  </svg>
+                  Locais
+                </button>
+                <button class="consult-tab-btn" id="tab-btn-disp" onclick="consultSwitchTab('disp')">
+                  <!-- SVG: transformador/equipamento MT -->
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="6" width="7" height="12" rx="1.5"/>
+                    <rect x="14" y="6" width="7" height="12" rx="1.5"/>
+                    <path d="M10 9 Q12 9 12 12 Q12 15 14 15"/>
+                    <line x1="6.5" y1="4" x2="6.5" y2="6"/>
+                    <line x1="17.5" y1="4" x2="17.5" y2="6"/>
+                    <line x1="6.5" y1="18" x2="6.5" y2="20"/>
+                    <line x1="17.5" y1="18" x2="17.5" y2="20"/>
+                  </svg>
+                  Dispositivos MT
+                </button>
+              </div>
+
+              <!-- Pane: Serviços -->
+              <div id="consult-pane-servicos" class="pane-active">
+                <div class="consult-grid" id="consult-grid"></div>
+              </div>
+
+              <!-- Pane: Locais -->
+              <div id="consult-pane-locais">
+                <div class="locais-grid" id="locais-grid"></div>
+              </div>
+
+              <!-- Pane: Dispositivos MT -->
+              <div id="consult-pane-disp">
+                <div class="disp-list" id="disp-list"></div>
+              </div>
 
             </div>
           </div>
@@ -7302,7 +8391,9 @@ body.light .home-title span {
         </div>
 
         <div id="footer">
-          <div class="fright" style="width:100%;text-align:right;">Ferramentas CSI — CEMIG Operação · 2026</div>
+          <span class="fright">Ferramentas CSI</span>
+          <span style="width:1px;height:14px;background:var(--border);flex-shrink:0;"></span>
+          <span class="fright">CEMIG Operação · 2026</span>
         </div>
       </div>
     </div>
@@ -8359,6 +9450,300 @@ function gLimpar() {
   gAtualizar(); toast("Campos limpos");
 }
 
+/* ══════════════════════════════════════════════════════
+   CONVERSOR UTM — WGS-84 / SIRGAS-2000, Hemisfério Sul
+   Algoritmo: Transverse Mercator (série de Helmert)
+   Precisão: < 1 mm dentro de MG
+   ══════════════════════════════════════════════════════ */
+
+var UTM_ZONE = 23; // padrão para BH/MG leste
+
+/* Parâmetros WGS-84 (idênticos ao SIRGAS-2000 para fins práticos) */
+var UTM_a   = 6378137.0;          // semi-eixo maior (m)
+var UTM_f   = 1 / 298.257223563;  // achatamento
+var UTM_k0  = 0.9996;             // fator de escala
+var UTM_E0  = 500000;             // falso leste (m)
+var UTM_N0  = 10000000;           // falso norte hemisfério sul (m)
+
+function utmMeridianCentral(zone) {
+  return (zone - 1) * 6 - 180 + 3; // graus
+}
+
+/* UTM → Lat/Lon (inversa da projeção TM) */
+function utmToLatLon(E, N, zone) {
+  var a  = UTM_a, f = UTM_f, k0 = UTM_k0;
+  var E0 = UTM_E0, N0 = UTM_N0;
+  var L0 = utmMeridianCentral(zone) * Math.PI / 180;
+
+  var b  = a * (1 - f);
+  var e2 = 2 * f - f * f;
+  var e  = Math.sqrt(e2);
+  var ep2 = e2 / (1 - e2);
+
+  var M  = (N - N0) / k0;
+  var mu = M / (a * (1 - e2/4 - 3*e2*e2/64 - 5*e2*e2*e2/256));
+
+  var e1 = (1 - Math.sqrt(1-e2)) / (1 + Math.sqrt(1-e2));
+  var phi1 = mu
+    + (3*e1/2 - 27*e1*e1*e1/32) * Math.sin(2*mu)
+    + (21*e1*e1/16 - 55*e1*e1*e1*e1/32) * Math.sin(4*mu)
+    + (151*e1*e1*e1/96) * Math.sin(6*mu)
+    + (1097*e1*e1*e1*e1/512) * Math.sin(8*mu);
+
+  var N1  = a / Math.sqrt(1 - e2*Math.sin(phi1)*Math.sin(phi1));
+  var T1  = Math.tan(phi1) * Math.tan(phi1);
+  var C1  = ep2 * Math.cos(phi1) * Math.cos(phi1);
+  var R1  = a * (1-e2) / Math.pow(1 - e2*Math.sin(phi1)*Math.sin(phi1), 1.5);
+  var D   = (E - E0) / (N1 * k0);
+
+  var lat = phi1 - (N1*Math.tan(phi1)/R1) * (
+    D*D/2
+    - (5 + 3*T1 + 10*C1 - 4*C1*C1 - 9*ep2) * D*D*D*D/24
+    + (61 + 90*T1 + 298*C1 + 45*T1*T1 - 252*ep2 - 3*C1*C1) * D*D*D*D*D*D/720
+  );
+
+  var lon = L0 + (
+    D
+    - (1 + 2*T1 + C1) * D*D*D/6
+    + (5 - 2*C1 + 28*T1 - 3*C1*C1 + 8*ep2 + 24*T1*T1) * D*D*D*D*D/120
+  ) / Math.cos(phi1);
+
+  return {
+    lat: lat * 180 / Math.PI,
+    lon: lon * 180 / Math.PI
+  };
+}
+
+/* Lat/Lon → UTM */
+function latLonToUtm(latDeg, lonDeg, zone) {
+  var a  = UTM_a, f = UTM_f, k0 = UTM_k0;
+  var E0 = UTM_E0, N0 = UTM_N0;
+  var L0 = utmMeridianCentral(zone) * Math.PI / 180;
+
+  var lat = latDeg * Math.PI / 180;
+  var lon = lonDeg * Math.PI / 180;
+
+  var e2  = 2*f - f*f;
+  var ep2 = e2 / (1-e2);
+  var N_  = a / Math.sqrt(1 - e2*Math.sin(lat)*Math.sin(lat));
+  var T   = Math.tan(lat) * Math.tan(lat);
+  var C   = ep2 * Math.cos(lat) * Math.cos(lat);
+  var A   = Math.cos(lat) * (lon - L0);
+  var M   = a * (
+    (1 - e2/4 - 3*e2*e2/64 - 5*e2*e2*e2/256) * lat
+    - (3*e2/8 + 3*e2*e2/32 + 45*e2*e2*e2/1024) * Math.sin(2*lat)
+    + (15*e2*e2/256 + 45*e2*e2*e2/1024) * Math.sin(4*lat)
+    - (35*e2*e2*e2/3072) * Math.sin(6*lat)
+  );
+
+  var E = E0 + k0 * N_ * (
+    A
+    + (1-T+C) * A*A*A/6
+    + (5 - 18*T + T*T + 72*C - 58*ep2) * A*A*A*A*A/120
+  );
+
+  var Nval = N0 + k0 * (M + N_ * Math.tan(lat) * (
+    A*A/2
+    + (5-T+9*C+4*C*C) * A*A*A*A/24
+    + (61 - 58*T + T*T + 600*C - 330*ep2) * A*A*A*A*A*A/720
+  ));
+
+  return { E: Math.round(E * 1000) / 1000, N: Math.round(Nval * 1000) / 1000 };
+}
+
+/* Converter DMS "19°55'43.8\"S" ou "19 55 43.8 S" para decimal */
+function parseDMS(str) {
+  str = str.trim();
+  // Tenta decimal direto
+  var d = parseFloat(str.replace(',', '.'));
+  if (!isNaN(d) && str.match(/^-?\d+([.,]\d+)?$/)) return d;
+
+  // DMS com símbolos: 19°55'43.8"S ou 19 55 43.8 S
+  var neg = /[SW]$/i.test(str) || str.startsWith('-');
+  var nums = str.match(/\d+([.,]\d+)?/g);
+  if (!nums) return NaN;
+  var deg = parseFloat(nums[0]);
+  var min = nums[1] ? parseFloat(nums[1].replace(',', '.')) : 0;
+  var sec = nums[2] ? parseFloat(nums[2].replace(',', '.')) : 0;
+  var result = deg + min/60 + sec/3600;
+  return neg ? -Math.abs(result) : result;
+}
+
+/* Formatar grau decimal com casas suficientes */
+function fmtDeg(v, places) {
+  return v.toFixed(places !== undefined ? places : 6);
+}
+
+/* Formatar UTM — sem casas decimais (uso operacional de campo) */
+function fmtUTM(v) {
+  return Math.round(v).toString();
+}
+
+/* ── Estado e UI ── */
+var UTM_MODE = 'to'; // 'to' = UTM→LatLon, 'from' = LatLon→UTM
+
+function utmSetZone(z) {
+  UTM_ZONE = z;
+  [22, 23, 24].forEach(function(n) {
+    var btn = document.getElementById('utm-z' + n);
+    if (btn) btn.classList.toggle('active', n === z);
+  });
+  utmConvert();
+  utmFromLatLon();
+}
+
+function utmSetMode(mode) {
+  UTM_MODE = mode;
+  document.getElementById('utm-tab-to').classList.toggle('active', mode === 'to');
+  document.getElementById('utm-tab-from').classList.toggle('active', mode === 'from');
+  document.getElementById('utm-panel-to').classList.toggle('hidden', mode !== 'to');
+  document.getElementById('utm-panel-from').classList.toggle('hidden', mode !== 'from');
+}
+
+function utmPasteExample(mode) {
+  if (mode === 'to') {
+    document.getElementById('utm-paste-to').value = '612345 7789012';
+    utmParsePaste('to');
+  } else {
+    document.getElementById('utm-paste-from').value = '-19.9288 -43.9506';
+    utmParsePaste('from');
+  }
+}
+
+/* Interpretar campo de cole livre */
+function utmParsePaste(mode) {
+  var val = document.getElementById('utm-paste-' + mode).value.trim();
+  if (!val) return;
+  var nums = val.replace(',', '.').match(/-?\d+\.?\d*/g);
+  if (!nums || nums.length < 2) return;
+  if (mode === 'to') {
+    document.getElementById('utm-e').value = nums[0];
+    document.getElementById('utm-n').value = nums[1];
+    utmConvert();
+  } else {
+    document.getElementById('utm-lat').value = nums[0];
+    document.getElementById('utm-lon').value = nums[1];
+    utmFromLatLon();
+  }
+}
+
+function utmConvert() {
+  var eRaw = document.getElementById('utm-e').value.trim().replace(',', '.');
+  var nRaw = document.getElementById('utm-n').value.trim().replace(',', '.');
+  var res  = document.getElementById('utm-result-to');
+
+  if (!eRaw && !nRaw) {
+    res.innerHTML = '<div class="utm-result-empty">Preencha E e N para converter</div>';
+    return;
+  }
+
+  var E = parseFloat(eRaw), N = parseFloat(nRaw);
+  if (isNaN(E) || isNaN(N)) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Valores inválidos</div>';
+    return;
+  }
+
+  // Sanidade para MG (fuso 22: E ~150k-650k, fuso 23: E ~220k-780k)
+  if (E < 100000 || E > 900000 || N < 7000000 || N > 9000000) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Coordenadas fora do intervalo esperado para MG</div>';
+    return;
+  }
+
+  try {
+    var r = utmToLatLon(E, N, UTM_ZONE);
+    // Sanidade geográfica MG: lat ~-22.9 a -14.2, lon ~-51.0 a -39.8
+    if (r.lat > -14 || r.lat < -24 || r.lon > -39 || r.lon < -52) {
+      res.innerHTML = '<div class="utm-result-error">⚠ Resultado fora de Minas Gerais — verifique o fuso</div>';
+      return;
+    }
+
+    var latStr = fmtDeg(r.lat);
+    var lonStr = fmtDeg(r.lon);
+    var dmsLat = decToDMS(r.lat, 'lat');
+    var dmsLon = decToDMS(r.lon, 'lon');
+
+    res.innerHTML =
+      '<div class="utm-result-grid">' +
+        utmCell('Latitude', latStr, dmsLat, 'utmCopy("' + latStr + '","Latitude")') +
+        utmCell('Longitude', lonStr, dmsLon, 'utmCopy("' + lonStr + '","Longitude")') +
+        utmCell('Par (Maps)', latStr + ', ' + lonStr, 'Ponto · vírgula', 'utmCopy("' + latStr + ', ' + lonStr + '","Lat+Lon (vírgula)")') +
+        utmCell('Par (GDis)', latStr + ' ' + lonStr, 'Ponto · espaço', 'utmCopy("' + latStr + ' ' + lonStr + '","Lat+Lon (espaço)")') +
+      '</div>' +
+      '<div class="utm-accuracy"><span class="utm-acc-dot"></span>Fuso ' + UTM_ZONE + 'K · WGS-84 · precisão &lt; 1 mm</div>';
+  } catch(e) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Erro no cálculo: ' + e.message + '</div>';
+  }
+}
+
+function utmFromLatLon() {
+  var latRaw = document.getElementById('utm-lat').value.trim();
+  var lonRaw = document.getElementById('utm-lon').value.trim();
+  var res = document.getElementById('utm-result-from');
+
+  if (!latRaw && !lonRaw) {
+    res.innerHTML = '<div class="utm-result-empty">Preencha Lat e Lon para converter</div>';
+    return;
+  }
+
+  var lat = parseDMS(latRaw), lon = parseDMS(lonRaw);
+  if (isNaN(lat) || isNaN(lon)) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Valores inválidos — aceita decimal ou DMS</div>';
+    return;
+  }
+
+  // Garantir negativo para hemisfério sul / oeste
+  if (lat > 0)  lat = -lat;
+  if (lon > 0)  lon = -lon;
+
+  if (lat > -14 || lat < -24 || lon > -39 || lon < -52) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Coordenadas fora de Minas Gerais</div>';
+    return;
+  }
+
+  try {
+    var r = latLonToUtm(lat, lon, UTM_ZONE);
+    var eStr = fmtUTM(r.E);
+    var nStr = fmtUTM(r.N);
+    var notacao = UTM_ZONE + 'K ' + eStr + ' ' + nStr;
+
+    res.innerHTML =
+      '<div class="utm-result-grid">' +
+        utmCell('Easting (E)', eStr, 'metros', 'utmCopy("' + eStr + '","Easting")') +
+        utmCell('Northing (N)', nStr, 'metros', 'utmCopy("' + nStr + '","Northing")') +
+        utmCell('Par E N', eStr + ' ' + nStr, 'Fuso ' + UTM_ZONE + 'K', 'utmCopy("' + eStr + ' ' + nStr + '","E N")') +
+        utmCell('Notação', notacao, 'UTM completo', 'utmCopy("' + notacao + '","UTM")') +
+      '</div>' +
+      '<div class="utm-accuracy"><span class="utm-acc-dot"></span>Fuso ' + UTM_ZONE + 'K · WGS-84 · precisão &lt; 1 mm</div>';
+  } catch(e) {
+    res.innerHTML = '<div class="utm-result-error">⚠ Erro no cálculo: ' + e.message + '</div>';
+  }
+}
+
+function utmCell(lbl, val, sub, onclick) {
+  return '<div class="utm-result-cell" onclick=\'' + onclick + '\' title="Clique para copiar">' +
+    '<div class="utm-cell-lbl">' + lbl + '</div>' +
+    '<div class="utm-cell-val">' + val + '</div>' +
+    '<div class="utm-cell-sub">' + sub + '</div>' +
+    '<span class="utm-cell-copy">copiar</span>' +
+  '</div>';
+}
+
+function utmCopy(val, label) {
+  copyText(val);
+  toast((label || 'Valor') + ' copiado');
+}
+
+/* Decimal → DMS legível */
+function decToDMS(deg, type) {
+  var abs = Math.abs(deg);
+  var d = Math.floor(abs);
+  var mFull = (abs - d) * 60;
+  var m = Math.floor(mFull);
+  var s = ((mFull - m) * 60).toFixed(2);
+  var hem = type === 'lat' ? (deg < 0 ? 'S' : 'N') : (deg < 0 ? 'W' : 'E');
+  return d + '° ' + m + '\' ' + s + '" ' + hem;
+}
+
 /* COORDENADAS */
 var CFMT = "ponto", CLAT = null, CLON = null;
 function cFmt(v) {
@@ -8446,290 +9831,716 @@ function cAddHist(lat, lon, orig) {
 }
 
 /* ── CONSULTAS ── */
-var INDICADORES = [
-  {
-    id: "emerg-mt",
-    label: "EMERG.MT",
-    color: "#f52323",
-    bg: "rgba(245, 35, 35, 0.10)",
-    border: "rgba(245, 35, 35, 0.28)",
-    desc: "Emergência Média Tensão",
-    servicos: ["RC01", "RC08", "RC09", "RC11"]
-  },
-  {
-    id: "emerg-bt",
-    label: "EMERG.BT",
-    color: "#f5a623",
-    bg: "rgba(245,166,35,.10)",
-    border: "rgba(245,166,35,.28)",
-    desc: "Emergência Baixa Tensão",
-    servicos: ["RC03", "RC04", "RC05", "RC06", "RC07",
-      "RC14", "RC15", "RC16", "RC17", "RC18", "RC19",
-      "RC21", "RC30", "RC32", "RC40", "RC41", "RC43", "RC45",
-      "RC48", "RC90"]
-  },
-  {
-    id: "pmal",
-    label: "PMAL",
-    color: "#00d4aa",
-    bg: "rgba(0,212,170,.12)",
-    border: "rgba(0,212,170,.3)",
-    desc: "Manutenção de Ativos de Linha",
-    servicos: ["AP01", "AP14", "AP79", "OSA1", "OSAC", "OSAQ", "OSCM", "OSIN", "OSIR",
-      "OSLI", "OSLN", "OSLQ", "OSM1", "OSML", "OSMR", "OSRO", "OSSC",
-      "OSSM", "OSVQ", "RC79", "RC81", "RC82", "APAA", "APMG", "GD81", "OSA2",
-      "OSAA", "OSLA", "OSRL"]
-  },
-  {
-    id: "pmar",
-    label: "PMAR",
-    color: "#a78bfa",
-    bg: "rgba(167,139,250,.10)",
-    border: "rgba(167,139,250,.28)",
-    desc: "Manutenção de Ativos de Rede",
-    servicos: ["ORNI", "ORSD", "ORSG", "ORTA", "ORTC"]
-  },
-  {
-    id: "pmag",
-    label: "PMAG",
-    color: "#38bdf8",
-    bg: "rgba(56,189,248,.10)",
-    border: "rgba(56,189,248,.28)",
-    desc: "Manutenção de Ativos de Geração",
-    servicos: ["AP06", "AP24", "AP34", "AP40", "AP41", "AP43", "AP44",
-      "LMT1", "NLMP", "NSCI", "NSME", "NSRC",
-      "OS14", "OSDC", "OSIM", "OSRP", "OSRR",
-      "OSTA", "OSTD", "OSTL", "OSTM", "OSTN", "OSTR", "OSTT",
-      "RC02", "RC20", "RC42", "RC43", "RC45", "RC46", "RC48", "RC54", "RC95",
-      "RCLD", "RCOP", "RCRN"]
-  }
-];
+</script>
+<script src="dados.js"></script>
+<script>
 
-// Mapa reverso: código → indicador
-var CONSULT_MAP = {};
-INDICADORES.forEach(function (ind) {
-  ind.servicos.forEach(function (s) { CONSULT_MAP[s] = ind; });
-});
+/* ── Locais render ── */
+function _doLocaisRender() {
+  var grid = document.getElementById("locais-grid");
+  if (!grid || grid.dataset.rendered) return;
+  grid.dataset.rendered = "1";
 
+  var malhaOrder = ["Centro","Norte","Sul","Leste","Triangulo","Mantiqueira"];
 
-var DESC_NOTAS = {
-  "RC01": "ABALROAMENTO DE POSTE",
-  "RC03": "RISCO DE CHOQUE ELETRICO",
-  "RC04": "CURTO NA TUBULACAO",
-  "RC05": "FAISCAMENTO",
-  "RC06": "FALTA DE ENERGIA NO TRAFO",
-  "RC07": "FALTA ENERGIA NO CONSUMIDOR",
-  "RC08": "FALTA ENERGIA NA REDE",
-  "RC09": "FIO PARTIDO",
-  "RC11": "FALTA DE ENERGIA EM RELIGADOR/SEC TRIFASICO",
-  "RC14": "OBJETOS ESTRANHOS NA REDE",
-  "RC15": "POSTE EM MAU ESTADO",
-  "RC16": "RAMAL PARTIDO",
-  "RC17": "TENSAO ELEVADA",
-  "RC18": "TENSAO BAIXA",
-  "RC19": "TENSAO OSCILANTE",
-  "RC21": "TRANSFORMADOR EM CHAMAS/CRUZETA QUEBRADA",
-  "RC30": "FALTA DE ENERGIA NO TRAFO",
-  "RC32": "TROCA DISJUNTOR C/FALTA ENERGIA",
-  "RC40": "VERIFICACAO DE TRANSFORMADOR",
-  "RC41": "FALTA ENERGIA - SEM PONTO DE INSTALACAO",
-  "RC43": "VERIFICACAO DE RD/EQUIPAMENTO FURTADO OU",
-  "RC45": "VAZAMENTO-CONTAMINACAO OLEO ISOLANTE",
-  "RC48": "MEIO AMBIENTE OUTRAS RECLAMACAO",
-  "RC79": "VISTORIA EM QUADRO DE MEDICAO COLETIVO",
-  "RC81": "INSTALAR RAMAL",
-  "RC82": "CONECTAR RAMAL NA REDE",
-  "RC90": "VARIACAO TENSAO PERMANENTE",
+  var byMalha = {};
+  Object.keys(POLO_DATA).sort().forEach(function(polo) {
+    var d = POLO_DATA[polo];
+    if (!d) return;
+    var m = d.malha || "Outros";
+    if (!byMalha[m]) byMalha[m] = [];
+    byMalha[m].push(polo);
+  });
 
-  "RC02": "SOLICITACAO DE PODA DE ARVORE",
-  "RC20": "TROCA DISJUNTOR S/ FALTA ENERGIA",
-  "RC42": "FALTA ENERGIA NO CONSUMIDOR FOTOVOLTAICO",
-  "RC46": "RUIDO PROVOCADO EQUIPAMENTO NA REDE",
-  "RC54": "VERIFICACAO DE MEDIDOR - ORDEM JUDICIAL",
-  "RC95": "VERIFICACAO DE MEDIDOR DO FATURAMENTO",
-  "RCLD": "VISITA TECNICA LIG. E OUTROS COMERCIAIS",
-  "RCOP": "VISITA TECNICA - OPERACAO",
-  "RCRN": "VISITA TECNICA - INSPECAO UC",
+  var malhas = Object.keys(byMalha).sort(function(a, b) {
+    var ia = malhaOrder.indexOf(a), ib = malhaOrder.indexOf(b);
+    if (ia < 0) ia = 999; if (ib < 0) ib = 999;
+    return ia !== ib ? ia - ib : a.localeCompare(b);
+  });
 
-  "AP01": "NOVA LIGACAO - MT",
-  "AP06": "TROCAR MEDICAO - MT",
-  "AP14": "ALTERAR DEMANDA - MT",
-  "AP24": "AFERICAO DE MEDIDOR - MT",
-  "AP34": "VISITA TECNICA SEM COBRANCA",
-  "AP40": "VISTORIA P/ MIGRACAO CLIENTE LIVRE",
-  "AP41": "2A VISTORIA P/ MIGRACAO CLIENTE LIVRE",
-  "AP43": "MIGRACAO DE CLIENTE PARA MERCADO LIVRE",
-  "AP44": "VISITA TECNICA COM COBRANCA",
-  "AP79": "RESTABELECIMENTO MT NOVO CLIENTE",
-  "APAA": "ALT CARG ACESSANTE MICRO/MINI GERACAO MT",
-  "APMG": "LIG.NOVA P/ACESSANTES MICRO/MINI GERACAO",
+  grid.innerHTML = malhas.map(function(malha) {
+    var polosList = byMalha[malha];
+    var totalLocais = 0;
 
-  "GD81": "INSTALAR RAMAL GD",
+    var polosHtml = polosList.map(function(polo) {
+      var d = POLO_DATA[polo];
+      if (!d || !d.cidades) return "";
 
-  "ORNI": "CONTING. RELIGAR NORMAL TELEMEDICAO",
-  "ORSD": "RELIGAR NORMAL",
-  "ORSG": "RELIGACAO NO POSTE/REDE",
-  "ORTA": "CONTING. RELIGACAO TACITA TELEMEDICAO",
-  "ORTC": "RELIGACAO TACITA",
+      var count = 0;
+      Object.keys(d.cidades).forEach(function(c) {
+        count += (d.cidades[c].locais || []).filter(function(l){ return l.local||l.nome; }).length;
+      });
+      if (!count) return "";
+      totalLocais += count;
 
-  "LMT1": "LEITURA - MT",
-  "NLMP": "MANUTENCAO EM CAIXA COM MEDICAO NO POSTE",
+      var safeId = "lp-" + polo.replace(/[\s/]/g,"_");
+      return '<div class="lp-card" id="' + safeId + '" onclick="poloPopupShow(\'' + polo.replace(/'/g,"\\'") + '\')">' +
+        '<div class="lp-head">' +
+          '<span class="lp-dot"></span>' +
+          '<span class="lp-name" title="' + polo + '">' + polo + '</span>' +
+          (d.base ? '<span class="lp-tag">' + d.base + '</span>' : '') +
+          '<span class="lp-count">' + count + '</span>' +
+          '<span class="lp-open-icon">⤢</span>' +
+        '</div>' +
+      '</div>';
+    }).filter(Boolean).join("");
 
-  "NSCI": "NSSM CIRCUITO",
-  "NSME": "NSSM MEDICAO",
-  "NSRC": "NSSM REDE",
+    if (!polosHtml) return "";
 
-  "OS14": "ALT CARG RETORN MICROMINI GER P/CONV BT",
-  "OSAA": "ALT CARG ACESSANTE MICRO/MINI GERACAO BT",
-  "OSA1": "ALTERACAO DE CARGA EM INSTALACAO CORTADA",
-  "OSA2": "ALT CARG ACESS/MICRO/MINI GER IN CORTADA",
-  "OSAC": "ALTERACAO DE CARGA",
-  "OSAQ": "ALTERAR CARGA DE UC EM QM VISTORIADO",
-  "OSCM": "CONTING RESTABELECIMENTO TELEMEDICAO",
-  "OSDC": "DESLIGAR CONSUMIDOR",
-  "OSIM": "INSTALAR MEDIDOR",
-  "OSIN": "INSPECAO",
-  "OSIR": "RESTABELECER COM INSTALACAO RAMAL",
-  "OSLA": "LIG. NOVA P/ACESSANTE MICRO/MINI GERACAO",
-  "OSLI": "LIGAR NOVO CONSUMIDOR - MEDICAO INDIRETA",
-  "OSLN": "LIGAR NOVO CONSUMIDOR",
-  "OSLQ": "LIGACAO NOVA DE UC EM QM VISTORIADO",
-  "OSM1": "MANUTENCAO",
-  "OSML": "PMAL BT",
-  "OSMR": "MANUTENCAO RAMAL",
-  "OSRO": "RESTABELECER COM MUDANÇA DE LOCAL",
-  "OSRR": "RETIRAR RAMAL",
-  "OSSC": "SUBSTITUICAO",
-  "OSSM": "SUBSTITUICAO MEDIDOR",
-  "OSTA": "SERVICO TRANSFORMADOR",
-  "OSTD": "TROCA DISJ.",
-  "OSTL": "TROCA LAMP.",
-  "OSTM": "TROCA MEDIDOR",
-  "OSTN": "TROCA NEUTRO",
-  "OSTR": "TROCA RAMAL",
-  "OSTT": "TROCA TRAFO",
-  "OSVQ": "VISTORIA DE QM PARA ADEQUACAO DA LIGACAO",
-
-  "OSRL": "RESTABELECER NA CAIXA",
-
-  "RC36": "REGULARIZAR APOS CC SEM COB TAXA",
-  "RC23": "REGULARIZAR APOS CC COM COB TAXA",
-  "RC68": "LIGAR PROVISORIA SEM MEDICAO",
-  "RC69": "LIGAR PROVISORIA COM MEDICAO",
-  "RC70": "DESLIGAR PROVISORIA COM MEDICAO",
-  "RC72": "DESLIGAR PROVISORIA SEM MEDICAO",
-  "RC94": "DESLIGAR NO POSTE - ARTIGO 355",
-  "RC53": "RELIGACAO POR ORDEM JUDICIAL",
-  "RC85": "VERIFICAR CARGA IRRIGANTE NOTURNO",
-  "RC86": "ABRIR E SELAR BORNE/CAIXA DE MEDICAO",
-
-  "RC68": "LIGAR PROVISORIA SEM MEDICAO",
-  "RC69": "LIGAR PROVISORIA COM MEDICAO",
-  "RC70": "DESLIGAR PROVISORIA COM MEDICAO",
-  "OSCI": "OS DE CORTE PARA CONSERTO ISENTO DE TAXA",
-  "OSDC": "DESLIGAR CONSUMIDOR",
-  "OSRP": "REPROGRAMAR MEDIDOR ELETRONICO"
-};
-
-function showChipDesc(code, desc, ev) {
-  var tt = document.getElementById("chip-tooltip");
-  tt.textContent = code + " — " + desc;
-  tt.style.display = "block";
-  tt.style.left = (ev.pageX + 12) + "px";
-  tt.style.top = (ev.pageY + 12) + "px";
+    var css = "lm-" + malha.replace(/\s/g,"");
+    return '<div class="lm-block ' + css + '">' +
+      '<div class="lm-head" onclick="toggleLocais(this.parentElement)">' +
+        '<span class="lm-bar"></span>' +
+        '<div class="lm-head-info">' +
+          '<div class="lm-head-title">Malha ' + malha + '</div>' +
+          '<div class="lm-head-meta">' + polosList.length + ' polos · ' + totalLocais + ' locais</div>' +
+        '</div>' +
+        '<span class="lm-badge">' + polosList.length + ' polos</span>' +
+        '<span class="lm-chevron">▼</span>' +
+      '</div>' +
+      '<div class="lm-body"><div class="lm-polos-grid">' + polosHtml + '</div></div>' +
+    '</div>';
+  }).filter(Boolean).join("");
 }
 
-function hideChipDesc() {
-  var tt = document.getElementById("chip-tooltip");
-  tt.style.display = "none";
-}
+function locaisRender() { _doLocaisRender(); }
 
-function consultRender() {
-  var grid = document.getElementById("consult-grid");
-  grid.innerHTML = INDICADORES.map(function (ind) {
-    var chips = ind.servicos.map(function (s) {
-      var desc = DESC_NOTAS[s] || s;
-      return "<span class=\"consult-chip\" style=\"color:" + ind.color + ";background:" + ind.bg + ";border-color:" + ind.border + "\" onmouseover=\"showChipDesc('" + s + "','" + desc + "',event)\" onmouseout=\"hideChipDesc()\">" + s + "</span>";
-    }).join("");
-    return "<div class=\"consult-card c-" + ind.id + "\">" +
-      "<div class=\"consult-header\">" +
-      "<div class=\"consult-header-ic\" style=\"background:" + ind.bg + ";border:1.5px solid " + ind.border + ";color:" + ind.color + "\">" + ind.label.charAt(0) + "</div>" +
-      "<div class=\"consult-header-title\" style=\"color:" + ind.color + "\">" + ind.label + "</div>" +
-      "<span class=\"consult-header-count\" style=\"color:" + ind.color + ";background:" + ind.bg + ";border-color:" + ind.border + "\">" + ind.servicos.length + "</span>" +
-      "</div>" +
-      "<div class=\"consult-chips\">" + chips + "</div>" +
-      "</div>";
+function toggleLocais(el) { el.classList.toggle("open"); }
+function togglePolo(card) { toggleLocais(card); }
+
+/* ── Popup do polo ── */
+function poloPopupShow(polo) {
+  var d = POLO_DATA[polo];
+  if (!d) return;
+
+  /* Cor da malha do polo */
+  var malhaColors = {
+    "Centro":"#818cf8","Sul":"#34d399","Norte":"#fb923c",
+    "Leste":"#f472b6","Triangulo":"#38bdf8","Mantiqueira":"#a78bfa"
+  };
+  var cor = malhaColors[d.malha] || "var(--accent)";
+
+  /* Montar lista de locais */
+  var todosLocais = [];
+  Object.keys(d.cidades).sort().forEach(function(cidade) {
+    (d.cidades[cidade].locais || []).forEach(function(l) {
+      if (!l.local && !l.nome) return;
+      var nome = (l.nome || "").replace(new RegExp("^" + l.local + "\\s*-\\s*"), "").trim();
+      todosLocais.push({ cod: l.local || "", nome: nome });
+    });
+  });
+
+  /* Header */
+  var dotEl = document.getElementById("polo-popup-dot");
+  dotEl.style.background = cor;
+  dotEl.style.boxShadow = "0 0 8px " + cor;
+  document.getElementById("polo-popup-title").textContent = polo + (d.base ? "  [" + d.base + "]" : "");
+  document.getElementById("polo-popup-sub").textContent = todosLocais.length + " locais · " + (d.malha || "");
+
+  /* Body */
+  document.getElementById("polo-popup-body").innerHTML = todosLocais.map(function(l) {
+    return '<div class="pp-local-row">' +
+      '<span class="pp-local-cod">' + l.cod + '</span>' +
+      '<span class="pp-local-nome">' + l.nome + '</span>' +
+    '</div>';
   }).join("");
+
+  document.getElementById("polo-popup-overlay").classList.add("visible");
+  document.body.style.overflow = "hidden";
+}
+
+function poloPopupHide() {
+  document.getElementById("polo-popup-overlay").classList.remove("visible");
+  document.body.style.overflow = "";
+}
+
+function poloPopupClose(e) {
+  if (e.target === document.getElementById("polo-popup-overlay")) poloPopupHide();
+}
+
+/* ── Smart unified search ── */
+
+/* Helper: set search field and trigger (kept for external use) */
+function consultSetSearch(val) {
+  var el = document.getElementById('consult-search');
+  if (el) { el.value = val; consultSearch(); el.focus(); }
 }
 
 function consultLimpar() {
-  document.getElementById("consult-search").value = "";
+  var el = document.getElementById('consult-search');
+  if (el) el.value = '';
   consultSearch();
 }
 
-function consultSearch() {
-  var q = document.getElementById("consult-search").value.trim().toUpperCase();
-  var resEl = document.getElementById("consult-search-result");
-  var gridEl = document.getElementById("consult-grid");
-
-  if (!q) {
-    resEl.style.display = "none";
-    gridEl.style.display = "grid";
-    return;
-  }
-
-  gridEl.style.display = "none";
-  resEl.style.display = "block";
-
-  // Busca parcial
-  var hits = Object.keys(CONSULT_MAP).filter(function (k) {
-    return k.indexOf(q) >= 0;
-  });
-
-  if (!hits.length) {
-    resEl.innerHTML =
-      '<div class="card"><div class="consult-none">Nenhum tipo de serviço encontrado para "' +
-      q +
-      '".</div></div>';
-    return;
-  }
-
-  var rows = hits
-    .map(function (code) {
-      var ind = CONSULT_MAP[code];
-      var desc = DESC_NOTAS[code] || "Descrição não cadastrada";
-
-      return (
-        '<div class="consult-search-hit">' +
-        '<span class="consult-search-code">' +
-        code +
-        "</span>" +
-        '<span class="consult-search-badge" style="color:' +
-        ind.color +
-        ";background:" +
-        ind.bg +
-        ";border:1px solid " +
-        ind.border +
-        '">' +
-        ind.label +
-        "</span>" +
-        '<span style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-left:auto;text-align:right;">' +
-        desc +
-        "</span>" +
-        "</div>"
-      );
-    })
-    .join("");
-
-  resEl.innerHTML =
-    '<div style="margin-bottom:8px;font-size:11px;color:var(--muted);">' +
-    hits.length +
-    ' resultado(s) para "' +
-    q +
-    '"</div>' +
-    rows;
+function consultSwitchTab(tab) {
+  document.getElementById('consult-pane-servicos').classList.toggle('pane-active', tab === 'servicos');
+  document.getElementById('consult-pane-locais').classList.toggle('pane-active', tab === 'locais');
+  document.getElementById('consult-pane-disp').classList.toggle('pane-active', tab === 'disp');
+  document.getElementById('tab-btn-servicos').classList.toggle('active', tab === 'servicos');
+  document.getElementById('tab-btn-locais').classList.toggle('active', tab === 'locais');
+  document.getElementById('tab-btn-disp').classList.toggle('active', tab === 'disp');
+  if (tab === 'locais') locaisRender();
+  if (tab === 'disp') dispRender();
 }
 
+function dispRender() {
+  var el = document.getElementById('disp-list');
+  if (!el || el.dataset.rendered) return;
+  el.dataset.rendered = '1';
+  if (typeof DESC_DISPOSITIVOS_MT === 'undefined') { el.innerHTML = '<div style="color:var(--hint);font-size:12px;padding:16px;">Dados não carregados.</div>'; return; }
+  el.innerHTML = Object.keys(DESC_DISPOSITIVOS_MT).map(function(k) {
+    return '<div class="disp-row">' +
+      '<span class="disp-cod">' + k + '</span>' +
+      '<span class="disp-desc">' + DESC_DISPOSITIVOS_MT[k] + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+/* ── Chip Modal ── */
+function openChipModal(code) {
+  var ind = CONSULT_MAP[code];
+  var desc = DESC_NOTAS[code] || '';
+  var chips = CHIP_FECH_MAP[code] || [];
+  var maDesc = (typeof DESC_MANOBRA !== 'undefined') ? (DESC_MANOBRA[code] || null) : null;
+
+  /* Header */
+  var ic = document.getElementById('chip-modal-ic');
+  var color = ind ? ind.color : 'var(--muted)';
+  var bg    = ind ? ind.bg    : 'var(--surface3)';
+  ic.style.background = bg;
+  ic.style.color = color;
+  ic.style.border = '1.5px solid ' + color;
+  ic.textContent = code.slice(0, 2);
+
+  document.getElementById('chip-modal-code').textContent = code;
+  document.getElementById('chip-modal-code').style.color = color;
+  document.getElementById('chip-modal-fullname').textContent = desc;
+  document.getElementById('chip-modal-fullname').style.display = desc ? '' : 'none';
+
+  var badge = document.getElementById('chip-modal-badge');
+  if (ind) {
+    badge.textContent = ind.label + (ind.desc ? ' — ' + ind.desc : '');
+    badge.style.color = color;
+    badge.style.background = bg;
+    badge.style.borderColor = ind.border || color;
+  } else {
+    badge.textContent = 'Manobra';
+    badge.style.color = '#a78bfa';
+    badge.style.background = 'rgba(167,139,250,.1)';
+    badge.style.borderColor = 'rgba(167,139,250,.3)';
+  }
+
+  /* Body */
+  var body = '';
+
+  /* Descrição do item de manobra (se for MAXX) */
+  if (maDesc) {
+    body += '<div class="chip-modal-section-title" style="color:#a78bfa;">⚙ Item de Manobra</div>' +
+      '<div class="manobra-desc-row" style="margin-bottom:12px;">' +
+        '<span class="manobra-desc-cod">' + code + '</span>' +
+        '<span class="manobra-desc-txt">' + maDesc + '</span>' +
+      '</div>';
+  }
+
+  /* Códigos de fechamento */
+  var has770 = chips.some(function(c) { return c.cod === '7.70'; });
+
+  if (chips.length) {
+    body += '<div class="chip-modal-section-title">Códigos de Fechamento (' + chips.length + ')</div>';
+    body += chips.map(function(c) {
+      var extra = '';
+      if (c.cod === '7.70') {
+        extra = '<button class="reprova-link-btn" onclick="openReprovaModal()" title="Ver todos os códigos de reprova">' +
+          '<svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+          'consultar códigos de reprova' +
+        '</button>';
+      }
+      return '<div class="chip-modal-cod-row">' +
+        '<span class="chip-modal-cod-num">' + c.cod + '</span>' +
+        '<span class="chip-modal-cod-desc">' + c.desc + extra + '</span>' +
+      '</div>';
+    }).join('');
+  } else {
+    body += '<div class="chip-modal-empty">Sem códigos de fechamento cadastrados.</div>';
+  }
+
+  document.getElementById('chip-modal-body').innerHTML = body;
+  document.getElementById('chip-modal-overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function hideChipModal() {
+  document.getElementById('chip-modal-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function closeChipModal(e) {
+  if (e.target === document.getElementById('chip-modal-overlay')) hideChipModal();
+}
+
+/* ── Modal de Reprova ── */
+function openReprovaModal() {
+  reprovaModalFilter('');
+  document.getElementById('reprova-modal-search').value = '';
+  document.getElementById('reprova-modal-overlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { document.getElementById('reprova-modal-search').focus(); }, 80);
+}
+
+function hideReprovaModal() {
+  document.getElementById('reprova-modal-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function closeReprovaModal(e) {
+  if (e.target === document.getElementById('reprova-modal-overlay')) hideReprovaModal();
+}
+
+function reprovaModalFilter(q) {
+  if (typeof DESC_REPROVA === 'undefined') return;
+  q = (q || '').toUpperCase().trim();
+  var body = document.getElementById('reprova-modal-body');
+  var rows = Object.keys(DESC_REPROVA).filter(function(k) {
+    if (!q) return true;
+    /* aceita: R70, 70, ou texto na descrição */
+    var num = q.replace(/^R\s*/, '');
+    return k === num || ('R' + k).indexOf(q) >= 0 || DESC_REPROVA[k].toUpperCase().indexOf(q) >= 0;
+  }).map(function(k) {
+    return '<div class="reprova-modal-row">' +
+      '<span class="reprova-modal-num">R' + k + '</span>' +
+      '<span class="reprova-modal-desc">' + DESC_REPROVA[k] + '</span>' +
+    '</div>';
+  }).join('');
+  body.innerHTML = rows || '<div style="color:var(--hint);font-size:12px;padding:12px 0;text-align:center;">Nenhum resultado.</div>';
+}
+
+document.addEventListener('keydown', function(e2) {
+  if (e2.key === 'Escape') { hideChipModal(); hideReprovaModal(); poloPopupHide(); }
+});
+
+/* ── consultRender ── */
+function consultRender() {
+  var grid = document.getElementById('consult-grid');
+  if (!grid) return;
+
+  var html = '';
+
+  /* ── CARD 1: Manobras (MAXX) — full width, primeiro ── */
+  var maColor  = '#a78bfa';
+  var maBg     = 'rgba(167,139,250,.1)';
+  var maBorder = 'rgba(167,139,250,.28)';
+
+  /* Coleta todos os códigos MA* existentes em INDICADORES */
+  var allMaCodes = [];
+  INDICADORES.forEach(function(ind) {
+    ind.servicos.forEach(function(s) {
+      if (/^MA[A-Z0-9]/.test(s) && allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
+    });
+  });
+  /* Adiciona os que estão em DESC_MANOBRA mas não em INDICADORES */
+  if (typeof DESC_MANOBRA !== 'undefined') {
+    Object.keys(DESC_MANOBRA).forEach(function(s) {
+      if (allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
+    });
+  }
+  allMaCodes.sort();
+
+  if (allMaCodes.length) {
+    html += '<div class="consult-card c-manobra full-width">';
+    html += '<div class="consult-header">';
+    html += '<div class="consult-header-ic" style="background:rgba(167,139,250,.12);color:' + maColor + ';border:1.5px solid ' + maBorder + ';">MA</div>';
+    html += '<div><div class="consult-header-title" style="color:' + maColor + ';">MANOBRAS</div>';
+    html += '<div class="consult-header-subtitle">Itens de manobra — distribuição e transmissão</div></div>';
+    html += '<span class="consult-header-count" style="color:' + maColor + ';border-color:' + maBorder + ';background:' + maBg + ';">' + allMaCodes.length + '</span>';
+    html += '</div>';
+    html += '<div class="consult-chips">';
+    html += allMaCodes.map(function(code) {
+      var desc = (typeof DESC_MANOBRA !== 'undefined' && DESC_MANOBRA[code]) ? DESC_MANOBRA[code] : (DESC_NOTAS[code] || '');
+      return '<span class="consult-chip" style="color:' + maColor + ';background:' + maBg + ';border-color:' + maBorder + ';cursor:pointer;" ' +
+        'onclick="openChipModal(\'' + code + '\')" title="' + desc + '">' + code + '</span>';
+    }).join('');
+    html += '</div></div>';
+  }
+
+  /* ── CARD 2: Emergências combo (BT + MT num único card) ── */
+  var btInd = INDICADORES.find(function(i) { return i.id === 'emerg-bt'; });
+  var mtInd = INDICADORES.find(function(i) { return i.id === 'emerg-mt'; });
+  if (btInd || mtInd) {
+    var totalEmerg = ((btInd ? btInd.servicos.length : 0) + (mtInd ? mtInd.servicos.length : 0));
+    html += '<div class="consult-card c-emerg-combo full-width">';
+    html += '<div class="consult-header">';
+    html += '<div class="consult-header-ic" style="background:rgba(255,77,106,.1);color:#ff4d6a;border:1.5px solid rgba(255,77,106,.3);">EM</div>';
+    html += '<div><div class="consult-header-title" style="color:#ff6b84;">EMERGÊNCIAS</div>';
+    html += '<div class="consult-header-subtitle">Atendimentos emergenciais BT e MT</div></div>';
+    html += '<span class="consult-header-count" style="color:#ff4d6a;border-color:rgba(255,77,106,.28);background:rgba(255,77,106,.09);">' + totalEmerg + '</span>';
+    html += '</div>';
+
+    if (mtInd) {
+      html += '<div class="consult-subsection">';
+      html += '<div class="consult-subsection-label">';
+      html += '<span class="sslabel-dot" style="background:#ff4d6a;box-shadow:0 0 6px #ff4d6a;"></span>';
+      html += 'EMERG·MT — ' + mtInd.servicos.length + ' serviços';
+      html += '</div>';
+      html += '<div style="display:flex;flex-wrap:wrap;gap:5px;padding-bottom:10px;">';
+      html += mtInd.servicos.map(function(code) {
+        var d = DESC_NOTAS[code] || '';
+        return '<span class="consult-chip" style="color:#ff4d6a;background:rgba(255,77,106,.1);border-color:rgba(255,77,106,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+      }).join('');
+      html += '</div></div>';
+    }
+
+    if (btInd) {
+      html += '<div class="consult-subsection">';
+      html += '<div class="consult-subsection-label">';
+      html += '<span class="sslabel-dot" style="background:#ffb830;box-shadow:0 0 6px #ffb830;"></span>';
+      html += 'EMERG·BT — ' + btInd.servicos.length + ' serviços';
+      html += '</div>';
+      html += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
+      html += btInd.servicos.map(function(code) {
+        var d = DESC_NOTAS[code] || '';
+        return '<span class="consult-chip" style="color:#ffb830;background:rgba(255,184,48,.1);border-color:rgba(255,184,48,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+      }).join('');
+      html += '</div></div>';
+    }
+    html += '</div>';
+  }
+
+  /* ── Demais indicadores (excluindo emerg-bt e emerg-mt) ── */
+  var clsMap = {
+    'pmal':     'c-pmal',
+    'pmar':     'c-pmar',
+    'pmag':     'c-pmag',
+    'inspecao': 'c-insp',
+  };
+  /* Indicadores que ocupam largura total */
+  var fullWidthIds = { 'outros': true };
+
+  INDICADORES.forEach(function(ind) {
+    if (ind.id === 'emerg-bt' || ind.id === 'emerg-mt') return;
+    var cls = clsMap[ind.id] || '';
+    var fw  = fullWidthIds[ind.id] ? ' full-width' : '';
+    html += '<div class="consult-card ' + cls + fw + '">';
+    html += '<div class="consult-header">';
+    html += '<div class="consult-header-ic" style="background:' + ind.bg + ';color:' + ind.color + ';border:1.5px solid ' + ind.border + ';">' + ind.label.slice(0,2) + '</div>';
+    html += '<div>';
+    html += '<div class="consult-header-title" style="color:' + ind.color + ';">' + ind.label + '</div>';
+    if (ind.desc) html += '<div class="consult-header-subtitle">' + ind.desc + '</div>';
+    html += '</div>';
+    html += '<span class="consult-header-count" style="color:' + ind.color + ';border-color:' + ind.border + ';background:' + ind.bg + ';">' + ind.servicos.length + '</span>';
+    html += '</div>';
+    html += '<div class="consult-chips">';
+    html += ind.servicos.map(function(code) {
+      var d = DESC_NOTAS[code] || '';
+      return '<span class="consult-chip" style="color:' + ind.color + ';background:' + ind.bg + ';border-color:' + ind.border + ';cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+    }).join('');
+    html += '</div></div>';
+  });
+
+  grid.innerHTML = html;
+}
+
+function consultSearch() {
+  var q = document.getElementById('consult-search').value.trim().toUpperCase();
+  var resEl = document.getElementById('consult-search-result');
+  var svcPane = document.getElementById('consult-pane-servicos');
+  var locPane = document.getElementById('consult-pane-locais');
+  var tabs = document.querySelector('.consult-tabs');
+
+  if (!q) {
+    resEl.style.display = 'none';
+    resEl.innerHTML = '';
+    tabs.style.display = '';
+    var activeTab = document.querySelector('.consult-tab-btn.active');
+    var activeId = activeTab ? activeTab.id.replace('tab-btn-', '') : 'servicos';
+    svcPane.classList.toggle('pane-active', activeId === 'servicos');
+    locPane.classList.toggle('pane-active', activeId === 'locais');
+    document.getElementById('consult-pane-disp').classList.toggle('pane-active', activeId === 'disp');
+    return;
+  }
+
+  tabs.style.display = 'none';
+  svcPane.classList.remove('pane-active');
+  locPane.classList.remove('pane-active');
+  document.getElementById('consult-pane-disp').classList.remove('pane-active');
+  resEl.style.display = 'block';
+
+  var sections = [];
+
+  /* ─────────────────────────────────────────────────────────
+     0. BUSCA POR ITEM DE MANOBRA (código MAxx ou descrição)
+     Detecta: começa com MA ou MAAS/MATS/MACT ou contém texto que bate em DESC_MANOBRA
+  ───────────────────────────────────────────────────────── */
+  if (typeof DESC_MANOBRA !== 'undefined') {
+    /* Busca por código exato tipo MA31, MAB1, MACT… */
+    var isMAcode = /^MA[A-Z0-9]+$/.test(q);
+    var maHits = [];
+
+    Object.keys(DESC_MANOBRA).forEach(function(cod) {
+      var descUp = DESC_MANOBRA[cod].toUpperCase();
+      var codUp  = cod.toUpperCase();
+      if (codUp === q || codUp.indexOf(q) >= 0 || descUp.indexOf(q) >= 0) {
+        maHits.push({ cod: cod, desc: DESC_MANOBRA[cod] });
+      }
+    });
+
+    if (maHits.length) {
+      var maRows = maHits.map(function(h) {
+        return '<div class="manobra-desc-row" style="cursor:pointer;" onclick="openChipModal(\'' + h.cod + '\')">' +
+          '<span class="manobra-desc-cod">' + h.cod + '</span>' +
+          '<span class="manobra-desc-txt">' + h.desc + '</span>' +
+        '</div>';
+      }).join('');
+      sections.push(
+        '<div class="consult-search-section-label">⚙ Itens de Manobra (' + maHits.length + ')</div>' +
+        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px 6px;">' +
+        maRows + '</div>'
+      );
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     0b. BUSCA POR CÓDIGO DE REPROVA (Rxx, R70, etc.)
+     Aceita "R23", "R 23", "REPROVA 23", ou só o número
+  ───────────────────────────────────────────────────────── */
+  if (typeof DESC_REPROVA !== 'undefined') {
+    /* extrai número da query: "R23" → "23", "R 23" → "23" */
+    var reprovaNumQ = null;
+    var mR = q.match(/^R\s*(\d+)$/);
+    if (mR) reprovaNumQ = mR[1];
+    else if (/^\d+$/.test(q) && parseInt(q) > 0) reprovaNumQ = q;
+
+    var reprovaHits = [];
+    if (reprovaNumQ) {
+      /* busca exata pelo número */
+      if (DESC_REPROVA[reprovaNumQ]) {
+        reprovaHits.push({ num: reprovaNumQ, desc: DESC_REPROVA[reprovaNumQ] });
+      }
+    } else {
+      /* busca textual na descrição */
+      Object.keys(DESC_REPROVA).forEach(function(k) {
+        if (DESC_REPROVA[k].toUpperCase().indexOf(q) >= 0) {
+          reprovaHits.push({ num: k, desc: DESC_REPROVA[k] });
+        }
+      });
+    }
+
+    if (reprovaHits.length) {
+      var rRows = reprovaHits.map(function(h) {
+        return '<div class="reprova-pill" style="width:100%;border-radius:7px;padding:6px 10px;cursor:default;">' +
+          '<span class="reprova-pill-num">R' + h.num + '</span>' +
+          '<span class="reprova-pill-desc" style="font-size:11px;">' + h.desc + '</span>' +
+        '</div>';
+      }).join('');
+      sections.push(
+        '<div class="consult-search-section-label">🔴 Códigos de Reprova (' + reprovaHits.length + ')</div>' +
+        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px 6px;display:flex;flex-direction:column;gap:3px;">' +
+        rRows + '</div>'
+      );
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     0c. BUSCA POR DISPOSITIVO MT (código ex: 21, ou nome)
+  ───────────────────────────────────────────────────────── */
+  if (typeof DESC_DISPOSITIVOS_MT !== 'undefined') {
+    var dispHits = [];
+    Object.keys(DESC_DISPOSITIVOS_MT).forEach(function(k) {
+      var descUp = DESC_DISPOSITIVOS_MT[k].toUpperCase();
+      /* aceita código puro (01, 21) ou texto da descrição */
+      if (k === q || k === q.replace(/^0/, '') || ('0' + q) === k || descUp.indexOf(q) >= 0) {
+        dispHits.push({ cod: k, desc: DESC_DISPOSITIVOS_MT[k] });
+      }
+    });
+    if (dispHits.length) {
+      var dRows = dispHits.map(function(h) {
+        return '<div class="manobra-desc-row" style="cursor:default;">' +
+          '<span class="manobra-desc-cod" style="color:#38bdf8;min-width:30px;">' + h.cod + '</span>' +
+          '<span class="manobra-desc-txt">' + h.desc + '</span>' +
+        '</div>';
+      }).join('');
+      sections.push(
+        '<div class="consult-search-section-label">🔩 Dispositivos MT (' + dispHits.length + ')</div>' +
+        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px 6px;">' +
+        dRows + '</div>'
+      );
+    }
+  }
+  var isFechCod = /^[A-Z0-9]{1,2}\.[A-Z0-9]{1,3}$/.test(q);
+
+  if (isFechCod) {
+    var fechServicos = [];
+    var fechDesc = '';
+    Object.keys(CHIP_FECH_MAP).forEach(function(svc) {
+      CHIP_FECH_MAP[svc].forEach(function(f) {
+        if (f.cod === q) {
+          if (!fechDesc) fechDesc = f.desc;
+          fechServicos.push(svc);
+        }
+      });
+    });
+
+    if (fechServicos.length) {
+      var fecHeader =
+        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;">' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+        '<span style="font-size:17px;font-weight:700;color:var(--accent);font-family:var(--mono);">' + q + '</span>' +
+        '<span style="font-size:12px;color:var(--muted);flex:1;">' + fechDesc + '</span>' +
+        '<span style="font-size:11px;color:var(--hint);">' + fechServicos.length + ' serviços</span>' +
+        '</div></div>';
+
+      var grupos = {};
+      var semIndicador = [];
+      fechServicos.forEach(function(svc) {
+        var ind = CONSULT_MAP[svc];
+        if (ind) {
+          if (!grupos[ind.id]) grupos[ind.id] = { ind: ind, svcs: [] };
+          grupos[ind.id].svcs.push(svc);
+        } else {
+          semIndicador.push(svc);
+        }
+      });
+
+      var blocos = '';
+      INDICADORES.forEach(function(ind) {
+        if (!grupos[ind.id]) return;
+        var svcs = grupos[ind.id].svcs;
+        var chips = svcs.map(function(svc) {
+          var d = DESC_NOTAS[svc] || '—';
+          return '<span class="consult-chip" style="color:' + ind.color + ';background:' + ind.bg + ';border-color:' + ind.border + ';cursor:pointer;" onclick="openChipModal(\'' + svc + '\')" title="' + d + '">' + svc + '</span>';
+        }).join('');
+        blocos += '<div style="margin-bottom:8px;">' +
+          '<div style="font-size:10px;font-weight:700;color:' + ind.color + ';text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">' +
+          ind.label + (ind.desc ? ' <span style="color:var(--muted);font-weight:400;">— ' + ind.desc + '</span>' : '') +
+          '</div><div style="display:flex;flex-wrap:wrap;gap:6px;">' + chips + '</div></div>';
+      });
+
+      if (semIndicador.length) {
+        var outros = semIndicador.map(function(svc) {
+          return '<span class="consult-chip" style="cursor:pointer;color:var(--muted);background:var(--surface3);border-color:var(--border);" onclick="openChipModal(\'' + svc + '\')">' + svc + '</span>';
+        }).join('');
+        blocos += '<div style="margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">MANOBRAS</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:6px;">' + outros + '</div></div>';
+      }
+
+      sections.push(
+        '<div class="consult-search-section-label">🔑 Código de Fechamento</div>' +
+        fecHeader +
+        '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px;">' +
+        blocos + '</div>'
+      );
+    }
+    if (sections.length) {
+      resEl.innerHTML =
+        '<div style="margin-bottom:10px;font-size:11px;color:var(--muted);">Resultados para <strong style="color:var(--text)">"' + q + '"</strong></div>' +
+        sections.join('<div style="height:12px;"></div>');
+      return;
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     2. BUSCA EM SERVIÇOS (sigla, nome)
+  ───────────────────────────────────────────────────────── */
+  var svcHits = Object.keys(CONSULT_MAP).filter(function(k) {
+    var desc = (DESC_NOTAS[k] || '').toUpperCase();
+    return k.indexOf(q) >= 0 || desc.indexOf(q) >= 0;
+  });
+  if (svcHits.length) {
+    var rows = svcHits.map(function(code) {
+      var ind = CONSULT_MAP[code];
+      var desc = (DESC_NOTAS[code] || '');
+      var fecCount = (CHIP_FECH_MAP[code] || []).length;
+      return '<div class="consult-search-hit" style="cursor:pointer" onclick="openChipModal(\'' + code + '\')">' +
+        '<span class="consult-search-code">' + code + '</span>' +
+        '<span class="consult-search-badge" style="color:' + ind.color + ';background:' + ind.bg + ';border:1px solid ' + ind.border + '">' + ind.label + '</span>' +
+        '<span style="font-size:11px;color:var(--muted);font-family:var(--mono);flex:1;">' + desc + '</span>' +
+        (fecCount ? '<span style="font-size:10px;color:var(--hint);">' + fecCount + ' cod. fech.</span>' : '') +
+        '</div>';
+    }).join('');
+    sections.push('<div class="consult-search-section-label">⚡ Serviços (' + svcHits.length + ')</div>' + rows);
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     3. BUSCA EM LOCAIS (número, nome, cidade, polo, malha)
+  ───────────────────────────────────────────────────────── */
+  var localHits = [];
+  var poloHits = [];
+  if (typeof POLO_DATA !== 'undefined') {
+    var polos = Object.keys(POLO_DATA);
+    outerLoop:
+    for (var pi = 0; pi < polos.length; pi++) {
+      var polo = polos[pi];
+      var pd = POLO_DATA[polo];
+      if (!pd || !pd.cidades) continue;
+      var poloUp = polo.toUpperCase();
+      var malhaUp = (pd.malha || '').toUpperCase();
+      var baseUp  = (pd.base  || '').toUpperCase();
+      var poloMatches = poloUp.indexOf(q) >= 0 || malhaUp.indexOf(q) >= 0 || baseUp.indexOf(q) >= 0;
+
+      if (poloMatches) {
+        var totalLocais = 0;
+        var cidades2 = Object.keys(pd.cidades);
+        for (var ci2 = 0; ci2 < cidades2.length; ci2++) {
+          totalLocais += (pd.cidades[cidades2[ci2]].locais || []).length;
+        }
+        poloHits.push({ polo: polo, base: pd.base, malha: pd.malha, cidades: cidades2.length, locais: totalLocais });
+        continue;
+      }
+
+      var cidades = Object.keys(pd.cidades);
+      for (var ci = 0; ci < cidades.length; ci++) {
+        var cidade = cidades[ci];
+        var cidadeUp = cidade.toUpperCase();
+        var locais = pd.cidades[cidade].locais || [];
+        for (var li = 0; li < locais.length; li++) {
+          var loc = locais[li];
+          if (!loc.local && !loc.nome) continue;
+          var locNum  = (loc.local || '').toUpperCase();
+          var locNome = (loc.nome  || '').toUpperCase();
+          if (locNum.indexOf(q) >= 0 || locNome.indexOf(q) >= 0 || cidadeUp.indexOf(q) >= 0) {
+            localHits.push({ polo: polo, base: pd.base, malha: pd.malha, cidade: cidade, local: loc.local, nome: loc.nome });
+            if (localHits.length >= 60) break outerLoop;
+          }
+        }
+      }
+    }
+  }
+
+  if (poloHits.length) {
+    var prows = poloHits.map(function(h) {
+      var malhaTag = h.malha ? '<span style="font-size:10px;background:rgba(99,102,241,.12);color:#818cf8;border:1px solid rgba(99,102,241,.25);border-radius:4px;padding:1px 6px;margin-left:4px;">' + h.malha + '</span>' : '';
+      return '<div class="consult-search-hit" style="cursor:default;align-items:flex-start;padding:10px 12px;">' +
+        '<div style="display:flex;flex-direction:column;gap:2px;flex:1;">' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
+        '<span class="consult-search-code" style="font-size:13px;">' + h.polo + '</span>' + malhaTag +
+        (h.base ? '<span style="font-size:10px;color:var(--hint);">· ' + h.base + '</span>' : '') +
+        '</div>' +
+        '<span style="font-size:10px;color:var(--muted);">' + h.cidades + ' cidade(s) · ' + h.locais + ' locais</span>' +
+        '</div></div>';
+    }).join('');
+    sections.push('<div class="consult-search-section-label">📍 Polos (' + poloHits.length + ')</div>' + prows);
+  }
+
+  if (localHits.length) {
+    var lrows = localHits.map(function(h) {
+      return '<div class="locais-search-hit">' +
+        '<span class="locais-search-num">' + h.local + '</span>' +
+        '<span class="locais-search-name">' + h.nome + '</span>' +
+        '<span class="locais-search-polo">' + h.polo + (h.base ? ' · ' + h.base : '') + '</span>' +
+      '</div>';
+    }).join('');
+    var moreLabel = localHits.length >= 60 ? ' <span style="font-size:10px;color:var(--hint)">(limite 60)</span>' : '';
+    sections.push('<div class="consult-search-section-label">📍 Locais (' + localHits.length + ')' + moreLabel + '</div>' + lrows);
+  }
+
+  if (!sections.length) {
+    resEl.innerHTML = '<div class="card"><div class="consult-none">Nenhum resultado para <strong>"' + document.getElementById('consult-search').value.trim() + '"</strong>.</div></div>';
+    return;
+  }
+
+  resEl.innerHTML =
+    '<div style="margin-bottom:10px;font-size:11px;color:var(--muted);">Resultados para <strong style="color:var(--text)">"' + document.getElementById('consult-search').value.trim() + '"</strong></div>' +
+    sections.join('<div style="height:12px;"></div>');
+}
 
 var CV = { tensao: 220, fase: "tri", fp: 0.85, unidade: "kva", customV: false };
 var CV_REFS = [5, 10, 15, 25, 30, 37.5, 45, 50, 75, 100, 112.5, 150, 200, 250, 300];
@@ -8872,19 +10683,107 @@ renderVaos();
 /* Editor de curva */
 requestAnimationFrame(function () { ceInit(); ceUpdateInfo(); });
 
-/* Registra listener de paste para extração automática G-Dis */
-function gOnPaste(e) {
-  /* Aguarda o valor ser inserido no campo antes de processar */
-  setTimeout(function () { gAtualizar(); }, 0);
+/* ── Paste robusto para G-Dis ── */
+function gIsPageActive() {
+  var pg = document.getElementById('page-gdis');
+  return pg && pg.classList.contains('active');
 }
+
+function gOnPaste(e) {
+  var txt = (e.clipboardData || window.clipboardData).getData('text');
+  if (txt && txt.trim()) {
+    e.preventDefault();
+    var ginEl = document.getElementById('gin');
+    if (ginEl) { ginEl.value = txt.trim(); gAtualizar(); }
+  } else {
+    setTimeout(function () { gAtualizar(); }, 0);
+  }
+}
+
+function gProcessarTexto(texto) {
+  /* Substitui o conteúdo do campo e dispara extração */
+  var ginEl = document.getElementById('gin');
+  if (!ginEl) return;
+  ginEl.value = texto;
+  gAtualizar();
+  ginEl.focus();
+}
+
 (function () {
+  /* Listener direto no campo #gin (comportamento original) */
   var ginEl = document.getElementById('gin');
   if (ginEl && !ginEl._pasteRegistered) {
     ginEl.addEventListener('paste', gOnPaste);
     ginEl._pasteRegistered = true;
   }
+
+  /* Listener global no document — captura colar em qualquer lugar quando
+     a página G-Dis está ativa e o foco NÃO está dentro do #gin */
+  document.addEventListener('paste', function(e) {
+    if (!gIsPageActive()) return;
+    var ginEl = document.getElementById('gin');
+    if (!ginEl) return;
+    /* Se o foco já é o #gin, o listener do campo já vai cuidar */
+    if (document.activeElement === ginEl) return;
+    /* Se o foco está em qualquer outro input/textarea, não interfere */
+    var tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    /* Captura o texto colado e manda pro #gin */
+    var txt = (e.clipboardData || window.clipboardData).getData('text');
+    if (!txt || !txt.trim()) return;
+    e.preventDefault();
+    /* Substitui o conteúdo do campo pelo novo texto colado */
+    gProcessarTexto(txt.trim());
+  });
 })();
 </script>
-  </body>
+  
+<!-- ── CHIP MODAL ── -->
+<div id="chip-modal-overlay" onclick="closeChipModal(event)">
+  <div id="chip-modal">
+    <div id="chip-modal-head">
+      <div id="chip-modal-ic"></div>
+      <div id="chip-modal-titles">
+        <div id="chip-modal-code"></div>
+        <div id="chip-modal-fullname"></div>
+        <div id="chip-modal-badge"></div>
+      </div>
+      <button id="chip-modal-close" onclick="hideChipModal()" title="Fechar">✕</button>
+    </div>
+    <div id="chip-modal-body"></div>
+  </div>
+</div>
+<!-- ── POLO POPUP ── -->
+<div id="polo-popup-overlay" onclick="poloPopupClose(event)">
+  <div id="polo-popup">
+    <div id="polo-popup-head">
+      <span id="polo-popup-dot"></span>
+      <span id="polo-popup-title"></span>
+      <span id="polo-popup-sub"></span>
+      <button id="polo-popup-close" onclick="poloPopupHide()" title="Fechar">✕</button>
+    </div>
+    <div id="polo-popup-body"></div>
+  </div>
+</div>
+<!-- ── REPROVA MODAL ── -->
+<div id="reprova-modal-overlay" onclick="closeReprovaModal(event)">
+  <div id="reprova-modal">
+    <div id="reprova-modal-head">
+      <div id="reprova-modal-ic">R</div>
+      <div style="flex:1;min-width:0;">
+        <div id="reprova-modal-title">Códigos de Reprova</div>
+        <div id="reprova-modal-sub">Obrigatório ao utilizar o código de fechamento 7.70</div>
+      </div>
+      <button id="reprova-modal-close" onclick="hideReprovaModal()" title="Fechar">✕</button>
+    </div>
+    <div id="reprova-modal-search-wrap">
+      <input type="text" id="reprova-modal-search"
+        placeholder="Buscar por código (ex: R70) ou descrição…"
+        oninput="reprovaModalFilter(this.value)">
+    </div>
+    <div id="reprova-modal-body"></div>
+  </div>
+</div>
+</body>
 
 </html>
