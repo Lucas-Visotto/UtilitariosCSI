@@ -37,13 +37,13 @@
 }
 
 body.light {
-  --bg: #e8eef6;
-  --surface: #dde5f0;
+  --bg: #eeeeee; /* FUNDO PRINCIPAL*/
+  --surface: #f5f5f4; 
   --surface2: #d0daea;
   --surface3: #c4d0e2;
   --border: #b0c0d4;
   --border2: #94a8bf;
-  --border3: #7a95b0;
+  --border3: #94a8bf;
   --accent: #007a60;
   --accent2: #006890;
   --accent-dim: rgba(0, 122, 96, .13);
@@ -170,7 +170,6 @@ body.light::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(0, 229, 184, .4), transparent 65%);
 }
 
 .slogo-ic svg {
@@ -545,7 +544,7 @@ body.light .tbadge::before {
 }
 
 body.light .bok {
-  color: #fff;
+  color: #ffffff;
 }
 
 body.light .bokw {
@@ -563,7 +562,7 @@ body.light .bokw {
   display: block;
 }
 
-/* FIX: área de páginas ocupa o espaço restante entre topbar e footer */
+/* área de páginas ocupa o espaço restante entre topbar e footer */
 #pages {
   flex: 1;
   overflow-y: auto;
@@ -584,7 +583,7 @@ body.light .bokw {
   background: var(--border3);
 }
 
-/* FIX: conteúdo de cada página centralizado horizontalmente */
+/*conteúdo de cada página centralizado horizontalmente */
 .pg>.pg-inner {
   max-width: 960px;
   margin: 0 auto;
@@ -737,7 +736,7 @@ select option {
 
 textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 40px;
   line-height: 1.55;
 }
 
@@ -1097,7 +1096,9 @@ body.light .rb2.danger {
   color: var(--danger);
 }
 
+/* Botão Excluir nota*/
 .vdel {
+  min-width: 30px;
   background: transparent;
   border: none;
   color: var(--hint);
@@ -1117,7 +1118,9 @@ body.light .rb2.danger {
   background: var(--danger-dim);
 }
 
+/* Botão Copiar conteúdo da nota*/
 .vcopy {
+  min-width: 30px;
   background: transparent;
   border: none;
   color: var(--hint);
@@ -3412,7 +3415,7 @@ body.light .ih-wire-sag {
 
 /* ── LIGHT MODE FIXES ── */
 body.light .bok {
-  background: linear-gradient(135deg, var(--accent), #005e48);
+  background: linear-gradient(135deg, var(--accent), #37524b);
   color: #fff;
 }
 
@@ -3450,6 +3453,19 @@ body.light .card {
 
 body.light .slogo-ic {
   box-shadow: 0 0 10px rgba(0, 122, 96, .15);
+}
+
+/* Ícone do logo no modo claro */
+body.light .slogo-ic {
+  background: linear-gradient(135deg, rgba(0, 122, 96, .15), rgba(0, 122, 96, .05));
+  border-color: rgba(0, 122, 96, .4);
+  box-shadow: 0 0 10px rgba(0, 122, 96, .15);
+}
+
+
+/* SVG do raio */
+body.light .slogo-ic svg {
+  stroke: var(--accent); 
 }
 
 body.light #topbar-page-icon {
@@ -3610,11 +3626,11 @@ body.light .bm-link {
   margin-bottom: 16px;
 }
 
-/* Título (Sem a linha lateral, como você pediu) */
+/* Título */
 .dev-section-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-secondary); /* Ou a cor que preferir */
+  color: var(--text-secondary);
   margin-bottom: 16px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -3649,7 +3665,7 @@ body.light .bm-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px; /* Levemente arredondado fica mais moderno que círculo total */
+  border-radius: 10px;
   font-weight: bold;
   font-size: 0.9rem;
   border: 1px solid transparent;
@@ -5731,7 +5747,7 @@ body.light .home-title span {
 
 .nota-conteudo {
   width: 100%;
-  min-height: 80px;
+  min-height: 40px !important;
   resize: vertical;
 }
 
@@ -5771,7 +5787,15 @@ body.light .home-title span {
   box-shadow: 0 0 12px rgba(255, 184, 48, .15);
 }
 
+/* Modo claro - nota favoritada */
+body.light .nota-box.favoritada {
+  border-color: rgba(122, 68, 0, .5);
+  background: #fff8e1;  /* Fundo amarelo claro */
+  box-shadow: 0 0 8px rgba(122, 68, 0, .2);
+}
+
 .btn-favoritar {
+  min-width: 30px;
   background: transparent;
   border: 1px solid transparent;
   color: var(--muted);
@@ -5784,7 +5808,6 @@ body.light .home-title span {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  min-width: auto;
 }
 
 .btn-favoritar:hover {
@@ -11044,7 +11067,7 @@ function criarNovaNota() {
     id: Date.now(),
     titulo: 'Nota ' + (notas.length + 1),
     conteudo: '',
-    altura: 90, // altura padrão inicial
+    altura: 60, // altura padrão inicial
     favoritada: false
   };
   
@@ -11099,7 +11122,7 @@ function copiarConteudoNota(id) {
   const conteudo = nota.conteudo;
   
   if (!conteudo || conteudo.trim() === '') {
-    toast('⚠️ Esta nota está vazia');
+    toast('Esta nota está vazia');
     return;
   }
 
@@ -11214,7 +11237,7 @@ function renderizarNotas() {
                     <rect x="9" y="9" width="13" height="13" rx="2"/>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                   </svg>
-          </button>
+        </button>
 
         <button class="vdel"
                 title="Excluir nota"
