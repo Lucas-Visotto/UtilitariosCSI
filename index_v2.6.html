@@ -21,7 +21,7 @@
   --accent-glow: rgba(0, 229, 184, .07);
   --warn: #ffb830;
   --warn-dim: rgba(255, 184, 48, .14);
-  --danger: #ff4d6a;
+  --danger: #ffd6dd;
   --danger-dim: rgba(255, 77, 106, .12);
   --ok: #00e5b8;
   --text: #e8f1fc;
@@ -276,7 +276,7 @@ body.light::before {
 }
 
 .ni:hover {
-  background: var(--surface2);
+  background: rgba(0, 229, 183, 0.082);
   color: var(--text2);
   transform: translateX(2px);
 }
@@ -362,10 +362,17 @@ body.light::before {
 }
 
 .theme-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: #00e5b75b;
+  color: #00e5b8;;
   background: var(--accent-glow);
 }
+
+body.light .theme-btn:hover {
+  color: #0000005b;
+  border-color: #00e5b75b;
+  background: var(--accent-glow);
+}
+
 
 .theme-btn:hover svg {
   transform: rotate(20deg);
@@ -490,6 +497,10 @@ body.light::before {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+body.light .topbar-badge {
+  color: var(--accent);
 }
 
 .tbadge {
@@ -722,7 +733,7 @@ input[type=number]::-webkit-inner-spin-button {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--accent);
+  border-color: #00e5b8;
   box-shadow: 0 0 0 3px rgba(0, 229, 184, .12);
   background: var(--surface3);
 }
@@ -765,14 +776,15 @@ textarea::placeholder {
   font-weight: 500;
 }
 
+/* ------ Botões da seção Interligação e Coordenadas ------*/
 .rb:hover {
-  border-color: var(--accent);
-  color: var(--text2);
+  border-color: #00e5b8;
+  color: var(--accent);
   background: var(--accent-glow);
 }
 
 .rb.on {
-  border-color: var(--accent);
+  border-color: #00e5b8;
   color: var(--accent);
   background: linear-gradient(135deg, rgba(0, 229, 184, .14), rgba(0, 229, 184, .06));
   font-weight: 700;
@@ -1233,15 +1245,20 @@ body.light .rb2.danger {
   background: transparent;
   border: 1.5px solid var(--border2);
   border-radius: 9px;
-  color: var(--muted);
+  color: #00e5b8;
   font-family: var(--sans);
   font-size: 13px;
   cursor: pointer;
   transition: all .15s;
 }
 
+body.light .bsec{
+  color: var(--accent);
+}
+
+
 .bsec:hover {
-  border-color: var(--accent);
+  border-color: #37d8a0;
   color: var(--accent);
   background: var(--accent-glow);
 }
@@ -1375,7 +1392,7 @@ body.light .rb2.danger {
 }
 
 .coord-box:hover {
-  border-color: var(--accent);
+  border-color: rgb(0, 229, 183);
   box-shadow: 0 0 0 3px rgba(0, 229, 184, .12);
 }
 
@@ -1985,7 +2002,7 @@ body.light .rb2.danger {
   transition: border-color .15s, box-shadow .15s;
 }
 .consult-search-box:focus-within {
-  border-color: var(--accent);
+  border-color: #00e5b8;
   box-shadow: 0 0 0 3px rgba(0, 229, 184, .10);
 }
 .consult-search-box input {
@@ -2903,7 +2920,7 @@ body.light .rb2.danger {
 }
 
 .ih-isolator-top {
-  fill: var(--accent);
+  fill: #32645b;
   opacity: .7;
 }
 
@@ -3589,7 +3606,7 @@ body.light .bm-link {
   font-size: 13px;
   color: var(--text2);
   line-height: 1.6;
-  max-width: 480px;
+  max-width: 1000px;
   margin-bottom: 20px;
 }
 
@@ -4431,12 +4448,13 @@ body.light .home-title span {
   cursor: pointer !important;
 }
 
-/* ── LOCAIS TAB ── */
+/* Tabs: Serviços | Locais | Dispositivos MT */
 .consult-tabs {
   display: flex;
   gap: 6px;
   margin-bottom: 16px;
 }
+
 .consult-tab-btn {
   padding: 7px 16px;
   border-radius: 8px;
@@ -4452,6 +4470,7 @@ body.light .home-title span {
   align-items: center;
   gap: 7px;
 }
+
 .consult-tab-btn svg {
   width: 14px;
   height: 14px;
@@ -4463,11 +4482,15 @@ body.light .home-title span {
   flex-shrink: 0;
   opacity: .8;
 }
+
 .consult-tab-btn.active {
-  background: var(--accent2);
-  color: #000;
-  /* border-color: var(--accent2); */
+  border-color: #00e5b8;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(0, 229, 184, .14), rgba(0, 229, 184, .06));
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(0, 229, 184, .1);
 }
+
 .consult-tab-btn.active svg { opacity: 1; }
 .consult-tab-btn:not(.active):hover {
   border-color: var(--border3);
@@ -5659,7 +5682,7 @@ body.light .home-title span {
 .au-btn-text { font-size:7px; fill:#a78bfa; font-family:monospace; font-weight:700; }
 .au-click { fill:none; stroke:#a78bfa; stroke-width:1; opacity:0; }
 .au-cursor { fill:#a78bfa; }
-.au-progress { fill:var(--accent); }
+.au-progress { fill:rgb(0, 229, 183); }
 .au-check { stroke:var(--accent); stroke-width:1.5; fill:none; stroke-linecap:round; }
 
 @keyframes au-click-ripple {
@@ -5739,15 +5762,27 @@ body.light .home-title span {
 }
 
 .nota-titulo {
-  color: var(--accent);
+  color: #00e5b8;
   font-weight: 700;
   font-size: 13px;
+}
+
+/* Alteração específica para o Modo Claro */
+body.light .nota-titulo {
+  color: var(--accent);
 }
 
 .nota-conteudo {
   width: 100%;
   min-height: 40px !important;
   resize: vertical;
+}
+
+body.light .nota-conteudo {
+  width: 100%;
+  min-height: 40px !important;
+  resize: vertical;
+  background-color: #d9d9d965;
 }
 
 /* ── BLOCO DE NOTAS ── */
@@ -5788,9 +5823,9 @@ body.light .home-title span {
 
 /* Modo claro - nota favoritada */
 body.light .nota-box.favoritada {
-  border-color: rgba(217, 119, 6, .4);  /* Borda âmbar mais suave */
-  background: #ffdf5e9a;  /* Amarelo bem claro, quente */
-  box-shadow: 0 0 8px rgba(217, 119, 6, .15);
+  border-color: rgba(217, 119, 6, .4);
+  background: linear-gradient(135deg, rgba(255, 184, 48, .06), rgba(255, 234, 48, 0.9));
+  box-shadow: 0 0 12px rgba(217, 119, 6, .15);
 }
 
 .btn-favoritar {
@@ -5818,6 +5853,60 @@ body.light .nota-box.favoritada {
   border-color: var(--warn);
   color: var(--warn);
   background: var(--warn-dim);
+}
+
+/* ── MARCAR NOTA COMO IMPORTANTE (VERMELHO) ── */
+.nota-box.importante {
+  border-color: rgba(255, 77, 106, .4);
+  background: linear-gradient(135deg, rgba(255, 77, 107, 0.096));
+  box-shadow: 0 0 12px rgba(255, 77, 106, .15);
+}
+
+/* Modo claro */
+body.light .nota-box.importante {
+  border-color: rgba(255, 77, 106, .4);
+  background: linear-gradient(135deg, rgba(255, 77, 106, .06), rgba(250, 71, 101, 0.527));
+  box-shadow: 0 0 12px rgba(255, 77, 106, .15);
+}
+
+.btn-importante {
+  min-width: 30px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-importante:hover {
+  color: #ff4d6a;
+  background: rgba(255, 77, 106, .1);
+}
+
+.btn-importante.marcado {
+  border-color: #ff4d6a;
+  color: #ff4d6a;
+  background: rgba(255, 77, 106, .1);
+}
+
+/* Prioridade: se uma nota for importante E favoritada, a importante prevalece */
+.nota-box.importante.favoritada {
+  border-color: rgba(255, 77, 106, .5);
+  background: linear-gradient(135deg, rgba(255, 77, 106, .05), rgba(255, 77, 107, 0.13));
+  box-shadow: 0 0 12px rgba(255, 77, 106, .18);
+}
+
+body.light .nota-box.importante.favoritada {
+  border-color: rgba(223, 35, 35, 0.45);
+  background: #ffeaea;
+  box-shadow: 0 0 8px rgba(220, 38, 38, .18);
 }
 
 .toast {
@@ -5876,59 +5965,7 @@ body.light .card.notasDiarias {
     color: var(--text) !important;
 }
 
-/* ── MARCAR NOTA COMO IMPORTANTE (VERMELHO) ── */
-.nota-box.importante {
-  border-color: rgba(255, 77, 106, .4);
-  background: linear-gradient(135deg, rgba(255, 77, 106, .04), rgba(255, 77, 107, 0.13));
-  box-shadow: 0 0 12px rgba(255, 77, 106, .15);
-}
 
-/* Modo claro */
-body.light .nota-box.importante {
-  border-color: rgba(220, 38, 38, .4);
-  background: #ffd5d5; 
-  box-shadow: 0 0 8px rgba(220, 38, 38, .15);
-}
-
-.btn-importante {
-  min-width: 30px;
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--muted);
-  padding: 5px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all .15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.btn-importante:hover {
-  color: #ff4d6a;
-  background: rgba(255, 77, 106, .1);
-}
-
-.btn-importante.marcado {
-  border-color: #ff4d6a;
-  color: #ff4d6a;
-  background: rgba(255, 77, 106, .1);
-}
-
-/* Prioridade: se uma nota for importante E favoritada, a importante prevalece */
-.nota-box.importante.favoritada {
-  border-color: rgba(255, 77, 106, .5);
-  background: linear-gradient(135deg, rgba(255, 77, 106, .05), rgba(255, 77, 107, 0.13));
-  box-shadow: 0 0 12px rgba(255, 77, 106, .18);
-}
-
-body.light .nota-box.importante.favoritada {
-  border-color: rgba(223, 35, 35, 0.45);
-  background: #ffeaea; /* levemente mais intenso que #fff5f5 */
-  box-shadow: 0 0 8px rgba(220, 38, 38, .18);
-}
 </style>
 
 </head>
@@ -6192,7 +6229,7 @@ body.light .nota-box.importante.favoritada {
             </div>
             <div class="home-hero-inner">
               <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
-              <div class="home-title">Ferramentas de <span>Operação e Controle</span></div>
+              <div class="home-title"><span>Ferramentas de Operação e Controle</span></div>
               <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do controlador.</div>
             </div>
           </div>
@@ -6511,8 +6548,8 @@ body.light .nota-box.importante.favoritada {
                 <text x="223" y="66" style="font-size:8px;fill:var(--warn);text-anchor:middle;">⚡</text>
                 <!-- texto da mensagem -->
                 <text x="236" y="61" style="font-size:7.5px;font-family:monospace;fill:var(--muted);">Eletricista  14:32 ✓✓</text>
-                <text x="236" y="74" style="font-size:9px;font-family:monospace;font-weight:700;fill:#ffcdd2;">REF1:-20.51524-43.4646341</text>
-                <text x="236" y="84" style="font-size:7px;font-family:monospace;fill:var(--hint);">📍 localização obra</text>
+                <text x="236" y="74" style="font-size:9px;font-family:monospace;font-weight:700;fill:#ffcdd2;">CSI REF1:-20.51524 -43.4646341</text>
+                <text x="236" y="84" style="font-size:7px;font-family:monospace;fill:var(--hint);"></text>
 
                 <!-- fluxo de dor -->
                 <text x="218" y="108" style="font-size:7.5px;font-family:monospace;fill:var(--hint);">↓ abre bloco de notas, edita na mão...</text>
@@ -6775,7 +6812,7 @@ body.light .nota-box.importante.favoritada {
                 <text x="140" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Tipo</text>
                 <text x="240" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Equipe</text>
                 <text x="380" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Status</text>
-                <text x="490" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;">Data</text>
+                <text x="490" y="61" style="font-size:6.5px;fill:var(--muted);font-family:monospace;"></text>
                 <!-- linhas de dados -->
                 <line x1="90" y1="66" x2="670" y2="66" stroke="var(--border)" stroke-width=".5"/>
                 <rect x="92" y="68" width="38" height="7" rx="2" fill="rgba(255,255,255,.05)"/>
@@ -6800,7 +6837,7 @@ body.light .nota-box.importante.favoritada {
                 <!-- BARRA DE PROGRESSO aparece após clique -->
                 <rect x="460" y="52" width="100" height="8" rx="4" class="au-content" style="fill:var(--surface3);"/>
                 <rect x="460" y="52" width="4" height="8" rx="4" class="au-progress au-prog-fill"/>
-                <text x="565" y="59" style="font-size:6.5px;fill:var(--accent);font-family:monospace;" class="au-check-anim">✓ Pronto!</text>
+                <text x="565" y="59" style="font-size:6.5px;fill:rgb(0, 229, 183);font-family:monospace;" class="au-check-anim">✓ Pronto!</text>
 
                 <!-- badge resultado -->
                 <rect x="430" y="29" width="105" height="12" rx="4" fill="rgba(0,229,184,.12)" stroke="rgba(0,229,184,.3)" stroke-width=".8" class="au-check-anim"/>
@@ -7144,6 +7181,7 @@ body.light .nota-box.importante.favoritada {
             <h3 class="dev-section-title">Equipe de Desenvolvimento</h3>
             
             <div class="dev-container">
+              
               <div class="dev-card">
                 <div class="dev-avatar color-blue">LV</div>
                 <div class="dev-info">
@@ -7153,7 +7191,7 @@ body.light .nota-box.importante.favoritada {
               </div>
 
               <div class="dev-card">
-                <div class="dev-avatar color-cyan">VT</div>
+                <div class="dev-avatar color-purple">VT</div>
                 <div class="dev-info">
                   <span class="dev-name">Vitor Tavares</span>
                   <span class="dev-role">Desenvolvedor · CSI</span>
@@ -7161,7 +7199,7 @@ body.light .nota-box.importante.favoritada {
               </div>
 
               <div class="dev-card">
-                <div class="dev-avatar color-purple">FE</div>
+                <div class="dev-avatar color-cyan">FE</div>
                 <div class="dev-info">
                   <span class="dev-name">Frederico Eustáquio</span>
                   <span class="dev-role">Desenvolvedor · CSI</span>
@@ -7865,7 +7903,7 @@ body.light .nota-box.importante.favoritada {
       <div class="home-hero" style="margin-bottom:22px;">
         <div class="home-hero-inner">
           <div class="home-eyebrow">DIGITEAM · AUTOMAÇÃO</div>
-          <div class="home-title" style="font-size:22px;">Automações <span>com Bookmarklets</span></div>
+          <div class="home-title" style="font-size:22px;"><span>Automações com Bookmarklets</span></div>
           <div class="home-sub">Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada.</div>
         </div>
       </div>
@@ -8154,8 +8192,7 @@ body.light .nota-box.importante.favoritada {
           <div class="home-eyebrow"
             style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.2);color:#38bdf8;">DIGITEAM ·
             EQUIPES · LOTE</div>
-          <div class="home-title" style="font-size:22px;">Renomeador de <span
-              style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Equipes</span>
+          <div class="home-title" style="font-size:22px;"><span style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Renomeador de Equipes</span>
           </div>
           <div class="home-sub">Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo
             percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas.</div>
