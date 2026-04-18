@@ -151,7 +151,7 @@ body.light::before {
   width: 38px;
   height: 38px;
   background: linear-gradient(135deg, rgba(0, 229, 184, .2), rgba(0, 229, 184, .07));
-
+  border: 1px solid rgba(0, 229, 184, .25);
   border-radius: 11px;
   display: flex;
   align-items: center;
@@ -9659,14 +9659,14 @@ function toggleTheme(init = false) {
 
   function gCopiar() {
     if (!GNOTAS.length) { return; }
-    copyText(GNOTAS.join(",")); toast(GNOTAS.length + " notas copiadas");
+    copyText(GNOTAS.join(",")); toast(GNOTAS.length + " nota(s) copiada(s)");
   }
 
   function gCopiarFiltro(tipo) {
     var lista = GNOTAS.filter(function (os) { return G_MAPA[os] === tipo; });
     if (!lista.length) { toast("Nenhuma nota identificada como " + (tipo === "caixa" ? "CX" : "Poste")); return; }
     copyText(lista.join(","));
-    toast(lista.length + " nota(s) " + (tipo === "caixa" ? "CX" : "Poste") + " copiadas");
+    toast(lista.length + " nota(s) " + (tipo === "caixa" ? "de caixa" : "de poste") + " copiada(s)");
   }
 
   function gLimpar() {
