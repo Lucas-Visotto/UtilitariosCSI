@@ -37,8 +37,8 @@
 }
 
 body.light {
-  --fundoPrincipal: #F5F7FA;
-  --surface: #f7f8fcab; 
+  --fundoPrincipal: #e3ecf9;
+  --surface: #eff2fcab; 
   --surface2: #d9d9d925; /* Fundo das caixas de texto*/
   --surface3: #d3d8e0;
   --border: #b0c0d4;
@@ -151,7 +151,7 @@ body.light::before {
   width: 38px;
   height: 38px;
   background: linear-gradient(135deg, rgba(0, 229, 184, .2), rgba(0, 229, 184, .07));
-  border: 1.5px solid rgba(225, 229, 0, 0.5);
+
   border-radius: 11px;
   display: flex;
   align-items: center;
@@ -359,18 +359,22 @@ body.light::before {
 
 .theme-btn:hover {
   border-color: #00e5b75b;
-  color: #00e5b8;;
-  background: var(--accent-glow);
+  color: var(--accent);
 }
 
 body.light .theme-btn:hover {
-  color: #0000005b;
-  border-color: #00e5b75b;
-  background: var(--accent-glow);
+  color: var(--accent);
+  border-color: #00aa88;
 }
 
 .theme-btn:hover svg {
   transform: rotate(20deg);
+  color: var(--accent);
+}
+
+body.light .theme-btn:hover svg {
+  transform: rotate(20deg);
+  color: var(--accent);
 }
 
 .tbtn {
@@ -1189,7 +1193,7 @@ body.light .rb2.danger {
 .bok:hover {
   opacity: .9;
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(0, 229, 184, .35);
+
 }
 
 .bok:active {
@@ -1223,7 +1227,6 @@ body.light .rb2.danger {
 .bokw:hover {
   opacity: .9;
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(0, 229, 184, .4);
 }
 
 .bokw:active {
@@ -3458,15 +3461,10 @@ body.light .card {
   box-shadow: 0 1px 6px rgba(0, 0, 0, .08);
 }
 
-body.light .slogo-ic {
-  box-shadow: 0 0 10px rgba(0, 122, 96, .15);
-}
-
 /* Ícone do logo no modo claro */
 body.light .slogo-ic {
-  background: linear-gradient(135deg, rgba(0, 122, 96, .15), rgba(0, 122, 96, .05));
-  border-color: rgba(0, 122, 96, .4);
-  box-shadow: 0 0 10px rgba(0, 122, 96, .15);
+  background: linear-gradient(90deg, rgba(0, 229, 184, .18), rgba(0, 229, 184, .07));
+  border-color: rgb(1, 170, 133);
 }
 
 /* SVG do raio */
