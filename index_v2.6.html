@@ -4844,7 +4844,7 @@ body.light .home-title span {
   border: 1px solid var(--accent-dim);
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--accent);
+  color: #00e5b8;
   flex-shrink: 0;
 }
 .utm-header-icon svg { width: 18px; height: 18px; }
@@ -4907,8 +4907,8 @@ body.light .home-title span {
 }
 .utm-tab:hover { color: var(--text2); background: rgba(255,255,255,.02); }
 .utm-tab.active {
-  color: #00e5b8 ;
-  border-bottom-color: var(--accent);
+  color: #02b995 ;
+  border-bottom-color: #00e5b8;
   background: rgba(0,229,184,.04);
 }
 .utm-tab-icon { font-size: 14px; }
@@ -11345,10 +11345,11 @@ function toggleTheme(init = false) {
   input.type = 'text';
   input.value = textoOriginal;
   input.className = 'nota-titulo-edit';
+  // Tema do título da nota
   input.style.cssText = `
     width: 100%;
     background: var(--surface3);
-    border: 1.5px solid var(--accent);
+    border: 1.5px solid #00e5b8;
     color: var(--text);
     font-family: var(--sans);
     font-size: 13px;
