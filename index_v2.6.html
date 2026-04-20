@@ -6293,127 +6293,78 @@ body.light .card.notasDiarias {
               <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" class="ih-svg">
                 <!-- Fio de alta tensão esquerda -->
                 <line x1="0" y1="28" x2="140" y2="28" class="ih-wire" />
-                
                 <!-- Torre esquerda -->
                 <g class="ih-tower" transform="translate(140,10)">
-                  <!-- Estrutura principal -->
-                  <line x1="15" y1="0" x2="15" y2="80" stroke-width="3" />
-                  <line x1="15" y1="0" x2="10" y2="12" stroke-width="2" />
-                  <line x1="15" y1="0" x2="20" y2="12" stroke-width="2" />
-                  <!-- Braços horizontais -->
-                  <line x1="0" y1="18" x2="30" y2="18" stroke-width="2.5" />
-                  <line x1="3" y1="30" x2="27" y2="30" stroke-width="2" />
-                  <!-- Isoladores -->
-                  <circle cx="0" cy="18" r="4" class="ih-isolator" />
-                  <circle cx="30" cy="18" r="4" class="ih-isolator" />
-                  <circle cx="3" cy="30" r="3" class="ih-isolator" />
-                  <circle cx="27" cy="30" r="3" class="ih-isolator" />
-                  <!-- Base da torre -->
-                  <line x1="10" y1="80" x2="20" y2="80" stroke-width="3" />
+                  <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
+                  <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
+                  <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
+                  <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
+                  <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
+                  <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
+                  <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
                 </g>
-                
                 <!-- Fio entre torres -->
-                <path d="M 171 29 Q 280 58 382 15" class="ih-wire ih-wire-sag" />
-                <path d="M 158 39 Q 280 68 362 40" class="ih-wire ih-wire-sag ih-wire-dim" />
-                
-                <!-- Torre central / Transformador (deslocado para direita) -->
-                <g transform="translate(370,5)">
-                  <defs>
-                    <linearGradient id="trafoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#9B9690;stop-opacity:1" />
-                      <stop offset="50%" style="stop-color:#B8B3AE;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#7B7670;stop-opacity:1" />
-                    </linearGradient>
-                  </defs>
-                  
-                  <!-- Sombra -->
-                  <ellipse cx="36" cy="105" rx="42" ry="5" fill="rgba(0,0,0,0.12)" />
-                  
-                  <!-- Corpo principal do transformador -->
-                  <rect x="0" y="20" width="72" height="80" rx="6" fill="url(#trafoGrad)" stroke="#6B6660" stroke-width="1.5" class="ih-trafo-body" />
-                  <rect x="8" y="28" width="56" height="64" rx="4" fill="#5A5550" stroke="#4A4540" stroke-width="1" class="ih-trafo-inner" />
-                  
+                <path d="M 171 29 Q 250 55 322 15" class="ih-wire ih-wire-sag" />
+                <path d="M 158 39 Q 250 65 302 40" class="ih-wire ih-wire-sag ih-wire-dim" />
+                <!-- Torre central / Transformador -->
+                <g transform="translate(310,5)">
+                  <!-- Base transformador -->
+                  <rect x="0" y="20" width="72" height="80" rx="6" class="ih-trafo-body" />
+                  <rect x="8" y="28" width="56" height="64" rx="4" class="ih-trafo-inner" />
                   <!-- Núcleo do trafo (bobinas) -->
-                  <ellipse cx="36" cy="45" rx="14" ry="7" fill="#A0522D" opacity="0.4" class="ih-coil" />
-                  <ellipse cx="36" cy="58" rx="14" ry="7" fill="#CD853F" opacity="0.4" class="ih-coil" />
-                  <ellipse cx="36" cy="71" rx="14" ry="7" fill="#A0522D" opacity="0.4" class="ih-coil" />
-                  <rect x="22" y="45" width="28" height="26" fill="#8B6914" opacity="0.3" class="ih-coil-fill" />
-                  
-                  <!-- Bucha AT (topo) -->
-                  <rect x="14" y="6" width="8" height="18" rx="3" fill="#C9C0B8" stroke="#8B8680" stroke-width="1.2" class="ih-bushing" />
-                  <rect x="50" y="6" width="8" height="18" rx="3" fill="#C9C0B8" stroke="#8B8680" stroke-width="1.2" class="ih-bushing" />
-                  <circle cx="18" cy="5" r="4" fill="#D4CCC4" stroke="#7B7670" stroke-width="1.5" class="ih-isolator-top" />
-                  <circle cx="54" cy="5" r="4" fill="#D4CCC4" stroke="#7B7670" stroke-width="1.5" class="ih-isolator-top" />
-                  
-                  <!-- Bucha BT (base) -->
-                  <rect x="28" y="96" width="6" height="14" rx="2" fill="#8B7355" stroke="#6B5335" stroke-width="1" class="ih-bushing-bt" />
-                  <rect x="38" y="96" width="6" height="14" rx="2" fill="#8B7355" stroke="#6B5335" stroke-width="1" class="ih-bushing-bt" />
-                  
+                  <ellipse cx="36" cy="45" rx="14" ry="7" class="ih-coil" />
+                  <ellipse cx="36" cy="58" rx="14" ry="7" class="ih-coil" />
+                  <ellipse cx="36" cy="71" rx="14" ry="7" class="ih-coil" />
+                  <rect x="22" y="45" width="28" height="26" class="ih-coil-fill" />
+                  <!-- Bucha AT -->
+                  <rect x="14" y="6" width="8" height="18" rx="3" class="ih-bushing" />
+                  <rect x="50" y="6" width="8" height="18" rx="3" class="ih-bushing" />
+                  <circle cx="18" cy="5" r="4" class="ih-isolator-top" />
+                  <circle cx="54" cy="5" r="4" class="ih-isolator-top" />
+                  <!-- Bucha BT -->
+                  <rect x="28" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
+                  <rect x="38" y="96" width="6" height="14" rx="2" class="ih-bushing-bt" />
                   <!-- Radiadores -->
-                  <rect x="-10" y="30" width="8" height="50" rx="2" fill="#8B8680" stroke="#6B6660" stroke-width="1" class="ih-radiator" />
-                  <rect x="-6" y="34" width="2" height="42" rx="1" fill="#6B6660" class="ih-radiator-fin" />
-                  <rect x="74" y="30" width="8" height="50" rx="2" fill="#8B8680" stroke="#6B6660" stroke-width="1" class="ih-radiator" />
-                  <rect x="76" y="34" width="2" height="42" rx="1" fill="#6B6660" class="ih-radiator-fin" />
-                  
+                  <rect x="-10" y="30" width="8" height="50" rx="2" class="ih-radiator" />
+                  <rect x="-6" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
+                  <rect x="74" y="30" width="8" height="50" rx="2" class="ih-radiator" />
+                  <rect x="76" y="34" width="2" height="42" rx="1" class="ih-radiator-fin" />
                   <!-- Relé -->
-                  <rect x="20" y="28" width="32" height="10" rx="2" fill="#2C2C2C" stroke="#1C1C1C" stroke-width="1" class="ih-relay" />
-                  <circle cx="30" cy="33" r="2" fill="#3C3C3C" stroke="#5C5C5C" stroke-width="0.5" class="ih-relay-dot" />
-                  <circle cx="36" cy="33" r="2" fill="#FFD700" stroke="#FFA500" stroke-width="0.5" class="ih-relay-dot ih-relay-active" />
-                  <circle cx="42" cy="33" r="2" fill="#3C3C3C" stroke="#5C5C5C" stroke-width="0.5" class="ih-relay-dot" />
-                  
-                  <!-- Parafusos nos cantos -->
-                  <circle cx="8" cy="28" r="2" fill="#4A4540" stroke="#2A2520" stroke-width="0.8" />
-                  <circle cx="64" cy="28" r="2" fill="#4A4540" stroke="#2A2520" stroke-width="0.8" />
-                  <circle cx="8" cy="92" r="2" fill="#4A4540" stroke="#2A2520" stroke-width="0.8" />
-                  <circle cx="64" cy="92" r="2" fill="#4A4540" stroke="#2A2520" stroke-width="0.8" />
+                  <rect x="20" y="28" width="32" height="10" rx="2" class="ih-relay" />
+                  <circle cx="30" cy="33" r="2" class="ih-relay-dot" />
+                  <circle cx="36" cy="33" r="2" class="ih-relay-dot ih-relay-active" />
+                  <circle cx="42" cy="33" r="2" class="ih-relay-dot" />
                 </g>
                 
                 <!-- Fio entre transformador e torre direita -->
-                <path d="M 428 10 Q 540 55 605 28" class="ih-wire ih-wire-sag" />
-                <path d="M 450 35 Q 540 65 602 40" class="ih-wire ih-wire-sag ih-wire-dim" />
-                
+                <path d="M 368 10 Q 510 55 605 28" class="ih-wire ih-wire-sag" />
+                <path d="M 390 35 Q 510 65 602 40" class="ih-wire ih-wire-sag ih-wire-dim" />
                 <!-- Torre direita -->
                 <g class="ih-tower" transform="translate(604,10)">
-                  <!-- Estrutura principal -->
-                  <line x1="15" y1="0" x2="15" y2="80" stroke-width="3" />
-                  <line x1="15" y1="0" x2="10" y2="12" stroke-width="2" />
-                  <line x1="15" y1="0" x2="20" y2="12" stroke-width="2" />
-                  <!-- Braços horizontais -->
-                  <line x1="0" y1="18" x2="30" y2="18" stroke-width="2.5" />
-                  <line x1="3" y1="30" x2="27" y2="30" stroke-width="2" />
-                  <!-- Isoladores -->
-                  <circle cx="0" cy="18" r="4" class="ih-isolator" />
-                  <circle cx="30" cy="18" r="4" class="ih-isolator" />
-                  <circle cx="3" cy="30" r="3" class="ih-isolator" />
-                  <circle cx="27" cy="30" r="3" class="ih-isolator" />
-                  <!-- Base da torre -->
-                  <line x1="10" y1="80" x2="20" y2="80" stroke-width="3" />
+                  <line x1="15" y1="0" x2="15" y2="80" stroke-width="2.5" />
+                  <line x1="0" y1="18" x2="30" y2="18" stroke-width="2" />
+                  <line x1="3" y1="30" x2="27" y2="30" stroke-width="1.5" />
+                  <circle cx="0" cy="18" r="3.5" class="ih-isolator" />
+                  <circle cx="30" cy="18" r="3.5" class="ih-isolator" />
+                  <circle cx="3" cy="30" r="2.5" class="ih-isolator" />
+                  <circle cx="27" cy="30" r="2.5" class="ih-isolator" />
                 </g>
-                
                 <!-- Fio saída direita -->
                 <line x1="630" y1="40" x2="760" y2="40" class="ih-wire" />
-                
                 <!-- Labels -->
                 <text x="70" y="25" class="ih-label">MT</text>
                 <text x="688" y="35" class="ih-label">BT</text>
 
                 <!-- Raios animados -->
                 <g>
-                  <path d="M 388 2 L 382 12 L 388 10 L 382 22" class="ih-bolt" />
+                  <path d="M 328 2 L 322 12 L 328 10 L 322 22" class="ih-bolt" />
                   <path 
-                    d="M 455 2 L 449 12 L 455 10 L 449 22" 
+                    d="M 348 2 L 342 12 L 348 10 L 342 22" 
                     class="ih-bolt ih-bolt-delay"
-                    transform="translate(-31, 0)"/>
+                    transform="translate(20, 0)"/>
                 </g>
               </svg>
             </div>
-            <div class="ih-info">
-              <div class="ih-info-title">Verificação de Interligação</div>
-              <div class="ih-info-sub">Configure o transformador doador, o transformador queimado e os cabos — clique em
-                <strong>Verificar</strong> para obter a análise completa.
-              </div>
-            </div>
-          </div>
             <div class="ih-info">
               <div class="ih-info-title">Verificação de Interligação</div>
               <div class="ih-info-sub">Configure o transformador doador, o transformador queimado e os cabos — clique em
