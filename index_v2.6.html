@@ -150,8 +150,8 @@ body.light::before {
 .slogo-ic {
   width: 38px;
   height: 38px;
-  background: linear-gradient(135deg, rgba(0, 229, 184, .2), rgba(0, 229, 184, .07));
-  border: 1px solid rgba(0, 229, 184, .25);
+  background: linear-gradient(135deg, rgba(0, 229, 183, 0.37), rgba(0, 229, 184, .07));
+  border: 1px solid rgba(0, 229, 183, 0.397);
   border-radius: 11px;
   display: flex;
   align-items: center;
@@ -159,6 +159,7 @@ body.light::before {
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 229, 184, .18), inset 0 1px 0 rgba(255, 255, 255, .08);
 }
 
 .slogo-ic::before {
@@ -285,7 +286,7 @@ body.light .ni:hover {
 
 
 .ni.active {
-  background: linear-gradient(90deg, rgba(0, 229, 183, 0.068), rgba(0, 229, 183, 0.212));
+  background: linear-gradient(90deg, rgba(0, 229, 184, .18), rgba(0, 229, 184, .07));
   color: var(--ok);
   font-weight: 600;
   border: 1px solid rgba(0, 229, 184, .25);
@@ -7443,7 +7444,13 @@ body.light .card.notasDiarias {
               <div class="card" style="flex:1;">
                 <div class="ct" style="margin-bottom:10px;">Ação rápida</div>
                 <button class="bok"
-                  style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;"
+                  style=
+                    "width:100%;
+                    margin-bottom:8px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:8px;"
                   id="gBtnCp" onclick="gCopiar()" disabled>
                   Copiar todas as notas
                   <span id="gBadgeTotal" class="gbadge">—</span>
@@ -7534,10 +7541,11 @@ body.light .card.notasDiarias {
               <span style="font-size:12px;color:var(--muted);font-style:italic;">Nenhuma conversão ainda…</span>
             </div>
           </div>
+          <br><br>
 
           <!-- ── CONVERSOR UTM ── -->
           <div class="utm-wrapper">
-
+            
             <!-- Cabeçalho do bloco -->
             <div class="utm-header">
               <div class="utm-header-icon">
@@ -7627,8 +7635,179 @@ body.light .card.notasDiarias {
             </div>
 
           </div><!-- /utm-wrapper -->
+          
+          <!-- INICIO: PARTE DO GOOGLE MAPS -->
+          <br><br>
+          <div class="page-hero">
+
+            <div class="ph-info">
+              <div class="ph-info-title">Buscador de Mapa e Coordenadas</div>
+              <div class="ph-info-sub">Digite um endereço para obter a latitude/longitude exata e visualizar no Google Maps.</div>
+            </div>
+          
+            <div class="card">
+              <div class="ct">Pesquisar Localização</div>
+              <span class="lbl">Endereço, Rua, Cidade ou Ponto de Referência</span>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <input type="text" id="map-address-input" placeholder="Ex: Av. Barbacena, 1200, Belo Horizonte" onkeypress="if(event.key === 'Enter') buscarMapa()">
+                <button class="bok" onclick="buscarMapa()" style="flex-shrink:0;">Pesquisar</button>
+                <button class="bdel" onclick="limparMapa()">Limpar</button>
+              </div>
+            </div>
+
+            <div class="g2" style="margin-top:14px;">
+              <div class="card">
+                <div class="ct">Coordenadas Encontradas</div>
+                <div class="coord-grid">
+                  <div class="coord-box" onclick="copyText(document.getElementById('map-lat').innerText); toast('Latitude copiada')" title="Clique para copiar">
+                    <div class="coord-box-lbl">Latitude</div>
+                    <div class="coord-box-val" id="map-lat">—</div>
+                    <div class="coord-box-copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg></div>
+                  </div>
+                  <div class="coord-box" onclick="copyText(document.getElementById('map-lon').innerText); toast('Longitude copiada')" title="Clique para copiar">
+                    <div class="coord-box-lbl">Longitude</div>
+                    <div class="coord-box-val" id="map-lon">—</div>
+                    <div class="coord-box-copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg></div>
+                  </div>
+                </div>
+                <div class="info" style="margin-top:14px; margin-bottom:0;" id="map-address-found">
+                  Aguardando pesquisa...
+                </div>
+              </div>
+
+              <div class="card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
+                <div class="ct" style="padding: 20px 22px 0;">Google Maps</div>
+                <div style="flex:1; min-height: 250px; margin-top: 10px; background: var(--surface2);">
+                  <iframe id="map-iframe" width="100%" height="100%" frameborder="0" style="border:0; width:100%; height:100%;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FIM: PARTE DO GOOGLE MAPS -->
 
         </div>
+      </div>
+    
+      <!-- ── CONSULTAS ── -->
+      <div class="pg" id="page-consult">
+        <div class="pg-inner">
+
+          <!-- Busca Inteligente Unificada -->
+          <div class="consult-search-box" style="margin-bottom:16px;">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="consult-search"
+              placeholder="Digite siglas, cód. fechamento (ex: 5.62), manobra (ex: MA31), reprova (ex: R23), polo, município…"
+              oninput="consultSearch()">
+
+            <button onclick="consultLimpar()" title="Limpar busca"
+              style="background:transparent;border:none;cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;color:var(--hint);transition:color .15s;flex-shrink:0;"
+              onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--hint)'">⌫</button>
+          </div>
+
+          <div id="consult-search-result" style="display:none;margin-bottom:16px;"></div>
+
+          <!-- Tabs: Serviços | Locais | Dispositivos MT -->
+          <div class="consult-tabs">
+            <button class="consult-tab-btn active" id="tab-btn-servicos" onclick="consultSwitchTab('servicos')">
+              <!-- SVG: raio elétrico estilizado -->
+              <svg viewBox="0 0 24 24">
+                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+              </svg>
+              Serviços
+            </button>
+
+            <button class="consult-tab-btn" id="tab-btn-locais" onclick="consultSwitchTab('locais')">
+              <!-- SVG: mapa com pin -->
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.5 2 6 4.5 6 8c0 5 6 13 6 13s6-8 6-13c0-3.5-2.5-6-6-6z"/>
+                <circle cx="12" cy="8" r="2"/>
+              </svg>
+              Locais
+            </button>
+
+            <button class="consult-tab-btn" id="tab-btn-disp" onclick="consultSwitchTab('disp')">
+              <!-- SVG: transformador/equipamento MT -->
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="6" width="7" height="12" rx="1.5"/>
+                <rect x="14" y="6" width="7" height="12" rx="1.5"/>
+                <path d="M10 9 Q12 9 12 12 Q12 15 14 15"/>
+                <line x1="6.5" y1="4" x2="6.5" y2="6"/>
+                <line x1="17.5" y1="4" x2="17.5" y2="6"/>
+                <line x1="6.5" y1="18" x2="6.5" y2="20"/>
+                <line x1="17.5" y1="18" x2="17.5" y2="20"/>
+              </svg>
+              Dispositivos MT
+            </button>
+          </div>
+
+          <!-- Pane: Serviços -->
+          <div id="consult-pane-servicos" class="pane-active">
+            <div class="consult-grid" id="consult-grid"></div>
+          </div>
+
+          <!-- Pane: Locais -->
+          <div id="consult-pane-locais">
+            <div class="locais-grid" id="locais-grid"></div>
+          </div>
+
+          <!-- Pane: Dispositivos MT -->
+          <div id="consult-pane-disp">
+            <div class="disp-list" id="disp-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── NOTAS DIÁRIAS ── -->
+      <div class="pg" id="page-notas">
+        <div class="pg-inner">
+
+        <div class="page-hero hero-gdis">
+          <div style="text-align:center;margin-bottom:4px;">
+            <div style="font-size:13px;color:var(--muted);margin-top:2px;max-width:700px;margin-left:auto;margin-right:auto;">
+              <p>❗ Os dados <strong>não são permanentes</strong> e podem ser perdidos ao reiniciar ou fazer logoff da máquina. </p>
+              <p>As exclusões de notas são permanentes e não podem ser restauradas </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card notasDiarias">     
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+            <button class="bok" onclick="criarNovaNota()" style=display:flex;align-items:center;justify-content:center;gap:8px;>
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Criar nova nota
+            </button>
+
+            <button class="bdel" onclick="excluirTodasNotas()" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Excluir todas as notas
+            </button>
+          </div>
+
+          <div id="lista-notas" style="display:flex;flex-direction:column;gap:12px;"></div>
+
+          <div id="estado-vazio-notas">
+            <div class="gdis-empty-hint">
+              <p>Clique em "Criar nova nota" para começar</p>
+              <p>Renomeie o título da nota e escreva o que desejar</p>
+              <br>
+              <p>Exemplo: Crie uma nota, altere o título para "PMAL vencendo" e cole as notas, quando precisar basta clicar no botão de copiar para jogar no Digiteam</p>
+            </div>
+          </div>
+            
+        </div>
+      </div>
       </div>
 
       <!-- ── CONVERSOR ELÉTRICO ── -->
@@ -7810,850 +7989,727 @@ body.light .card.notasDiarias {
         </div>
       </div>
 
-      <!-- ── CONSULTAS ── -->
-      <div class="pg" id="page-consult">
+      <!-- ── AUTOMAÇÕES ── -->
+      <div class="pg" id="page-automacoes">
         <div class="pg-inner">
 
-          <!-- Busca Inteligente Unificada -->
-          <div class="consult-search-box" style="margin-bottom:16px;">
-            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <input type="text" id="consult-search"
-              placeholder="Digite siglas, cód. fechamento (ex: 5.62), manobra (ex: MA31), reprova (ex: R23), polo, município…"
-              oninput="consultSearch()">
 
-            <button onclick="consultLimpar()" title="Limpar busca"
-              style="background:transparent;border:none;cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;color:var(--hint);transition:color .15s;flex-shrink:0;"
-              onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--hint)'">⌫</button>
+          <!-- Hero -->
+          <div class="home-hero" style="margin-bottom:22px;">
+            <div class="home-hero-inner">
+              <div class="home-eyebrow">DIGITEAM · AUTOMAÇÃO</div>
+              <div class="home-title" style="font-size:22px;"><span>Automações com Bookmarklets</span></div>
+              <div class="home-sub">Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada.</div>
+            </div>
           </div>
 
-          <div id="consult-search-result" style="display:none;margin-bottom:16px;"></div>
+          <!-- O QUE É UM BOOKMARKLET -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">O que é um bookmarklet?</div>
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div
+                style="width:38px;height:38px;border-radius:10px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+                <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text2);font-weight:600;margin-bottom:4px;">Um favorito que
+                  executa código</div>
+                <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">É um favorito normal do navegador,
+                  mas em vez de guardar uma URL, ele executa um script JavaScript na página aberta. Roda localmente
+                  no seu navegador, sem enviar dados pra fora, sem instalar extensão.</div>
+              </div>
+            </div>
+          </div>
 
-          <!-- Tabs: Serviços | Locais | Dispositivos MT -->
-          <div class="consult-tabs">
-            <button class="consult-tab-btn active" id="tab-btn-servicos" onclick="consultSwitchTab('servicos')">
-              <!-- SVG: raio elétrico estilizado -->
-              <svg viewBox="0 0 24 24">
-                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+          <!-- BOOKMARKLET: INTERVALO 6 MESES -->
+          <div class="card"
+            style="margin-bottom:16px;border-color:rgba(167,139,250,.22);position:relative;overflow:hidden;">
+            <div
+              style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;">
+            </div>
+
+            <!-- Header -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+              <div
+                style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </div>
+
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.01em;">Digiteam — Intervalo 6 meses</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px;">Aba Despacho · Automação de filtros, datas e refresh</div>
+              </div>
+
+            </div>
+
+            <!-- O que faz -->
+            <div
+              style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;box-shadow:0 0 5px var(--accent);flex-shrink:0;"></span>O
+              que ele faz automaticamente
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔽</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Abre o painel
+                    de filtro</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Clica automaticamente no botão
+                    de filtro da tela.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔄</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ativa Tempo
+                    Real</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Liga o toggle de atualização em
+                    tempo real.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:15px;flex-shrink:0;margin-top:1px;">📅</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Define 6 meses
+                    de intervalo</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Seleciona "Intervalo" e preenche
+                    de hoje até 6 meses atrás.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:15px;flex-shrink:0;margin-top:1px;">⏱️</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Refresh a cada
+                    1 min</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Define o intervalo de
+                    atualização automática para 1 minuto.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÁREA DE ARRASTAR -->
+            <div
+              style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:#a78bfa;border-radius:2px;display:inline-block;flex-shrink:0;"></span>Arraste
+              para a barra de favoritos
+            </div>
+            <div
+              style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(167,139,250,.06);border:1.5px dashed rgba(167,139,250,.35);border-radius:10px;margin-bottom:10px;">
+              <svg viewBox="0 0 24 24"
+                style="width:16px;height:16px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;">
+                <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
+                <path d="M9 3v4m6-4v4M3 11h18" />
               </svg>
-              Serviços
-            </button>
+              <div style="font-size:11px;color:#a78bfa;font-weight:600;">Segure e arraste o botão abaixo até a barra
+                de favoritos do navegador</div>
+            </div>
+            <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+              <a class="bm-link"
+                style="font-size:13px;padding:13px 22px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 18px rgba(167,139,250,.1);"
+                href="javascript:(async function(){try{const s=m=&gt;new Promise(r=&gt;setTimeout(r,m)),waitFor=async(fn,max=5000)=&gt;{const start=Date.now();while(Date.now()-start&lt;max){if(fn())return true;await s(50)}return false};const f=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi.pi-filter&quot;));if(!f){alert(&quot;Botão de filtro não encontrado&quot;);return}f.click();await s(150);const t=[...document.querySelectorAll(&quot;input[type=&#x27;checkbox&#x27;][role=&#x27;switch&#x27;]&quot;)].filter(x=&gt;x.offsetParent!==null);if(t.length&lt;3){alert(&quot;Toggle &#x27;Tempo real&#x27; não encontrado&quot;);return}if(!t[2].checked){t[2].click()}await s(250);const ch=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;));if(ch){const ic=ch.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;);if(ic&amp;&amp;ic.classList.contains(&quot;pi-chevron-left&quot;)){ch.click();await s(400);const ok=await waitFor(()=&gt;{const labels=[...document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)].filter(e=&gt;e.offsetParent!==null);return labels.length&gt;=2},3000);if(!ok)await s(500)}}let ps=null;for(const l of document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(!b)continue;ps=p;b.click();await s(80);const hOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);if(hOpt){hOpt.click();await s(80)}b.click();await s(80);const iOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(iOpt){iOpt.click();await s(80);break}document.body.click();await s(80)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}await s(100);let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(40);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(15);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();await s(200);const allSelects=[...document.querySelectorAll(&quot;p-select&quot;)].filter(sel=&gt;sel!==ps&amp;&amp;sel.offsetParent!==null);for(const pSel of allSelects){const lbl=pSel.querySelector(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;);if(!lbl)continue;const ariaLbl=lbl.getAttribute(&quot;aria-label&quot;);if(ariaLbl&amp;&amp;(ariaLbl.includes(&quot;min&quot;)||ariaLbl.includes(&quot;Não Atualizar&quot;))){const dropBtn=pSel.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(dropBtn){dropBtn.click();await s(250);const minOpt=[...document.querySelectorAll(&quot;li[role=&#x27;option&#x27;]&quot;)].find(e=&gt;{const span=e.querySelector(&quot;span.ng-star-inserted&quot;);return span&amp;&amp;span.textContent.trim()===&quot;1 min&quot;});if(minOpt){minOpt.click();await s(100);break}}}}}catch(e){alert(&quot;Erro: &quot;+e.message)}})();void 0;"
+                title="Arraste para a barra de favoritos">
+                <svg viewBox="0 0 24 24"
+                  style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Intervalo 6 meses
+              </a>
+            </div>
+            <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ segure e arraste ·
+              depois clique com o Digiteam aberto</div>
+          </div>
 
-            <button class="consult-tab-btn" id="tab-btn-locais" onclick="consultSwitchTab('locais')">
-              <!-- SVG: mapa com pin -->
-              <svg viewBox="0 0 24 24">
-                <path d="M12 2C8.5 2 6 4.5 6 8c0 5 6 13 6 13s6-8 6-13c0-3.5-2.5-6-6-6z"/>
-                <circle cx="12" cy="8" r="2"/>
+          <!-- TUTORIAL PASSO A PASSO -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">Como usar — passo a passo</div>
+
+            <div
+              style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte
+              1 · Instalar (só uma vez)
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  1</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Exiba a barra
+                    de favoritos</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Pressione <span
+                      style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 7px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span>
+                    para mostrar a barra de favoritos, caso ela esteja oculta.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  2</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Arraste o
+                    botão roxo para os favoritos</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Segure o botão <strong
+                      style="color:#a78bfa;">Intervalo 6 meses</strong> acima e arraste até a barra de favoritos do
+                    navegador. Solte quando aparecer o indicador de posição. Feito — está instalado!</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div
+              style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte
+              2 · Usar no dia a dia
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  1</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Abra o
+                    Digiteam na aba Despacho</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Navegue até a tela de Despacho
+                    normalmente. O script precisa que a página esteja carregada.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  2</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Selecione seu
+                    filtro de equipe / setor</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Aplique o filtro que você usa
+                    normalmente (equipe, regional, tipo de serviço…) <strong
+                      style="color:var(--text2);">antes</strong> de acionar o bookmarklet.</div>
+                </div>
+              </div>
+
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  3</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">Clique no favorito
+                    "Intervalo 6 meses"</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Clique no favorito instalado na
+                    barra. O script roda sozinho — abre o filtro, ativa tempo real, preenche as datas (6 meses) e
+                    configura atualização de 1 min. Aguarde uns 3 segundos e tá pronto.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- DICAS -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">Dicas e observações</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O bookmarklet funciona
+                  <strong>somente no Digiteam</strong>. Em outras páginas ele não vai encontrar os elementos e pode
+                  exibir um alerta.</div>
+              </div>
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Se a tela do Digiteam mudar de
+                  layout em uma atualização futura, o script pode parar de funcionar. Nesse caso, chama o Lucas.
+                </div>
+              </div>
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Você pode instalar o bookmarklet
+                  em mais de um navegador. Basta repetir o processo de arrastar em cada um.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RENOMEADOR DE EQUIPES ── -->
+      <div class="pg" id="page-renomeador">
+        <div class="pg-inner">
+
+          <!-- Hero -->
+          <div class="home-hero" style="margin-bottom:22px;">
+            <div class="home-hero-inner">
+              <div class="home-eyebrow"
+                style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.2);color:#38bdf8;">DIGITEAM ·
+                EQUIPES · LOTE</div>
+              <div class="home-title" style="font-size:22px;"><span style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Renomeador de Equipes</span>
+              </div>
+              <div class="home-sub">Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo
+                percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas.</div>
+            </div>
+          </div>
+
+          <!-- COMO FUNCIONA -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">Como funciona</div>
+            <div style="display:flex;gap:0;flex-wrap:wrap;gap:8px;">
+              <div
+                style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="font-size:13px;">1️⃣</span>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Preparar o CSV
+                  </div>
+                  <div style="font-size:11px;color:var(--muted);line-height:1.5;">Monte o arquivo com veículo, local
+                    e término.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">
+                →</div>
+              <div
+                style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:28px;height:28px;border-radius:7px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="font-size:13px;">2️⃣</span>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Bookmarklet:
+                    Conectar CSV</div>
+                  <div style="font-size:11px;color:var(--muted);line-height:1.5;">Abre seletor de arquivo e salva os
+                    dados no navegador.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">
+                →</div>
+              <div
+                style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
+                <div
+                  style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="font-size:13px;">3️⃣</span>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:3px;">Bookmarklet: Renomear
+                  </div>
+                  <div style="font-size:11px;color:var(--muted);line-height:1.5;">Percorre o Digiteam e renomeia
+                    tudo em lote.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASSO 1: CSV -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">Passo 1 — Obter o CSV</div>
+
+            <!-- Opção A: Teams direto -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:rgba(0,229,184,.05);border:1px solid rgba(0,229,184,.22);border-radius:10px;margin-bottom:10px;">
+              <div style="width:28px;height:28px;border-radius:8px;background:rgba(0,229,184,.15);border:1px solid rgba(0,229,184,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--accent);font-family:var(--mono);">A</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:5px;">Exportar direto da Força de Trabalho do Teams</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.75;">
+                  Se a força de trabalho da sua polo estiver <strong style="color:var(--text2);">bem organizada e com boa legibilidade</strong>, você pode exportar diretamente do Teams:
+                  <br><br>
+                  Na planilha de Força de Trabalho → <strong style="color:var(--text2);">Arquivo → Exportar → Baixar como CSV UTF-8</strong>
+                  <br><br>
+                  O conector é inteligente — ele detecta automaticamente o separador (<span style="font-family:var(--mono);color:var(--accent);">,</span> ou <span style="font-family:var(--mono);color:var(--accent);">;</span>), a codificação do arquivo e identifica as colunas certas mesmo que os nomes sejam ligeiramente diferentes. Basta conectar o arquivo exportado diretamente.
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
+                  <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(0,229,184,.1);border:1px solid rgba(0,229,184,.2);color:var(--accent);">veiculo · frota · viatura · equipe</span>
+                  <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(0,184,230,.1);border:1px solid rgba(0,184,230,.2);color:var(--accent2);">local · base · cadastro · localidade</span>
+                  <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:#a78bfa;">termino · fim · horario · hora fim</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Opção B: CSV manual (força fracassada) -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:rgba(255,77,106,.05);border:1px solid rgba(255,77,106,.2);border-radius:10px;margin-bottom:14px;">
+              <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--danger);font-family:var(--mono);">B</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:5px;">Força de trabalho <span style="color:var(--danger);">desorganizada</span>? Crie o CSV manualmente</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.75;">
+                  Se a força de trabalho da sua polo for toda bagunçada — colunas misturadas, nomes diferentes, dados incompletos — o conector pode não conseguir identificar as informações corretamente. Nesse caso, <strong style="color:var(--text2);">crie um CSV manualmente</strong> no formato padrão abaixo, usando Excel, Google Sheets ou uma IA para montar o arquivo. Salve como <span style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">CSV UTF-8</span>.
+                  <br><br>
+                  O conector aceita os dois modos — tanto o exportado do Teams quanto o criado manualmente.
+                </div>
+              </div>
+            </div>
+
+            <!-- Estrutura das colunas -->
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+              <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;"></span>Formato padrão do CSV manual
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+              <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+                <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna A</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);">veiculo</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:4px;">Número do veículo (4 dígitos)</div>
+              </div>
+              <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+                <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna B</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent2);">local</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:4px;">Local / bairro / regional</div>
+              </div>
+              <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
+                <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna C</div>
+                <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:#a78bfa;">termino</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:4px;">Horário de término (ex: 17H)</div>
+              </div>
+            </div>
+
+            <!-- Exemplo CSV -->
+            <div style="background:var(--fundoPrincipal);border:1px solid var(--border2);border-radius:9px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);"></div>
+              <div style="color:var(--muted);opacity:.85;">veiculo,local,termino</div>
+              <div><span style="color:var(--accent);">1023</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">BOM DESPACHO</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
+              <div><span style="color:var(--accent);">1047</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">DIVINOPOLIS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">16H</span></div>
+              <div><span style="color:var(--accent);">1088</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">PARA DE MINAS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
+              <div><span style="color:var(--accent);">1102</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">ITAUNA</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">18H</span></div>
+            </div>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.65;">
+              💡 O nome gerado será <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span>, ex: <span style="font-family:var(--mono);color:var(--accent);">BOM DESPACHO-1023-17H</span>. Acentos removidos automaticamente. Horário aceito em qualquer formato: <span style="font-family:var(--mono);color:var(--text2);">17H</span>, <span style="font-family:var(--mono);color:var(--text2);">17:00</span> ou <span style="font-family:var(--mono);color:var(--text2);">17</span>.
+            </div>
+          </div>
+
+          <!-- PASSO 2: BOOKMARKLET CONECTAR CSV -->
+          <div class="card"
+            style="margin-bottom:16px;border-color:rgba(167,139,250,.2);position:relative;overflow:hidden;">
+            <div
+              style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div
+                style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 2 — Conectar CSV</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px;">Abre o arquivo e salva os dados no
+                  navegador para o Renomeador usar</div>
+              </div>
+              <span
+                style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:#a78bfa;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO
+                1/2</span>
+            </div>
+            <div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+              Com o Digiteam aberto, clique neste favorito. Ele vai abrir uma janela para você selecionar o arquivo
+              <span
+                style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span>
+              — após selecionar, os dados ficam salvos no navegador até você fechar a aba.
+            </div>
+            <div
+              style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(167,139,250,.05);border:1.5px dashed rgba(167,139,250,.3);border-radius:10px;margin-bottom:10px;">
+              <svg viewBox="0 0 24 24"
+                style="width:15px;height:15px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;">
+                <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
+                <path d="M9 3v4m6-4v4M3 11h18" />
               </svg>
-              Locais
-            </button>
+              <div style="font-size:11px;color:#a78bfa;font-weight:600;">Arraste o botão abaixo para a barra de
+                favoritos</div>
+            </div>
+            <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+              <a class="bm-link"
+                style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 14px rgba(167,139,250,.1);"
+                href="javascript:(function(){const MAPA={veiculo:['veiculo','frota','viatura','equipe','numero equipe','nº equipe','num equipe'],local:['local','base','regiao','local de cadastro','cadastro','cadastra em','localidade'],termino:['termino','fim','hora fim','fim de jornada','termino jornada','horario','horario x escala']};function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s]/g,'').trim();}function detectarSep(linha){const pv=linha.split(';').length;const pc=linha.split(',').length;return pv&gt;pc?';':',';}function parseLinha(l,sep){const c=[];let cur='',d=false;for(let i=0;i&lt;l.length;i++){const ch=l[i];if(ch==='&quot;'){d=!d;}else if(ch===sep&amp;&amp;!d){c.push(cur.trim().replace(/^&quot;|&quot;$/g,''));cur='';}else{cur+=ch;}}c.push(cur.trim().replace(/^&quot;|&quot;$/g,''));return c;}function detectarCab(ls,sep){const ch=Object.values(MAPA).flat();for(let i=0;i&lt;Math.min(20,ls.length);i++){const cols=parseLinha(ls[i],sep);if(cols.filter(c=&gt;ch.includes(norm(c))).length&gt;=2)return i;}return 0;}function mapear(l,sep){const r={};const cols=parseLinha(l,sep);for(const[k,a]of Object.entries(MAPA)){const f=cols.findIndex(c=&gt;a.includes(norm(c)));if(f!==-1)r[k]=f;}return r;}function fmtTermino(val){const t=val?.trim()||'';if(!t)return 'Sem Horário na FT';const todos=[...t.matchAll(/\b(\d{1,2}):\d{2}(:\d{2})?\b/g)].map(m=&gt;m[1]);if(todos.length)return todos[todos.length-1]+'h';const digitos=t.match(/\b(\d{1,2})\b/);if(digitos){const num=parseInt(digitos[1]);if(num&gt;=0&amp;&amp;num&lt;=24)return num.toString().padStart(2,'0')+'h';}const comH=t.match(/(\d{1,2})h/i);if(comH)return comH[1].padStart(2,'0')+'h';return 'Sem Horário na FT';}function processar(texto){const ls=texto.split('\n').filter(l=&gt;l.trim());if(!ls.length){alert('⚠️ Arquivo vazio');return;}const sep=detectarSep(ls[0]);const ic=detectarCab(ls,sep);const m=mapear(ls[ic],sep);const fat=['veiculo','local','termino'].filter(k=&gt;!(k in m));if(fat.length){alert('⚠️ Colunas não encontradas: '+fat.join(', ')+'\nCabeçalho detectado: '+ls[ic]);return;}const d={};const duplas=[];ls.slice(ic+1).forEach(l=&gt;{const p=parseLinha(l,sep);const v=p[m.veiculo]?.trim();if(!v||v==='')return;if(d[v])duplas.push(v);d[v]={local:p[m.local]?.trim()||'',termino:fmtTermino(p[m.termino])};});localStorage.setItem('equipes_csv',JSON.stringify(d));let msg='✅ '+Object.keys(d).length+' veículos carregados';if(duplas.length)msg+='\n⚠️ Duplicados (última linha venceu): '+duplas.join(', ');alert(msg);}const inp=document.createElement('input');inp.type='file';inp.accept='.csv';inp.onchange=e=&gt;{const f=e.target.files[0];const tentarLer=(enc)=&gt;new Promise(res=&gt;{const r=new FileReader();r.onload=evt=&gt;res(evt.target.result);r.readAsText(f,enc);});(async()=&gt;{let texto=await tentarLer('UTF-8');const temLixo=/[\uFFFD]/.test(texto);if(temLixo)texto=await tentarLer('windows-1252');processar(texto);})();};inp.click();})()"
+                title="Arraste para a barra de favoritos">
+                <svg viewBox="0 0 24 24"
+                  style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                Conectar CSV
+              </a>
+            </div>
+            <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
+              favoritos · clique com o Digiteam aberto</div>
+          </div>
 
-            <button class="consult-tab-btn" id="tab-btn-disp" onclick="consultSwitchTab('disp')">
-              <!-- SVG: transformador/equipamento MT -->
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="6" width="7" height="12" rx="1.5"/>
-                <rect x="14" y="6" width="7" height="12" rx="1.5"/>
-                <path d="M10 9 Q12 9 12 12 Q12 15 14 15"/>
-                <line x1="6.5" y1="4" x2="6.5" y2="6"/>
-                <line x1="17.5" y1="4" x2="17.5" y2="6"/>
-                <line x1="6.5" y1="18" x2="6.5" y2="20"/>
-                <line x1="17.5" y1="18" x2="17.5" y2="20"/>
+          <!-- PASSO 3: BOOKMARKLET RENOMEAR -->
+          <div class="card"
+            style="margin-bottom:16px;border-color:rgba(56,189,248,.2);position:relative;overflow:hidden;">
+            <div
+              style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#38bdf8,transparent);pointer-events:none;">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <div
+                style="width:42px;height:42px;border-radius:11px;background:rgba(56,189,248,.12);border:1.5px solid rgba(56,189,248,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#38bdf8;fill:none;stroke-width:2;">
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 3 — Renomear em Lote</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px;">Percorre o Digiteam e aplica os novos
+                  nomes automaticamente</div>
+              </div>
+              <span
+                style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.22);color:#38bdf8;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO
+                2/2</span>
+            </div>
+
+            <!-- O que faz -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:14px;flex-shrink:0;margin-top:1px;">✅</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Renomeia em
+                    lote</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Percorre todas as equipes
+                    visíveis e aplica o nome do CSV.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔒</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pula
+                    bloqueadas</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Equipes com cadeado são
+                    ignoradas sem interromper o processo.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏭️</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ignora já
+                    renomeadas</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Se o nome já está correto, a
+                    equipe é pulada sem modificação.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏸️</span>
+                <div>
+                  <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pausar / Parar
+                  </div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Barra de progresso com botões de
+                    controle em tempo real.</div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(56,189,248,.05);border:1.5px dashed rgba(56,189,248,.3);border-radius:10px;margin-bottom:10px;">
+              <svg viewBox="0 0 24 24"
+                style="width:15px;height:15px;stroke:#38bdf8;fill:none;stroke-width:2;flex-shrink:0;">
+                <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
+                <path d="M9 3v4m6-4v4M3 11h18" />
               </svg>
-              Dispositivos MT
-            </button>
+              <div style="font-size:11px;color:#38bdf8;font-weight:600;">Arraste o botão abaixo para a barra de
+                favoritos</div>
+            </div>
+            <div style="display:flex;justify-content:center;padding:4px 0 6px;">
+              <a class="bm-link"
+                style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(56,189,248,.55);background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(56,189,248,.07));color:#38bdf8;box-shadow:0 0 14px rgba(56,189,248,.1);"
+                href="javascript:(function(){const dadosStr=localStorage.getItem('equipes_csv');if(!dadosStr){alert('⚠️ Carregue o CSV primeiro!');return;}const dados=JSON.parse(dadosStr);const removerAcentos=str=&gt;str.normalize('NFD').replace(/[\u0300-\u036f]/g,'');let PARAR=false;let PAUSADO=false;let bloqueadas=0;const veiculosProcessados=new Set();const progDiv=document.createElement('div');progDiv.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#131b27 0%,#182030 50%,#1e2840 100%);color:#e8f1fc;padding:20px 30px;border-radius:16px;z-index:999999;font-family:Arial,sans-serif;min-width:400px;max-width:500px;box-shadow:0 10px 40px rgba(12,17,24,0.8),0 0 0 1px rgba(0,229,184,0.15);border:1px solid #283d58';progDiv.innerHTML='&lt;div style=&quot;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px&quot;&gt;&lt;div style=&quot;font-weight:600;font-size:16px;text-shadow:0 2px 4px rgba(0,0,0,0.4);color:#e8f1fc&quot;&gt;🔄 Renomeando...&lt;/div&gt;&lt;div&gt;&lt;button id=&quot;btn-pausar&quot; style=&quot;background:rgba(0,229,184,0.12);color:#00e5b8;border:1px solid rgba(0,229,184,0.3);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;margin-right:8px;backdrop-filter:blur(10px);transition:all 0.3s&quot;&gt;PAUSAR&lt;/button&gt;&lt;button id=&quot;btn-parar&quot; style=&quot;background:rgba(255,77,106,0.12);color:#ff4d6a;border:1px solid rgba(255,77,106,0.3);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;backdrop-filter:blur(10px);transition:all 0.3s&quot;&gt;PARAR&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;prog-status&quot; style=&quot;font-size:14px;margin-bottom:12px;font-family:monospace;text-shadow:0 1px 2px rgba(0,0,0,0.3);color:#c8ddf2&quot;&gt;Preparando...&lt;/div&gt;&lt;div style=&quot;background:rgba(0,0,0,0.4);height:24px;border-radius:12px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);border:1px solid #1e2d42&quot;&gt;&lt;div id=&quot;prog-bar&quot; style=&quot;background:linear-gradient(90deg,#00e5b8,#00b8e6);height:100%;width:0%;transition:width 0.4s ease;box-shadow:0 0 15px rgba(0,229,184,0.4)&quot;&gt;&lt;/div&gt;&lt;/div&gt;';document.body.appendChild(progDiv);const statusDiv=progDiv.querySelector('#prog-status');const barDiv=progDiv.querySelector('#prog-bar');const btnPausar=progDiv.querySelector('#btn-pausar');const btnParar=progDiv.querySelector('#btn-parar');btnPausar.addEventListener('mouseover',function(){this.style.background='rgba(0,229,184,0.2)';this.style.borderColor='rgba(0,229,184,0.5)';this.style.boxShadow='0 0 12px rgba(0,229,184,0.3)';});btnPausar.addEventListener('mouseout',function(){if(!PAUSADO){this.style.background='rgba(0,229,184,0.12)';this.style.borderColor='rgba(0,229,184,0.3)';this.style.boxShadow='none';}});btnParar.addEventListener('mouseover',function(){this.style.background='rgba(255,77,106,0.2)';this.style.borderColor='rgba(255,77,106,0.5)';this.style.boxShadow='0 0 12px rgba(255,77,106,0.3)';});btnParar.addEventListener('mouseout',function(){this.style.background='rgba(255,77,106,0.12)';this.style.borderColor='rgba(255,77,106,0.3)';this.style.boxShadow='none';});btnPausar.addEventListener('click',()=&gt;{PAUSADO=!PAUSADO;if(PAUSADO){btnPausar.textContent='RETOMAR';btnPausar.style.background='rgba(0,229,184,0.25)';btnPausar.style.borderColor='rgba(0,229,184,0.6)';btnPausar.style.boxShadow='0 0 15px rgba(0,229,184,0.4)';statusDiv.innerHTML='⏸️ PAUSADO';}else{btnPausar.textContent='PAUSAR';btnPausar.style.background='rgba(0,229,184,0.12)';btnPausar.style.borderColor='rgba(0,229,184,0.3)';btnPausar.style.boxShadow='none';renomearProxima();}});btnParar.addEventListener('click',()=&gt;{if(confirm('⚠️ Deseja realmente parar?')){PARAR=true;btnParar.textContent='PARANDO...';btnParar.disabled=true;btnParar.style.background='rgba(255,77,106,0.08)';btnParar.style.color='#8aaac8';btnPausar.disabled=true;}});let processadas=0;let sucesso=0;let falhas=0;let total=0;function atualizarProgresso(){if(total&gt;0){const perc=Math.round((processadas/total)*100);barDiv.style.width=perc+'%';}if(!PAUSADO)statusDiv.innerHTML=processadas+'/'+total+' | ✓'+sucesso+' | ✗'+falhas+(bloqueadas&gt;0?' | 🔒'+bloqueadas:'');}function tocarSom(tipo){const audioContext=new(window.AudioContext||window.webkitAudioContext)();const masterGain=audioContext.createGain();masterGain.connect(audioContext.destination);masterGain.gain.setValueAtTime(0.15,audioContext.currentTime);if(tipo==='sucesso'){const notas=[{freq:523.25,time:0,duration:0.12},{freq:659.25,time:0.08,duration:0.12},{freq:783.99,time:0.16,duration:0.12},{freq:1046.5,time:0.24,duration:0.25}];notas.forEach(nota=&gt;{const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(masterGain);osc.type='sine';osc.frequency.setValueAtTime(nota.freq,audioContext.currentTime+nota.time);gain.gain.setValueAtTime(0.6,audioContext.currentTime+nota.time);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+nota.time+nota.duration);osc.start(audioContext.currentTime+nota.time);osc.stop(audioContext.currentTime+nota.time+nota.duration);});const osc2=audioContext.createOscillator();const gain2=audioContext.createGain();osc2.connect(gain2);gain2.connect(masterGain);osc2.type='triangle';osc2.frequency.setValueAtTime(1046.5,audioContext.currentTime+0.24);gain2.gain.setValueAtTime(0.2,audioContext.currentTime+0.24);gain2.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+0.5);osc2.start(audioContext.currentTime+0.24);osc2.stop(audioContext.currentTime+0.5);}else{const notas=[{freq:600,time:0},{freq:500,time:0.1},{freq:400,time:0.2}];notas.forEach(nota=&gt;{const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(masterGain);osc.type='square';osc.frequency.setValueAtTime(nota.freq,audioContext.currentTime+nota.time);gain.gain.setValueAtTime(0.4,audioContext.currentTime+nota.time);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+nota.time+0.15);osc.start(audioContext.currentTime+nota.time);osc.stop(audioContext.currentTime+nota.time+0.15);});}}function normalizarNome(nome){return removerAcentos(nome.toUpperCase().trim()).replace(/\s+/g,' ');}function estaBloqueada(spanVeiculo){let elemento=spanVeiculo;while(elemento&amp;&amp;elemento.tagName!=='TR'){elemento=elemento.parentElement;}if(!elemento)return false;return!!elemento.querySelector('td i.pi.pi-lock');}function buscarEquipesParaRenomear(){const equipesSpans=document.querySelectorAll('span[style*=&quot;font-size: x-small&quot;][style*=&quot;font-weight:bold&quot;]');const equipes=[];equipesSpans.forEach(span=&gt;{const texto=span.textContent.trim();const match=texto.match(/^(\d{4})\s*-/);if(match){const veiculo=match[1];if(veiculosProcessados.has(veiculo))return;let nomeAtualSpan=null;let parent=span.parentElement;for(let i=0;i&lt;8;i++){if(!parent)break;nomeAtualSpan=parent.querySelector('span[style*=&quot;font-weight: bold&quot;][style*=&quot;display: block&quot;]');if(nomeAtualSpan)break;parent=parent.parentElement;}const nomeAtual=nomeAtualSpan?nomeAtualSpan.textContent.trim():'';if(dados[veiculo]){const d=dados[veiculo];const localLimpo=removerAcentos(d.local.toUpperCase().replace(/,.*$/,'').trim());const nomeEsperado=localLimpo+'-'+veiculo+'-'+d.termino.toUpperCase();if(normalizarNome(nomeAtual)!==normalizarNome(nomeEsperado)){equipes.push({veiculo,nomeAtual,nomeEsperado,elemento:span});}}}});return equipes;}function scrollParaElemento(elemento,callback){const rect=elemento.getBoundingClientRect();const visivel=rect.top&gt;=0&amp;&amp;rect.bottom&lt;=window.innerHeight;if(!visivel){elemento.scrollIntoView({behavior:'instant',block:'center'});setTimeout(callback,100);}else{callback();}}function aguardarEFecharToast(callback){let tentativas=0;const intervalo=setInterval(()=&gt;{const toast=document.querySelector('.p-toast');if(toast){const btn=toast.querySelector('button');if(btn)btn.click();clearInterval(intervalo);setTimeout(callback,60);return;}if(++tentativas&gt;=6){clearInterval(intervalo);callback();}},80);}function fecharModalPrincipal(callback){setTimeout(()=&gt;{const btnFechar=document.querySelector('.p-dialog-footer button')||[...document.querySelectorAll('.p-dialog-close-button')].find(b=&gt;!b.closest('.p-inplace'));if(btnFechar){btnFechar.click();setTimeout(callback,150);return;}callback();},150);}function mostrarResultadoFinal(parou){progDiv.style.transform='translateX(-50%) translateY(20px)';progDiv.style.opacity='0';setTimeout(()=&gt;progDiv.remove(),300);tocarSom(parou?'erro':'sucesso');const box=document.createElement('div');box.id='resultado-final';box.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#131b27 0%,#182030 50%,#1e2840 100%);padding:24px 28px;border-radius:16px;z-index:999999;min-width:420px;max-width:480px;box-shadow:0 10px 40px rgba(12,17,24,0.8),0 0 0 1px rgba(0,229,184,0.15);border:1px solid #283d58;font-family:Arial,sans-serif;opacity:0;transition:all 0.4s cubic-bezier(0.4,0,0.2,1)';const icone=parou?'⚠️':'✅';const tit=parou?'PROCESSO PARADO':'CONCLUÍDO!';box.innerHTML='&lt;div style=&quot;text-align:center&quot;&gt;&lt;div style=&quot;font-size:42px;margin-bottom:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))&quot;&gt;'+icone+'&lt;/div&gt;&lt;h2 style=&quot;color:#e8f1fc;font-family:Arial,sans-serif;margin:0 0 18px 0;font-size:18px;font-weight:600;letter-spacing:0.5px;text-shadow:0 2px 4px rgba(0,0,0,0.4)&quot;&gt;'+tit+'&lt;/h2&gt;&lt;div style=&quot;background:rgba(0,0,0,0.35);padding:16px;border-radius:10px;margin-bottom:16px;border:1px solid #1e2d42&quot;&gt;&lt;div style=&quot;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,sans-serif&quot;&gt;&lt;div style=&quot;background:rgba(0,229,184,0.06);padding:12px;border-radius:8px;border:1px solid rgba(0,229,184,0.15)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Total&lt;/div&gt;&lt;div style=&quot;color:#e8f1fc;font-size:22px;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.3)&quot;&gt;'+processadas+'&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;background:rgba(0,229,184,0.08);padding:12px;border-radius:8px;border:1px solid rgba(0,229,184,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Sucesso&lt;/div&gt;&lt;div style=&quot;color:#00e5b8;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(0,229,184,0.4)&quot;&gt;'+sucesso+'&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;background:rgba(255,77,106,0.08);padding:12px;border-radius:8px;border:1px solid rgba(255,77,106,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Falhas&lt;/div&gt;&lt;div style=&quot;color:#ff4d6a;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(255,77,106,0.3)&quot;&gt;'+falhas+'&lt;/div&gt;&lt;/div&gt;'+(bloqueadas&gt;0?'&lt;div style=&quot;background:rgba(255,184,48,0.08);padding:12px;border-radius:8px;border:1px solid rgba(255,184,48,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Bloqueadas&lt;/div&gt;&lt;div style=&quot;color:#ffb830;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(255,184,48,0.3)&quot;&gt;'+bloqueadas+'&lt;/div&gt;&lt;/div&gt;':'')+'&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;btn-fechar-resultado&quot; style=&quot;background:linear-gradient(90deg,#00e5b8,#00b8e6);color:#002b22;border:none;padding:11px 24px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;width:100%;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,229,184,0.35);font-family:Arial,sans-serif;letter-spacing:0.5px;margin-bottom:10px&quot;&gt;FECHAR&lt;/button&gt;&lt;div style=&quot;text-align:center&quot;&gt;&lt;p style=&quot;color:#8aaac8;margin:0;font-size:10px;font-family:Arial,sans-serif&quot;&gt;Pressione &lt;span style=&quot;background:rgba(0,229,184,0.12);padding:2px 6px;border-radius:4px;color:#00e5b8;font-weight:600;border:1px solid rgba(0,229,184,0.2)&quot;&gt;ESC&lt;/span&gt; para fechar&lt;/p&gt;&lt;/div&gt;&lt;div style=&quot;margin-top:12px;padding-top:12px;border-top:1px solid #283d58&quot;&gt;&lt;p style=&quot;color:#8aaac8;text-align:center;margin:0;font-size:10px;font-family:Arial,sans-serif&quot;&gt;💻 Dev by &lt;span style=&quot;color:#00e5b8;font-weight:600&quot;&gt;Lucas Visotto&lt;/span&gt; &amp;amp; &lt;span style=&quot;color:#00b8e6;font-weight:600&quot;&gt;Vitor Coutinho&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;';document.body.appendChild(box);setTimeout(()=&gt;{box.style.opacity='1';box.style.transform='translateX(-50%) translateY(0)';},50);const btnFechar=document.getElementById('btn-fechar-resultado');const fecharResultado=()=&gt;{box.style.opacity='0';box.style.transform='translateX(-50%) translateY(100px)';document.removeEventListener('keydown',handleEsc);setTimeout(()=&gt;box.remove(),400);};const handleEsc=(e)=&gt;{if(e.key==='Escape'||e.key==='Esc'){fecharResultado();}};document.addEventListener('keydown',handleEsc);btnFechar.addEventListener('mouseover',function(){this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 25px rgba(0,229,184,0.5)';this.style.opacity='0.9';});btnFechar.addEventListener('mouseout',function(){this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(0,229,184,0.35)';this.style.opacity='1';});btnFechar.addEventListener('click',fecharResultado);setTimeout(()=&gt;{fecharResultado();},8000);}function renomearProxima(){if(PARAR){setTimeout(()=&gt;{mostrarResultadoFinal(true);},150);return;}if(PAUSADO){setTimeout(renomearProxima,150);return;}const equipesRestantes=buscarEquipesParaRenomear();total=processadas+equipesRestantes.length;atualizarProgresso();if(equipesRestantes.length===0){setTimeout(()=&gt;{mostrarResultadoFinal(false);},150);return;}const eq=equipesRestantes[0];if(estaBloqueada(eq.elemento)){veiculosProcessados.add(eq.veiculo);bloqueadas++;atualizarProgresso();setTimeout(renomearProxima,50);return;}veiculosProcessados.add(eq.veiculo);processadas++;atualizarProgresso();scrollParaElemento(eq.elemento,()=&gt;{const rect=eq.elemento.getBoundingClientRect();if(rect.width===0||rect.height===0){falhas++;setTimeout(renomearProxima,100);return;}eq.elemento.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,view:window,button:2,clientX:rect.left+10,clientY:rect.top+10}));setTimeout(()=&gt;{const menuLinks=document.querySelectorAll('a.p-contextmenu-item-link');let clicouInfo=false;for(let link of menuLinks){const label=link.querySelector('.p-contextmenu-item-label');if(label&amp;&amp;label.textContent.trim()==='Informações'){link.click();clicouInfo=true;break;}}if(!clicouInfo){falhas++;atualizarProgresso();setTimeout(renomearProxima,120);return;}setTimeout(()=&gt;{const inplaceDisplay=document.querySelector('.p-inplace-display');if(!inplaceDisplay){falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inplaceDisplay.click();setTimeout(()=&gt;{const inputNome=document.querySelector('input[type=&quot;text&quot;]:focus')||document.querySelector('.p-inplace-content input');if(!inputNome){falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inputNome.value=eq.nomeEsperado;inputNome.dispatchEvent(new Event('input',{bubbles:true}));inputNome.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=&gt;{const btnCheck1=document.querySelector('button .pi-check')?.closest('button');if(btnCheck1){btnCheck1.click();setTimeout(()=&gt;{const btnCheck2=document.querySelector('button .pi-check')?.closest('button');if(btnCheck2)btnCheck2.click();setTimeout(()=&gt;{const btnFechar=document.querySelector('.p-dialog-close-button');if(btnFechar)btnFechar.click();sucesso++;atualizarProgresso();aguardarEFecharToast(()=&gt;{fecharModalPrincipal(()=&gt;{setTimeout(renomearProxima,120);});});},120);},150);}else{falhas++;atualizarProgresso();fecharModalPrincipal(()=&gt;{setTimeout(renomearProxima,120);});}},80);},250);},300);},150);});}renomearProxima();})()"
+                title="Arraste para a barra de favoritos">
+                <svg viewBox="0 0 24 24"
+                  style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+                Renomear Equipes
+              </a>
+            </div>
+            <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
+              favoritos · execute com o Digiteam aberto após carregar o CSV</div>
           </div>
 
-          <!-- Pane: Serviços -->
-          <div id="consult-pane-servicos" class="pane-active">
-            <div class="consult-grid" id="consult-grid"></div>
+          <!-- TUTORIAL COMPLETO -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="ct">Tutorial — do zero ao renomeado</div>
+
+            <div
+              style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Preparação
+              (uma vez)
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  1</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Monte o CSV
+                    com os dados das equipes</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Três colunas: <span
+                      style="font-family:var(--mono);color:var(--accent);">veiculo</span>, <span
+                      style="font-family:var(--mono);color:var(--accent2);">localdecadastro</span>, <span
+                      style="font-family:var(--mono);color:#a78bfa;">termino</span>. Salve como <span
+                      style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span>.
+                  </div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  2</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Instale os
+                    dois bookmarklets</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Arraste <strong
+                      style="color:#a78bfa;">Conectar CSV</strong> e <strong style="color:#38bdf8;">Renomear
+                      Equipes</strong> para a barra de favoritos (<span
+                      style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span>
+                    para exibir).</div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+              <span
+                style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>No
+              dia de renomear
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  3</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">Abra o Digiteam e
+                    clique em Conectar CSV</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Selecione o arquivo .csv. Uma
+                    confirmação vai aparecer com o total de veículos carregados.</div>
+                </div>
+              </div>
+              <div
+                style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
+                <div
+                  style="width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,.15);border:1.5px solid rgba(56,189,248,.4);color:#38bdf8;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
+                  4</div>
+                <div>
+                  <div style="font-size:12.5px;font-weight:700;color:#38bdf8;margin-bottom:3px;">Clique em Renomear
+                    Equipes — aguarde</div>
+                  <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Uma barra de progresso vai
+                    aparecer no canto da tela. Você pode <strong>pausar</strong> ou <strong>parar</strong> a
+                    qualquer momento. Ao final, um resumo mostra sucesso, falhas e equipes bloqueadas.</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Pane: Locais -->
-          <div id="consult-pane-locais">
-            <div class="locais-grid" id="locais-grid"></div>
-          </div>
-
-          <!-- Pane: Dispositivos MT -->
-          <div id="consult-pane-disp">
-            <div class="disp-list" id="disp-list"></div>
+          <!-- DICAS -->
+          <div class="card" style="margin-bottom:0;">
+            <div class="ct">Dicas e comportamentos</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O CSV precisa ser carregado a cada
+                  nova sessão — os dados não sobrevivem se você fechar e reabrir a aba.</div>
+              </div>
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com o nome já correto são
+                  detectadas e ignoradas — seguro de rodar mais de uma vez.</div>
+              </div>
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com 🔒 cadeado são puladas
+                  automaticamente e contadas separado no resumo final.</div>
+              </div>
+              <div
+                style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+                <svg viewBox="0 0 24 24"
+                  style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">O formato do nome gerado é sempre
+                  <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span> em
+                  maiúsculas sem acentos, ex: <span style="font-family:var(--mono);color:var(--accent);">PARA DE
+                    MINAS-1088-17H</span>.</div>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
-
-  <!-- ── BLOCO DE NOTAS ── -->
-  <div class="pg" id="page-notas">
-    <div class="pg-inner">
-
-    <!-- Hero Bloco de Notas -->
-    <div class="page-hero hero-gdis">
-      <div style="text-align:center;margin-bottom:4px;">
-        <div style="font-size:13px;color:var(--muted);margin-top:2px;max-width:700px;margin-left:auto;margin-right:auto;">
-          <p>❗ Os dados <strong>não são permanentes</strong> e podem ser perdidos ao reiniciar ou fazer logoff da máquina. </p>
-          <p>As exclusões de notas são permanentes e não podem ser restauradas </p>
+      
+      <div>
+        <div id="footer"> <!-- Rodape -->
+          <span class="fright">v2.6 · 2026</span>
         </div>
       </div>
-    </div>
-
-    <div class="card notasDiarias">     
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-        <button class="bok" onclick="criarNovaNota()" style=display:flex;align-items:center;justify-content:center;gap:8px;>
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Criar nova nota
-        </button>
-
-        <button class="bdel" onclick="excluirTodasNotas()" style="display:flex;align-items:center;justify-content:center;gap:8px;">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            <line x1="10" y1="11" x2="10" y2="17"/>
-            <line x1="14" y1="11" x2="14" y2="17"/>
-          </svg>
-          Excluir todas as notas
-        </button>
-      </div>
-
-      <div id="lista-notas" style="display:flex;flex-direction:column;gap:12px;"></div>
-
-      <div id="estado-vazio-notas">
-        <div class="gdis-empty-hint">
-          <p>Clique em "Criar nova nota" para começar</p>
-          <p>Renomeie o título da nota e escreva o que desejar</p>
-          <br>
-          <p>Exemplo: Crie uma nota, altere o título para "PMAL vencendo" e cole as notas, quando precisar basta clicar no botão de copiar para jogar no Digiteam</p>
-        </div>
-      </div>
-        
-    </div>
   </div>
-</div>
-
-  <!-- ── AUTOMAÇÕES ── -->
-  <div class="pg" id="page-automacoes">
-    <div class="pg-inner">
-
-
-      <!-- Hero -->
-      <div class="home-hero" style="margin-bottom:22px;">
-        <div class="home-hero-inner">
-          <div class="home-eyebrow">DIGITEAM · AUTOMAÇÃO</div>
-          <div class="home-title" style="font-size:22px;"><span>Automações com Bookmarklets</span></div>
-          <div class="home-sub">Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada.</div>
-        </div>
-      </div>
-
-      <!-- O QUE É UM BOOKMARKLET -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">O que é um bookmarklet?</div>
-        <div style="display:flex;gap:14px;align-items:flex-start;">
-          <div
-            style="width:38px;height:38px;border-radius:10px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
-            <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-            </svg>
-          </div>
-          <div>
-            <div style="font-size:13px;color:var(--text2);font-weight:600;margin-bottom:4px;">Um favorito que
-              executa código</div>
-            <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">É um favorito normal do navegador,
-              mas em vez de guardar uma URL, ele executa um script JavaScript na página aberta. Roda localmente
-              no seu navegador, sem enviar dados pra fora, sem instalar extensão.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOOKMARKLET: INTERVALO 6 MESES -->
-      <div class="card"
-        style="margin-bottom:16px;border-color:rgba(167,139,250,.22);position:relative;overflow:hidden;">
-        <div
-          style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;">
-        </div>
-
-        <!-- Header -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-          <div
-            style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
-              <rect x="3" y="4" width="18" height="18" rx="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-          </div>
-
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.01em;">Digiteam — Intervalo 6 meses</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Aba Despacho · Automação de filtros, datas e refresh</div>
-          </div>
-
-        </div>
-
-        <!-- O que faz -->
-        <div
-          style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;box-shadow:0 0 5px var(--accent);flex-shrink:0;"></span>O
-          que ele faz automaticamente
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔽</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Abre o painel
-                de filtro</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Clica automaticamente no botão
-                de filtro da tela.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:15px;flex-shrink:0;margin-top:1px;">🔄</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ativa Tempo
-                Real</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Liga o toggle de atualização em
-                tempo real.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:15px;flex-shrink:0;margin-top:1px;">📅</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Define 6 meses
-                de intervalo</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Seleciona "Intervalo" e preenche
-                de hoje até 6 meses atrás.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:15px;flex-shrink:0;margin-top:1px;">⏱️</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Refresh a cada
-                1 min</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Define o intervalo de
-                atualização automática para 1 minuto.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ÁREA DE ARRASTAR -->
-        <div
-          style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:#a78bfa;border-radius:2px;display:inline-block;flex-shrink:0;"></span>Arraste
-          para a barra de favoritos
-        </div>
-        <div
-          style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(167,139,250,.06);border:1.5px dashed rgba(167,139,250,.35);border-radius:10px;margin-bottom:10px;">
-          <svg viewBox="0 0 24 24"
-            style="width:16px;height:16px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;">
-            <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
-            <path d="M9 3v4m6-4v4M3 11h18" />
-          </svg>
-          <div style="font-size:11px;color:#a78bfa;font-weight:600;">Segure e arraste o botão abaixo até a barra
-            de favoritos do navegador</div>
-        </div>
-        <div style="display:flex;justify-content:center;padding:4px 0 6px;">
-          <a class="bm-link"
-            style="font-size:13px;padding:13px 22px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 18px rgba(167,139,250,.1);"
-            href="javascript:(async function(){try{const s=m=&gt;new Promise(r=&gt;setTimeout(r,m)),waitFor=async(fn,max=5000)=&gt;{const start=Date.now();while(Date.now()-start&lt;max){if(fn())return true;await s(50)}return false};const f=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi.pi-filter&quot;));if(!f){alert(&quot;Botão de filtro não encontrado&quot;);return}f.click();await s(150);const t=[...document.querySelectorAll(&quot;input[type=&#x27;checkbox&#x27;][role=&#x27;switch&#x27;]&quot;)].filter(x=&gt;x.offsetParent!==null);if(t.length&lt;3){alert(&quot;Toggle &#x27;Tempo real&#x27; não encontrado&quot;);return}if(!t[2].checked){t[2].click()}await s(250);const ch=[...document.querySelectorAll(&quot;button&quot;)].find(b=&gt;b.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;));if(ch){const ic=ch.querySelector(&quot;span.pi-chevron-left, span.pi-chevron-right&quot;);if(ic&amp;&amp;ic.classList.contains(&quot;pi-chevron-left&quot;)){ch.click();await s(400);const ok=await waitFor(()=&gt;{const labels=[...document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)].filter(e=&gt;e.offsetParent!==null);return labels.length&gt;=2},3000);if(!ok)await s(500)}}let ps=null;for(const l of document.querySelectorAll(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;)){const t=l.getAttribute(&quot;aria-label&quot;);if(!t)continue;const x=t.toLowerCase();if(!(x===&quot;hoje&quot;||x===&quot;ontem&quot;||x===&quot;amanhã&quot;||x===&quot;intervalo&quot;||x.includes(&quot;semana&quot;)||x.includes(&quot;mês&quot;)||x.includes(&quot;meses&quot;)))continue;const p=l.closest(&quot;p-select&quot;);if(!p)continue;const b=p.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(!b)continue;ps=p;b.click();await s(80);const hOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Hoje&quot;);if(hOpt){hOpt.click();await s(80)}b.click();await s(80);const iOpt=[...document.querySelectorAll(&quot;[role=&#x27;option&#x27;],.p-select-option&quot;)].find(e=&gt;e.textContent.trim()===&quot;Intervalo&quot;);if(iOpt){iOpt.click();await s(80);break}document.body.click();await s(80)}if(!ps){alert(&quot;Seletor de período não encontrado&quot;);return}await s(100);let i=[...document.querySelectorAll(&quot;input.p-datepicker-input&quot;)].find(e=&gt;e.offsetParent!==null);if(!i){alert(&quot;Datepicker não encontrado&quot;);return}i.click();await s(40);const h=new Date(),a=new Date();a.setMonth(h.getMonth()-6);const d=x=&gt;`${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`,di=d(a),df=d(h),m=(h.getFullYear()-a.getFullYear())*12+(h.getMonth()-a.getMonth());for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-prev-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${di}&quot;]`)?.click();await s(15);for(let j=0;j&lt;m;j++){document.querySelector(&quot;button.p-datepicker-next-button&quot;)?.click();await s(15)}document.querySelector(`span[data-date=&quot;${df}&quot;]`)?.click();await s(200);const allSelects=[...document.querySelectorAll(&quot;p-select&quot;)].filter(sel=&gt;sel!==ps&amp;&amp;sel.offsetParent!==null);for(const pSel of allSelects){const lbl=pSel.querySelector(&quot;span.p-select-label[role=&#x27;combobox&#x27;]&quot;);if(!lbl)continue;const ariaLbl=lbl.getAttribute(&quot;aria-label&quot;);if(ariaLbl&amp;&amp;(ariaLbl.includes(&quot;min&quot;)||ariaLbl.includes(&quot;Não Atualizar&quot;))){const dropBtn=pSel.querySelector(&quot;div.p-select-dropdown[role=&#x27;button&#x27;]&quot;);if(dropBtn){dropBtn.click();await s(250);const minOpt=[...document.querySelectorAll(&quot;li[role=&#x27;option&#x27;]&quot;)].find(e=&gt;{const span=e.querySelector(&quot;span.ng-star-inserted&quot;);return span&amp;&amp;span.textContent.trim()===&quot;1 min&quot;});if(minOpt){minOpt.click();await s(100);break}}}}}catch(e){alert(&quot;Erro: &quot;+e.message)}})();void 0;"
-            title="Arraste para a barra de favoritos">
-            <svg viewBox="0 0 24 24"
-              style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
-              <rect x="3" y="4" width="18" height="18" rx="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Intervalo 6 meses
-          </a>
-        </div>
-        <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ segure e arraste ·
-          depois clique com o Digiteam aberto</div>
-      </div>
-
-      <!-- TUTORIAL PASSO A PASSO -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">Como usar — passo a passo</div>
-
-        <div
-          style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte
-          1 · Instalar (só uma vez)
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              1</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Exiba a barra
-                de favoritos</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Pressione <span
-                  style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 7px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span>
-                para mostrar a barra de favoritos, caso ela esteja oculta.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              2</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Arraste o
-                botão roxo para os favoritos</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Segure o botão <strong
-                  style="color:#a78bfa;">Intervalo 6 meses</strong> acima e arraste até a barra de favoritos do
-                navegador. Solte quando aparecer o indicador de posição. Feito — está instalado!</div>
-            </div>
-          </div>
-
-        </div>
-
-        <div
-          style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Parte
-          2 · Usar no dia a dia
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              1</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Abra o
-                Digiteam na aba Despacho</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Navegue até a tela de Despacho
-                normalmente. O script precisa que a página esteja carregada.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:rgba(0,184,230,.12);border:1.5px solid rgba(0,184,230,.3);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              2</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Selecione seu
-                filtro de equipe / setor</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Aplique o filtro que você usa
-                normalmente (equipe, regional, tipo de serviço…) <strong
-                  style="color:var(--text2);">antes</strong> de acionar o bookmarklet.</div>
-            </div>
-          </div>
-
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              3</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">Clique no favorito
-                "Intervalo 6 meses"</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Clique no favorito instalado na
-                barra. O script roda sozinho — abre o filtro, ativa tempo real, preenche as datas (6 meses) e
-                configura atualização de 1 min. Aguarde uns 3 segundos e tá pronto.</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- DICAS -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">Dicas e observações</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O bookmarklet funciona
-              <strong>somente no Digiteam</strong>. Em outras páginas ele não vai encontrar os elementos e pode
-              exibir um alerta.</div>
-          </div>
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Se a tela do Digiteam mudar de
-              layout em uma atualização futura, o script pode parar de funcionar. Nesse caso, chama o Lucas.
-            </div>
-          </div>
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Você pode instalar o bookmarklet
-              em mais de um navegador. Basta repetir o processo de arrastar em cada um.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- FIM AUTOMAÇÕES -->
-
-  <!-- ── RENOMEADOR DE EQUIPES ── -->
-  <div class="pg" id="page-renomeador">
-    <div class="pg-inner">
-
-      <!-- Hero -->
-      <div class="home-hero" style="margin-bottom:22px;">
-        <div class="home-hero-inner">
-          <div class="home-eyebrow"
-            style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.2);color:#38bdf8;">DIGITEAM ·
-            EQUIPES · LOTE</div>
-          <div class="home-title" style="font-size:22px;"><span style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Renomeador de Equipes</span>
-          </div>
-          <div class="home-sub">Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo
-            percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas.</div>
-        </div>
-      </div>
-
-      <!-- COMO FUNCIONA -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">Como funciona</div>
-        <div style="display:flex;gap:0;flex-wrap:wrap;gap:8px;">
-          <div
-            style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="font-size:13px;">1️⃣</span>
-            </div>
-            <div>
-              <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Preparar o CSV
-              </div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Monte o arquivo com veículo, local
-                e término.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">
-            →</div>
-          <div
-            style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:28px;height:28px;border-radius:7px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="font-size:13px;">2️⃣</span>
-            </div>
-            <div>
-              <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:3px;">Bookmarklet:
-                Conectar CSV</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Abre seletor de arquivo e salva os
-                dados no navegador.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:center;color:var(--hint);font-size:16px;padding:0 4px;align-self:center;">
-            →</div>
-          <div
-            style="flex:1;min-width:180px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
-            <div
-              style="width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="font-size:13px;">3️⃣</span>
-            </div>
-            <div>
-              <div style="font-size:12px;font-weight:700;color:#38bdf8;margin-bottom:3px;">Bookmarklet: Renomear
-              </div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Percorre o Digiteam e renomeia
-                tudo em lote.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PASSO 1: CSV -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">Passo 1 — Obter o CSV</div>
-
-        <!-- Opção A: Teams direto -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:rgba(0,229,184,.05);border:1px solid rgba(0,229,184,.22);border-radius:10px;margin-bottom:10px;">
-          <div style="width:28px;height:28px;border-radius:8px;background:rgba(0,229,184,.15);border:1px solid rgba(0,229,184,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--accent);font-family:var(--mono);">A</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:5px;">Exportar direto da Força de Trabalho do Teams</div>
-            <div style="font-size:12px;color:var(--muted);line-height:1.75;">
-              Se a força de trabalho da sua polo estiver <strong style="color:var(--text2);">bem organizada e com boa legibilidade</strong>, você pode exportar diretamente do Teams:
-              <br><br>
-              Na planilha de Força de Trabalho → <strong style="color:var(--text2);">Arquivo → Exportar → Baixar como CSV UTF-8</strong>
-              <br><br>
-              O conector é inteligente — ele detecta automaticamente o separador (<span style="font-family:var(--mono);color:var(--accent);">,</span> ou <span style="font-family:var(--mono);color:var(--accent);">;</span>), a codificação do arquivo e identifica as colunas certas mesmo que os nomes sejam ligeiramente diferentes. Basta conectar o arquivo exportado diretamente.
-            </div>
-            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
-              <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(0,229,184,.1);border:1px solid rgba(0,229,184,.2);color:var(--accent);">veiculo · frota · viatura · equipe</span>
-              <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(0,184,230,.1);border:1px solid rgba(0,184,230,.2);color:var(--accent2);">local · base · cadastro · localidade</span>
-              <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:#a78bfa;">termino · fim · horario · hora fim</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Opção B: CSV manual (força fracassada) -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:rgba(255,77,106,.05);border:1px solid rgba(255,77,106,.2);border-radius:10px;margin-bottom:14px;">
-          <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--danger);font-family:var(--mono);">B</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:5px;">Força de trabalho <span style="color:var(--danger);">desorganizada</span>? Crie o CSV manualmente</div>
-            <div style="font-size:12px;color:var(--muted);line-height:1.75;">
-              Se a força de trabalho da sua polo for toda bagunçada — colunas misturadas, nomes diferentes, dados incompletos — o conector pode não conseguir identificar as informações corretamente. Nesse caso, <strong style="color:var(--text2);">crie um CSV manualmente</strong> no formato padrão abaixo, usando Excel, Google Sheets ou uma IA para montar o arquivo. Salve como <span style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">CSV UTF-8</span>.
-              <br><br>
-              O conector aceita os dois modos — tanto o exportado do Teams quanto o criado manualmente.
-            </div>
-          </div>
-        </div>
-
-        <!-- Estrutura das colunas -->
-        <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-          <span style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;"></span>Formato padrão do CSV manual
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
-          <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna A</div>
-            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);">veiculo</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Número do veículo (4 dígitos)</div>
-          </div>
-          <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna B</div>
-            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent2);">local</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Local / bairro / regional</div>
-          </div>
-          <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;text-align:center;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Coluna C</div>
-            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:#a78bfa;">termino</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Horário de término (ex: 17H)</div>
-          </div>
-        </div>
-
-        <!-- Exemplo CSV -->
-        <div style="background:var(--fundoPrincipal);border:1px solid var(--border2);border-radius:9px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);"></div>
-          <div style="color:var(--muted);opacity:.85;">veiculo,local,termino</div>
-          <div><span style="color:var(--accent);">1023</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">BOM DESPACHO</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
-          <div><span style="color:var(--accent);">1047</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">DIVINOPOLIS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">16H</span></div>
-          <div><span style="color:var(--accent);">1088</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">PARA DE MINAS</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">17H</span></div>
-          <div><span style="color:var(--accent);">1102</span><span style="color:var(--muted);">,</span><span style="color:var(--accent2);">ITAUNA</span><span style="color:var(--muted);">,</span><span style="color:#a78bfa;">18H</span></div>
-        </div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.65;">
-          💡 O nome gerado será <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span>, ex: <span style="font-family:var(--mono);color:var(--accent);">BOM DESPACHO-1023-17H</span>. Acentos removidos automaticamente. Horário aceito em qualquer formato: <span style="font-family:var(--mono);color:var(--text2);">17H</span>, <span style="font-family:var(--mono);color:var(--text2);">17:00</span> ou <span style="font-family:var(--mono);color:var(--text2);">17</span>.
-        </div>
-      </div>
-
-      <!-- PASSO 2: BOOKMARKLET CONECTAR CSV -->
-      <div class="card"
-        style="margin-bottom:16px;border-color:rgba(167,139,250,.2);position:relative;overflow:hidden;">
-        <div
-          style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,transparent);pointer-events:none;">
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <div
-            style="width:42px;height:42px;border-radius:11px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:2;">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-          </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 2 — Conectar CSV</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Abre o arquivo e salva os dados no
-              navegador para o Renomeador usar</div>
-          </div>
-          <span
-            style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:#a78bfa;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO
-            1/2</span>
-        </div>
-        <div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
-          Com o Digiteam aberto, clique neste favorito. Ele vai abrir uma janela para você selecionar o arquivo
-          <span
-            style="font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span>
-          — após selecionar, os dados ficam salvos no navegador até você fechar a aba.
-        </div>
-        <div
-          style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(167,139,250,.05);border:1.5px dashed rgba(167,139,250,.3);border-radius:10px;margin-bottom:10px;">
-          <svg viewBox="0 0 24 24"
-            style="width:15px;height:15px;stroke:#a78bfa;fill:none;stroke-width:2;flex-shrink:0;">
-            <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
-            <path d="M9 3v4m6-4v4M3 11h18" />
-          </svg>
-          <div style="font-size:11px;color:#a78bfa;font-weight:600;">Arraste o botão abaixo para a barra de
-            favoritos</div>
-        </div>
-        <div style="display:flex;justify-content:center;padding:4px 0 6px;">
-          <a class="bm-link"
-            style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(167,139,250,.55);background:linear-gradient(135deg,rgba(167,139,250,.18),rgba(167,139,250,.07));color:#a78bfa;box-shadow:0 0 14px rgba(167,139,250,.1);"
-            href="javascript:(function(){const MAPA={veiculo:['veiculo','frota','viatura','equipe','numero equipe','nº equipe','num equipe'],local:['local','base','regiao','local de cadastro','cadastro','cadastra em','localidade'],termino:['termino','fim','hora fim','fim de jornada','termino jornada','horario','horario x escala']};function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s]/g,'').trim();}function detectarSep(linha){const pv=linha.split(';').length;const pc=linha.split(',').length;return pv&gt;pc?';':',';}function parseLinha(l,sep){const c=[];let cur='',d=false;for(let i=0;i&lt;l.length;i++){const ch=l[i];if(ch==='&quot;'){d=!d;}else if(ch===sep&amp;&amp;!d){c.push(cur.trim().replace(/^&quot;|&quot;$/g,''));cur='';}else{cur+=ch;}}c.push(cur.trim().replace(/^&quot;|&quot;$/g,''));return c;}function detectarCab(ls,sep){const ch=Object.values(MAPA).flat();for(let i=0;i&lt;Math.min(20,ls.length);i++){const cols=parseLinha(ls[i],sep);if(cols.filter(c=&gt;ch.includes(norm(c))).length&gt;=2)return i;}return 0;}function mapear(l,sep){const r={};const cols=parseLinha(l,sep);for(const[k,a]of Object.entries(MAPA)){const f=cols.findIndex(c=&gt;a.includes(norm(c)));if(f!==-1)r[k]=f;}return r;}function fmtTermino(val){const t=val?.trim()||'';if(!t)return 'Sem Horário na FT';const todos=[...t.matchAll(/\b(\d{1,2}):\d{2}(:\d{2})?\b/g)].map(m=&gt;m[1]);if(todos.length)return todos[todos.length-1]+'h';const digitos=t.match(/\b(\d{1,2})\b/);if(digitos){const num=parseInt(digitos[1]);if(num&gt;=0&amp;&amp;num&lt;=24)return num.toString().padStart(2,'0')+'h';}const comH=t.match(/(\d{1,2})h/i);if(comH)return comH[1].padStart(2,'0')+'h';return 'Sem Horário na FT';}function processar(texto){const ls=texto.split('\n').filter(l=&gt;l.trim());if(!ls.length){alert('⚠️ Arquivo vazio');return;}const sep=detectarSep(ls[0]);const ic=detectarCab(ls,sep);const m=mapear(ls[ic],sep);const fat=['veiculo','local','termino'].filter(k=&gt;!(k in m));if(fat.length){alert('⚠️ Colunas não encontradas: '+fat.join(', ')+'\nCabeçalho detectado: '+ls[ic]);return;}const d={};const duplas=[];ls.slice(ic+1).forEach(l=&gt;{const p=parseLinha(l,sep);const v=p[m.veiculo]?.trim();if(!v||v==='')return;if(d[v])duplas.push(v);d[v]={local:p[m.local]?.trim()||'',termino:fmtTermino(p[m.termino])};});localStorage.setItem('equipes_csv',JSON.stringify(d));let msg='✅ '+Object.keys(d).length+' veículos carregados';if(duplas.length)msg+='\n⚠️ Duplicados (última linha venceu): '+duplas.join(', ');alert(msg);}const inp=document.createElement('input');inp.type='file';inp.accept='.csv';inp.onchange=e=&gt;{const f=e.target.files[0];const tentarLer=(enc)=&gt;new Promise(res=&gt;{const r=new FileReader();r.onload=evt=&gt;res(evt.target.result);r.readAsText(f,enc);});(async()=&gt;{let texto=await tentarLer('UTF-8');const temLixo=/[\uFFFD]/.test(texto);if(temLixo)texto=await tentarLer('windows-1252');processar(texto);})();};inp.click();})()"
-            title="Arraste para a barra de favoritos">
-            <svg viewBox="0 0 24 24"
-              style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            Conectar CSV
-          </a>
-        </div>
-        <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
-          favoritos · clique com o Digiteam aberto</div>
-      </div>
-
-      <!-- PASSO 3: BOOKMARKLET RENOMEAR -->
-      <div class="card"
-        style="margin-bottom:16px;border-color:rgba(56,189,248,.2);position:relative;overflow:hidden;">
-        <div
-          style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#38bdf8,transparent);pointer-events:none;">
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <div
-            style="width:42px;height:42px;border-radius:11px;background:rgba(56,189,248,.12);border:1.5px solid rgba(56,189,248,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#38bdf8;fill:none;stroke-width:2;">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-            </svg>
-          </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);">Passo 3 — Renomear em Lote</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Percorre o Digiteam e aplica os novos
-              nomes automaticamente</div>
-          </div>
-          <span
-            style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:5px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.22);color:#38bdf8;font-family:var(--mono);letter-spacing:.05em;flex-shrink:0;">PASSO
-            2/2</span>
-        </div>
-
-        <!-- O que faz -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:14px;flex-shrink:0;margin-top:1px;">✅</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Renomeia em
-                lote</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Percorre todas as equipes
-                visíveis e aplica o nome do CSV.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:14px;flex-shrink:0;margin-top:1px;">🔒</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pula
-                bloqueadas</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Equipes com cadeado são
-                ignoradas sem interromper o processo.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏭️</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Ignora já
-                renomeadas</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Se o nome já está correto, a
-                equipe é pulada sem modificação.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <span style="font-size:14px;flex-shrink:0;margin-top:1px;">⏸️</span>
-            <div>
-              <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:2px;">Pausar / Parar
-              </div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.55;">Barra de progresso com botões de
-                controle em tempo real.</div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(56,189,248,.05);border:1.5px dashed rgba(56,189,248,.3);border-radius:10px;margin-bottom:10px;">
-          <svg viewBox="0 0 24 24"
-            style="width:15px;height:15px;stroke:#38bdf8;fill:none;stroke-width:2;flex-shrink:0;">
-            <path d="M5 3h14M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" />
-            <path d="M9 3v4m6-4v4M3 11h18" />
-          </svg>
-          <div style="font-size:11px;color:#38bdf8;font-weight:600;">Arraste o botão abaixo para a barra de
-            favoritos</div>
-        </div>
-        <div style="display:flex;justify-content:center;padding:4px 0 6px;">
-          <a class="bm-link"
-            style="font-size:13px;padding:12px 20px;border-radius:11px;border-color:rgba(56,189,248,.55);background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(56,189,248,.07));color:#38bdf8;box-shadow:0 0 14px rgba(56,189,248,.1);"
-            href="javascript:(function(){const dadosStr=localStorage.getItem('equipes_csv');if(!dadosStr){alert('⚠️ Carregue o CSV primeiro!');return;}const dados=JSON.parse(dadosStr);const removerAcentos=str=&gt;str.normalize('NFD').replace(/[\u0300-\u036f]/g,'');let PARAR=false;let PAUSADO=false;let bloqueadas=0;const veiculosProcessados=new Set();const progDiv=document.createElement('div');progDiv.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#131b27 0%,#182030 50%,#1e2840 100%);color:#e8f1fc;padding:20px 30px;border-radius:16px;z-index:999999;font-family:Arial,sans-serif;min-width:400px;max-width:500px;box-shadow:0 10px 40px rgba(12,17,24,0.8),0 0 0 1px rgba(0,229,184,0.15);border:1px solid #283d58';progDiv.innerHTML='&lt;div style=&quot;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px&quot;&gt;&lt;div style=&quot;font-weight:600;font-size:16px;text-shadow:0 2px 4px rgba(0,0,0,0.4);color:#e8f1fc&quot;&gt;🔄 Renomeando...&lt;/div&gt;&lt;div&gt;&lt;button id=&quot;btn-pausar&quot; style=&quot;background:rgba(0,229,184,0.12);color:#00e5b8;border:1px solid rgba(0,229,184,0.3);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;margin-right:8px;backdrop-filter:blur(10px);transition:all 0.3s&quot;&gt;PAUSAR&lt;/button&gt;&lt;button id=&quot;btn-parar&quot; style=&quot;background:rgba(255,77,106,0.12);color:#ff4d6a;border:1px solid rgba(255,77,106,0.3);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;backdrop-filter:blur(10px);transition:all 0.3s&quot;&gt;PARAR&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;prog-status&quot; style=&quot;font-size:14px;margin-bottom:12px;font-family:monospace;text-shadow:0 1px 2px rgba(0,0,0,0.3);color:#c8ddf2&quot;&gt;Preparando...&lt;/div&gt;&lt;div style=&quot;background:rgba(0,0,0,0.4);height:24px;border-radius:12px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);border:1px solid #1e2d42&quot;&gt;&lt;div id=&quot;prog-bar&quot; style=&quot;background:linear-gradient(90deg,#00e5b8,#00b8e6);height:100%;width:0%;transition:width 0.4s ease;box-shadow:0 0 15px rgba(0,229,184,0.4)&quot;&gt;&lt;/div&gt;&lt;/div&gt;';document.body.appendChild(progDiv);const statusDiv=progDiv.querySelector('#prog-status');const barDiv=progDiv.querySelector('#prog-bar');const btnPausar=progDiv.querySelector('#btn-pausar');const btnParar=progDiv.querySelector('#btn-parar');btnPausar.addEventListener('mouseover',function(){this.style.background='rgba(0,229,184,0.2)';this.style.borderColor='rgba(0,229,184,0.5)';this.style.boxShadow='0 0 12px rgba(0,229,184,0.3)';});btnPausar.addEventListener('mouseout',function(){if(!PAUSADO){this.style.background='rgba(0,229,184,0.12)';this.style.borderColor='rgba(0,229,184,0.3)';this.style.boxShadow='none';}});btnParar.addEventListener('mouseover',function(){this.style.background='rgba(255,77,106,0.2)';this.style.borderColor='rgba(255,77,106,0.5)';this.style.boxShadow='0 0 12px rgba(255,77,106,0.3)';});btnParar.addEventListener('mouseout',function(){this.style.background='rgba(255,77,106,0.12)';this.style.borderColor='rgba(255,77,106,0.3)';this.style.boxShadow='none';});btnPausar.addEventListener('click',()=&gt;{PAUSADO=!PAUSADO;if(PAUSADO){btnPausar.textContent='RETOMAR';btnPausar.style.background='rgba(0,229,184,0.25)';btnPausar.style.borderColor='rgba(0,229,184,0.6)';btnPausar.style.boxShadow='0 0 15px rgba(0,229,184,0.4)';statusDiv.innerHTML='⏸️ PAUSADO';}else{btnPausar.textContent='PAUSAR';btnPausar.style.background='rgba(0,229,184,0.12)';btnPausar.style.borderColor='rgba(0,229,184,0.3)';btnPausar.style.boxShadow='none';renomearProxima();}});btnParar.addEventListener('click',()=&gt;{if(confirm('⚠️ Deseja realmente parar?')){PARAR=true;btnParar.textContent='PARANDO...';btnParar.disabled=true;btnParar.style.background='rgba(255,77,106,0.08)';btnParar.style.color='#8aaac8';btnPausar.disabled=true;}});let processadas=0;let sucesso=0;let falhas=0;let total=0;function atualizarProgresso(){if(total&gt;0){const perc=Math.round((processadas/total)*100);barDiv.style.width=perc+'%';}if(!PAUSADO)statusDiv.innerHTML=processadas+'/'+total+' | ✓'+sucesso+' | ✗'+falhas+(bloqueadas&gt;0?' | 🔒'+bloqueadas:'');}function tocarSom(tipo){const audioContext=new(window.AudioContext||window.webkitAudioContext)();const masterGain=audioContext.createGain();masterGain.connect(audioContext.destination);masterGain.gain.setValueAtTime(0.15,audioContext.currentTime);if(tipo==='sucesso'){const notas=[{freq:523.25,time:0,duration:0.12},{freq:659.25,time:0.08,duration:0.12},{freq:783.99,time:0.16,duration:0.12},{freq:1046.5,time:0.24,duration:0.25}];notas.forEach(nota=&gt;{const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(masterGain);osc.type='sine';osc.frequency.setValueAtTime(nota.freq,audioContext.currentTime+nota.time);gain.gain.setValueAtTime(0.6,audioContext.currentTime+nota.time);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+nota.time+nota.duration);osc.start(audioContext.currentTime+nota.time);osc.stop(audioContext.currentTime+nota.time+nota.duration);});const osc2=audioContext.createOscillator();const gain2=audioContext.createGain();osc2.connect(gain2);gain2.connect(masterGain);osc2.type='triangle';osc2.frequency.setValueAtTime(1046.5,audioContext.currentTime+0.24);gain2.gain.setValueAtTime(0.2,audioContext.currentTime+0.24);gain2.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+0.5);osc2.start(audioContext.currentTime+0.24);osc2.stop(audioContext.currentTime+0.5);}else{const notas=[{freq:600,time:0},{freq:500,time:0.1},{freq:400,time:0.2}];notas.forEach(nota=&gt;{const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(masterGain);osc.type='square';osc.frequency.setValueAtTime(nota.freq,audioContext.currentTime+nota.time);gain.gain.setValueAtTime(0.4,audioContext.currentTime+nota.time);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+nota.time+0.15);osc.start(audioContext.currentTime+nota.time);osc.stop(audioContext.currentTime+nota.time+0.15);});}}function normalizarNome(nome){return removerAcentos(nome.toUpperCase().trim()).replace(/\s+/g,' ');}function estaBloqueada(spanVeiculo){let elemento=spanVeiculo;while(elemento&amp;&amp;elemento.tagName!=='TR'){elemento=elemento.parentElement;}if(!elemento)return false;return!!elemento.querySelector('td i.pi.pi-lock');}function buscarEquipesParaRenomear(){const equipesSpans=document.querySelectorAll('span[style*=&quot;font-size: x-small&quot;][style*=&quot;font-weight:bold&quot;]');const equipes=[];equipesSpans.forEach(span=&gt;{const texto=span.textContent.trim();const match=texto.match(/^(\d{4})\s*-/);if(match){const veiculo=match[1];if(veiculosProcessados.has(veiculo))return;let nomeAtualSpan=null;let parent=span.parentElement;for(let i=0;i&lt;8;i++){if(!parent)break;nomeAtualSpan=parent.querySelector('span[style*=&quot;font-weight: bold&quot;][style*=&quot;display: block&quot;]');if(nomeAtualSpan)break;parent=parent.parentElement;}const nomeAtual=nomeAtualSpan?nomeAtualSpan.textContent.trim():'';if(dados[veiculo]){const d=dados[veiculo];const localLimpo=removerAcentos(d.local.toUpperCase().replace(/,.*$/,'').trim());const nomeEsperado=localLimpo+'-'+veiculo+'-'+d.termino.toUpperCase();if(normalizarNome(nomeAtual)!==normalizarNome(nomeEsperado)){equipes.push({veiculo,nomeAtual,nomeEsperado,elemento:span});}}}});return equipes;}function scrollParaElemento(elemento,callback){const rect=elemento.getBoundingClientRect();const visivel=rect.top&gt;=0&amp;&amp;rect.bottom&lt;=window.innerHeight;if(!visivel){elemento.scrollIntoView({behavior:'instant',block:'center'});setTimeout(callback,100);}else{callback();}}function aguardarEFecharToast(callback){let tentativas=0;const intervalo=setInterval(()=&gt;{const toast=document.querySelector('.p-toast');if(toast){const btn=toast.querySelector('button');if(btn)btn.click();clearInterval(intervalo);setTimeout(callback,60);return;}if(++tentativas&gt;=6){clearInterval(intervalo);callback();}},80);}function fecharModalPrincipal(callback){setTimeout(()=&gt;{const btnFechar=document.querySelector('.p-dialog-footer button')||[...document.querySelectorAll('.p-dialog-close-button')].find(b=&gt;!b.closest('.p-inplace'));if(btnFechar){btnFechar.click();setTimeout(callback,150);return;}callback();},150);}function mostrarResultadoFinal(parou){progDiv.style.transform='translateX(-50%) translateY(20px)';progDiv.style.opacity='0';setTimeout(()=&gt;progDiv.remove(),300);tocarSom(parou?'erro':'sucesso');const box=document.createElement('div');box.id='resultado-final';box.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#131b27 0%,#182030 50%,#1e2840 100%);padding:24px 28px;border-radius:16px;z-index:999999;min-width:420px;max-width:480px;box-shadow:0 10px 40px rgba(12,17,24,0.8),0 0 0 1px rgba(0,229,184,0.15);border:1px solid #283d58;font-family:Arial,sans-serif;opacity:0;transition:all 0.4s cubic-bezier(0.4,0,0.2,1)';const icone=parou?'⚠️':'✅';const tit=parou?'PROCESSO PARADO':'CONCLUÍDO!';box.innerHTML='&lt;div style=&quot;text-align:center&quot;&gt;&lt;div style=&quot;font-size:42px;margin-bottom:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))&quot;&gt;'+icone+'&lt;/div&gt;&lt;h2 style=&quot;color:#e8f1fc;font-family:Arial,sans-serif;margin:0 0 18px 0;font-size:18px;font-weight:600;letter-spacing:0.5px;text-shadow:0 2px 4px rgba(0,0,0,0.4)&quot;&gt;'+tit+'&lt;/h2&gt;&lt;div style=&quot;background:rgba(0,0,0,0.35);padding:16px;border-radius:10px;margin-bottom:16px;border:1px solid #1e2d42&quot;&gt;&lt;div style=&quot;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,sans-serif&quot;&gt;&lt;div style=&quot;background:rgba(0,229,184,0.06);padding:12px;border-radius:8px;border:1px solid rgba(0,229,184,0.15)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Total&lt;/div&gt;&lt;div style=&quot;color:#e8f1fc;font-size:22px;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.3)&quot;&gt;'+processadas+'&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;background:rgba(0,229,184,0.08);padding:12px;border-radius:8px;border:1px solid rgba(0,229,184,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Sucesso&lt;/div&gt;&lt;div style=&quot;color:#00e5b8;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(0,229,184,0.4)&quot;&gt;'+sucesso+'&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;background:rgba(255,77,106,0.08);padding:12px;border-radius:8px;border:1px solid rgba(255,77,106,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Falhas&lt;/div&gt;&lt;div style=&quot;color:#ff4d6a;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(255,77,106,0.3)&quot;&gt;'+falhas+'&lt;/div&gt;&lt;/div&gt;'+(bloqueadas&gt;0?'&lt;div style=&quot;background:rgba(255,184,48,0.08);padding:12px;border-radius:8px;border:1px solid rgba(255,184,48,0.25)&quot;&gt;&lt;div style=&quot;color:#8aaac8;font-size:9px;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px&quot;&gt;Bloqueadas&lt;/div&gt;&lt;div style=&quot;color:#ffb830;font-size:22px;font-weight:bold;text-shadow:0 0 12px rgba(255,184,48,0.3)&quot;&gt;'+bloqueadas+'&lt;/div&gt;&lt;/div&gt;':'')+'&lt;/div&gt;&lt;/div&gt;&lt;button id=&quot;btn-fechar-resultado&quot; style=&quot;background:linear-gradient(90deg,#00e5b8,#00b8e6);color:#002b22;border:none;padding:11px 24px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;width:100%;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,229,184,0.35);font-family:Arial,sans-serif;letter-spacing:0.5px;margin-bottom:10px&quot;&gt;FECHAR&lt;/button&gt;&lt;div style=&quot;text-align:center&quot;&gt;&lt;p style=&quot;color:#8aaac8;margin:0;font-size:10px;font-family:Arial,sans-serif&quot;&gt;Pressione &lt;span style=&quot;background:rgba(0,229,184,0.12);padding:2px 6px;border-radius:4px;color:#00e5b8;font-weight:600;border:1px solid rgba(0,229,184,0.2)&quot;&gt;ESC&lt;/span&gt; para fechar&lt;/p&gt;&lt;/div&gt;&lt;div style=&quot;margin-top:12px;padding-top:12px;border-top:1px solid #283d58&quot;&gt;&lt;p style=&quot;color:#8aaac8;text-align:center;margin:0;font-size:10px;font-family:Arial,sans-serif&quot;&gt;💻 Dev by &lt;span style=&quot;color:#00e5b8;font-weight:600&quot;&gt;Lucas Visotto&lt;/span&gt; &amp;amp; &lt;span style=&quot;color:#00b8e6;font-weight:600&quot;&gt;Vitor Coutinho&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;';document.body.appendChild(box);setTimeout(()=&gt;{box.style.opacity='1';box.style.transform='translateX(-50%) translateY(0)';},50);const btnFechar=document.getElementById('btn-fechar-resultado');const fecharResultado=()=&gt;{box.style.opacity='0';box.style.transform='translateX(-50%) translateY(100px)';document.removeEventListener('keydown',handleEsc);setTimeout(()=&gt;box.remove(),400);};const handleEsc=(e)=&gt;{if(e.key==='Escape'||e.key==='Esc'){fecharResultado();}};document.addEventListener('keydown',handleEsc);btnFechar.addEventListener('mouseover',function(){this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 25px rgba(0,229,184,0.5)';this.style.opacity='0.9';});btnFechar.addEventListener('mouseout',function(){this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(0,229,184,0.35)';this.style.opacity='1';});btnFechar.addEventListener('click',fecharResultado);setTimeout(()=&gt;{fecharResultado();},8000);}function renomearProxima(){if(PARAR){setTimeout(()=&gt;{mostrarResultadoFinal(true);},150);return;}if(PAUSADO){setTimeout(renomearProxima,150);return;}const equipesRestantes=buscarEquipesParaRenomear();total=processadas+equipesRestantes.length;atualizarProgresso();if(equipesRestantes.length===0){setTimeout(()=&gt;{mostrarResultadoFinal(false);},150);return;}const eq=equipesRestantes[0];if(estaBloqueada(eq.elemento)){veiculosProcessados.add(eq.veiculo);bloqueadas++;atualizarProgresso();setTimeout(renomearProxima,50);return;}veiculosProcessados.add(eq.veiculo);processadas++;atualizarProgresso();scrollParaElemento(eq.elemento,()=&gt;{const rect=eq.elemento.getBoundingClientRect();if(rect.width===0||rect.height===0){falhas++;setTimeout(renomearProxima,100);return;}eq.elemento.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,view:window,button:2,clientX:rect.left+10,clientY:rect.top+10}));setTimeout(()=&gt;{const menuLinks=document.querySelectorAll('a.p-contextmenu-item-link');let clicouInfo=false;for(let link of menuLinks){const label=link.querySelector('.p-contextmenu-item-label');if(label&amp;&amp;label.textContent.trim()==='Informações'){link.click();clicouInfo=true;break;}}if(!clicouInfo){falhas++;atualizarProgresso();setTimeout(renomearProxima,120);return;}setTimeout(()=&gt;{const inplaceDisplay=document.querySelector('.p-inplace-display');if(!inplaceDisplay){falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inplaceDisplay.click();setTimeout(()=&gt;{const inputNome=document.querySelector('input[type=&quot;text&quot;]:focus')||document.querySelector('.p-inplace-content input');if(!inputNome){falhas++;atualizarProgresso();fecharModalPrincipal(renomearProxima);return;}inputNome.value=eq.nomeEsperado;inputNome.dispatchEvent(new Event('input',{bubbles:true}));inputNome.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=&gt;{const btnCheck1=document.querySelector('button .pi-check')?.closest('button');if(btnCheck1){btnCheck1.click();setTimeout(()=&gt;{const btnCheck2=document.querySelector('button .pi-check')?.closest('button');if(btnCheck2)btnCheck2.click();setTimeout(()=&gt;{const btnFechar=document.querySelector('.p-dialog-close-button');if(btnFechar)btnFechar.click();sucesso++;atualizarProgresso();aguardarEFecharToast(()=&gt;{fecharModalPrincipal(()=&gt;{setTimeout(renomearProxima,120);});});},120);},150);}else{falhas++;atualizarProgresso();fecharModalPrincipal(()=&gt;{setTimeout(renomearProxima,120);});}},80);},250);},300);},150);});}renomearProxima();})()"
-            title="Arraste para a barra de favoritos">
-            <svg viewBox="0 0 24 24"
-              style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-            </svg>
-            Renomear Equipes
-          </a>
-        </div>
-        <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:6px;">↔ arraste para os
-          favoritos · execute com o Digiteam aberto após carregar o CSV</div>
-      </div>
-
-      <!-- TUTORIAL COMPLETO -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="ct">Tutorial — do zero ao renomeado</div>
-
-        <div
-          style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:var(--accent2);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Preparação
-          (uma vez)
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              1</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Monte o CSV
-                com os dados das equipes</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Três colunas: <span
-                  style="font-family:var(--mono);color:var(--accent);">veiculo</span>, <span
-                  style="font-family:var(--mono);color:var(--accent2);">localdecadastro</span>, <span
-                  style="font-family:var(--mono);color:#a78bfa;">termino</span>. Salve como <span
-                  style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">.csv</span>.
-              </div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:1.5px solid rgba(0,229,184,.35);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              2</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:3px;">Instale os
-                dois bookmarklets</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Arraste <strong
-                  style="color:#a78bfa;">Conectar CSV</strong> e <strong style="color:#38bdf8;">Renomear
-                  Equipes</strong> para a barra de favoritos (<span
-                  style="font-family:var(--mono);background:var(--surface3);border:1px solid var(--border2);padding:1px 6px;border-radius:4px;color:var(--text);">Ctrl+Shift+B</span>
-                para exibir).</div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-          <span
-            style="width:3px;height:10px;background:var(--accent);border-radius:2px;display:inline-block;flex-shrink:0;"></span>No
-          dia de renomear
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.4);color:#a78bfa;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              3</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:#a78bfa;margin-bottom:3px;">Abra o Digiteam e
-                clique em Conectar CSV</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Selecione o arquivo .csv. Uma
-                confirmação vai aparecer com o total de veículos carregados.</div>
-            </div>
-          </div>
-          <div
-            style="display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.18);border-radius:9px;">
-            <div
-              style="width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,.15);border:1.5px solid rgba(56,189,248,.4);color:#38bdf8;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);">
-              4</div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:#38bdf8;margin-bottom:3px;">Clique em Renomear
-                Equipes — aguarde</div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Uma barra de progresso vai
-                aparecer no canto da tela. Você pode <strong>pausar</strong> ou <strong>parar</strong> a
-                qualquer momento. Ao final, um resumo mostra sucesso, falhas e equipes bloqueadas.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DICAS -->
-      <div class="card" style="margin-bottom:0;">
-        <div class="ct">Dicas e comportamentos</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--warn-dim);border:1px solid rgba(255,184,48,.25);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--warn);line-height:1.6;">O CSV precisa ser carregado a cada
-              nova sessão — os dados não sobrevivem se você fechar e reabrir a aba.</div>
-          </div>
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com o nome já correto são
-              detectadas e ignoradas — seguro de rodar mais de uma vez.</div>
-          </div>
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--ok);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">Equipes com 🔒 cadeado são puladas
-              automaticamente e contadas separado no resumo final.</div>
-          </div>
-          <div
-            style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
-            <svg viewBox="0 0 24 24"
-              style="width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">O formato do nome gerado é sempre
-              <span style="font-family:var(--mono);color:var(--text2);">LOCAL-VEICULO-TERMINO</span> em
-              maiúsculas sem acentos, ex: <span style="font-family:var(--mono);color:var(--accent);">PARA DE
-                MINAS-1088-17H</span>.</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- FIM RENOMEADOR -->
-</div>
-      <div id="footer"> <!-- Rodape -->
-        <span class="fright">v2.6 · 2026</span>
-      </div>
-    </div>
-</div>
 
   <div id="toast"></div>
 
@@ -8978,6 +9034,7 @@ body.light .card.notasDiarias {
     conv: { t: "Conversor Elétrico", s: "kVA · kW · Amperes — trifásico e monofásico para qualquer tensão e FP" },
     consult: { t: "Consultas", s: "Busca universal por polos, malhas, códigos de locais, de dispositivos, de reprova, de fechamento ou manobras." },
     notas: { t: "Notas Diárias", s: "Armazene anotações temporárias do dia" },
+    conv:{t:"Conversor Elétrico",s:"kVA · kW · Amperes — trifásico e monofásico para qualquer tensão e FP"},
     automacoes: { t: "Seletor de Intervalo", s: "Automação · Digiteam · Bookmarklet" },
     renomeador: { t: "Renomeador de Equipes", s: "Automação · Digiteam · CSV + Bookmarklet" },
   };
@@ -11403,6 +11460,194 @@ function toggleTheme(init = false) {
     setTimeout(renderizarNotas, 0);
   }
   });
+
+
+  /* ── INICIO: PARTE DO GOOGLE MAPS ── */
+  async function buscarMapa() {
+    var input = document.getElementById("map-address-input");
+    var address = input.value.trim();
+
+    if (!address) {
+      toast("Por favor, digite um endereço para buscar.");
+      return;
+    }
+
+    document.getElementById("map-lat").textContent = "Buscando...";
+    document.getElementById("map-lat").classList.remove("filled");
+    document.getElementById("map-lon").textContent = "Buscando...";
+    document.getElementById("map-lon").classList.remove("filled");
+    document.getElementById("map-address-found").innerHTML = "Consultando satélites...";
+
+    try {
+      var response = await fetch("https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(address));
+      var data = await response.json();
+
+      if (data && data.length > 0) {
+        var lat = parseFloat(data[0].lat).toFixed(6);
+        var lon = parseFloat(data[0].lon).toFixed(6);
+
+        document.getElementById("map-lat").textContent = lat.replace(".", ",");
+        document.getElementById("map-lat").classList.add("filled");
+        document.getElementById("map-lon").textContent = lon.replace(".", ",");
+        document.getElementById("map-lon").classList.add("filled");
+
+        document.getElementById("map-address-found").innerHTML = "<strong>Local:</strong> " + data[0].display_name;
+
+        var mapIframe = document.getElementById("map-iframe");
+        mapIframe.src = "https://maps.google.com/maps?q=" + lat + "," + lon + "&hl=pt-BR&z=17&output=embed";
+
+        toast("Localização encontrada com sucesso!");
+      } else {
+        document.getElementById("map-lat").textContent = "N/A";
+        document.getElementById("map-lon").textContent = "N/A";
+        document.getElementById("map-address-found").innerHTML = "<span style='color: var(--danger);'>Não foi possível obter as coordenadas. Verifique a ortografia do endereço.</span>";
+
+        var mapIframe = document.getElementById("map-iframe");
+        mapIframe.src = "https://maps.google.com/maps?q=" + encodeURIComponent(address) + "&hl=pt-BR&z=15&output=embed";
+      }
+    } catch (error) {
+      document.getElementById("map-lat").textContent = "Erro";
+      document.getElementById("map-lon").textContent = "Erro";
+      document.getElementById("map-address-found").innerHTML = "<span style='color: var(--danger);'>Ocorreu um erro na rede ao buscar as coordenadas.</span>";
+    }
+  }
+
+  function limparMapa() {
+    document.getElementById("map-address-input").value = "";
+    document.getElementById("map-lat").textContent = "—";
+    document.getElementById("map-lat").classList.remove("filled");
+    document.getElementById("map-lon").textContent = "—";
+    document.getElementById("map-lon").classList.remove("filled");
+    document.getElementById("map-address-found").innerHTML = "Aguardando pesquisa...";
+    document.getElementById("map-iframe").src = "";
+    toast("Campos limpos!");
+  }
+  /* ── FIM: PARTE DO GOOGLE MAPS ── */
+
+
+
+
+  var CV={tensao:220,fase:"tri",fp:0.85,unidade:"kva",customV:false};
+var CV_REFS=[5,10,15,25,30,37.5,45,50,75,100,112.5,150,200,250,300];
+
+function cvLimpar(){
+  document.getElementById("cv-valor").value="";
+  document.getElementById("cv-results").innerHTML="<div class=\"cv-empty\">Insira um valor para converter.</div>";
+  cvRenderTable();
+}
+function cvRenderVoltageButtons(){
+  var bar=document.getElementById("cv-vbar");
+  if(CV.fase==="tri"){
+    bar.innerHTML=
+      "<div class=\"rb"+(CV.tensao===220&&!CV.customV?" on":"")+"\" id=\"cvt-220\" onclick=\"cvSetV(220)\">220 V</div>"+
+      "<div class=\"rb"+(CV.tensao===127&&!CV.customV?" on":"")+"\" id=\"cvt-127\" onclick=\"cvSetV(127)\">127 V</div>"+
+      "<div class=\"rb"+(CV.tensao===380&&!CV.customV?" on":"")+"\" id=\"cvt-380\" onclick=\"cvSetV(380)\">380 V</div>"+
+      "<div class=\"rb"+(CV.customV?" on":"")+"\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
+  } else {
+    // Monofásico CEMIG: 110V (MT rural) ou 240V (padrão BT)
+    bar.innerHTML=
+      "<div class=\"rb"+(CV.tensao===240&&!CV.customV?" on":"")+"\" id=\"cvt-240\" onclick=\"cvSetV(240)\">240 V</div>"+
+      "<div class=\"rb"+(CV.tensao===110&&!CV.customV?" on":"")+"\" id=\"cvt-110\" onclick=\"cvSetV(110)\">110 V</div>"+
+      "<div class=\"rb"+(CV.customV?" on":"")+"\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
+  }
+}
+
+function cvSetV(v){
+  var inp=document.getElementById("cv-tensao");
+  if(v==="custom"){
+    CV.customV=true;
+    inp.style.display="block";
+    CV.tensao=parseFloat(inp.value)||CV.tensao;
+  } else {
+    CV.customV=false;
+    CV.tensao=v;
+    inp.style.display="none";
+  }
+  cvRenderVoltageButtons();
+  cvCalc();
+}
+function cvSetF(f){
+  CV.fase=f;
+  // Ajusta tensão padrão ao mudar fase
+  if(f==="mono"&&(CV.tensao===127||CV.tensao===220||CV.tensao===380)){CV.tensao=240;CV.customV=false;}
+  if(f==="tri"&&(CV.tensao===110||CV.tensao===240)){CV.tensao=220;CV.customV=false;}
+  document.getElementById("cv-tensao").style.display="none";
+  ["tri","mono"].forEach(function(x){document.getElementById("cvf-"+x).classList.toggle("on",x===f);});
+  cvRenderVoltageButtons();
+  cvCalc();
+}
+function cvSetFP(fp){
+  CV.fp=fp;
+  ["085","090","092","1"].forEach(function(x){document.getElementById("cvfp-"+x).classList.toggle("on",parseFloat("0."+x.replace("0","."))==fp||(x==="1"&&fp===1.0)||(x==="085"&&fp===0.85)||(x==="090"&&fp===0.90)||(x==="092"&&fp===0.92));});
+  cvCalc();
+}
+function cvSetU(u){
+  CV.unidade=u;
+  ["kva","kw","a"].forEach(function(x){document.getElementById("cvu-"+x).classList.toggle("on",x===u);});
+  cvCalc();
+}
+
+function cvToKVA(val,u){
+  if(u==="kva"){return val;}
+  if(u==="kw"){return val/CV.fp;}
+  // A → kVA
+  if(CV.fase==="tri"){return (val*Math.sqrt(3)*CV.tensao)/1000;}
+  return (val*CV.tensao)/1000;
+}
+function cvFromKVA(kva){
+  var kw=kva*CV.fp;
+  var a=CV.fase==="tri"?(kva*1000)/(Math.sqrt(3)*CV.tensao):(kva*1000)/CV.tensao;
+  return {kva:kva,kw:kw,a:a};
+}
+function cvFmt(v,dec){return v.toFixed(dec===undefined?2:dec).replace(".",",");}
+
+function cvCalc(){
+  var raw=parseFloat(document.getElementById("cv-valor").value);
+  var el=document.getElementById("cv-results");
+  if(!raw||isNaN(raw)){el.innerHTML="<div class=\"cv-empty\">Insira um valor para converter.</div>";cvRenderTable();return;}
+  var kva=cvToKVA(raw,CV.unidade);
+  var r=cvFromKVA(kva);
+  var items=[
+    {lbl:"Potência Aparente",val:cvFmt(r.kva)+" kVA",hl:CV.unidade==="kva"},
+    {lbl:"Potência Ativa",val:cvFmt(r.kw)+" kW",hl:CV.unidade==="kw"},
+    {lbl:"Corrente",val:cvFmt(r.a,1)+" A",hl:CV.unidade==="a"},
+    {lbl:"Fator de Potência",val:CV.fp.toFixed(2).replace(".",","),hl:false},
+    {lbl:"Tensão / Fases",val:CV.tensao+" V — "+(CV.fase==="tri"?"Trifásico":"Monofásico"),hl:false}
+  ];
+  el.innerHTML=items.map(function(it){
+    return "<div class=\"cv-result-item"+(it.hl?" highlight":"")+"\">"+
+      "<span class=\"cv-result-lbl\">"+it.lbl+"</span>"+
+      "<span class=\"cv-result-val\">"+it.val+"</span>"+
+    "</div>";
+  }).join("");
+  cvRenderTable();
+}
+
+function cvRenderTable(){
+  var lbl=(CV.fase==="tri"?"Trifásico":"Monofásico")+" "+CV.tensao+" V, FP "+CV.fp.toFixed(2).replace(".",",");
+  document.getElementById("cv-ref-label").textContent=lbl;
+  var rows=CV_REFS.map(function(kva){
+    var r=cvFromKVA(kva);
+    return "<div class=\"cv-table-row\" onclick=\"document.getElementById('cv-valor').value='"+kva+"';cvSetU('kva');cvCalc();\">"+
+      "<div class=\"cv-table-cell\">"+kva+" kVA</div>"+
+      "<div class=\"cv-table-cell\">"+cvFmt(r.kva)+" kVA</div>"+
+      "<div class=\"cv-table-cell\">"+cvFmt(r.kw)+" kW</div>"+
+      "<div class=\"cv-table-cell\">"+cvFmt(r.a,1)+" A</div>"+
+    "</div>";
+  }).join("");
+  document.getElementById("cv-table").innerHTML=
+    "<div class=\"cv-table-row header\">"+
+      "<div class=\"cv-table-cell\">Potência</div>"+
+      "<div class=\"cv-table-cell\">kVA</div>"+
+      "<div class=\"cv-table-cell\">kW</div>"+
+      "<div class=\"cv-table-cell\">Corrente (A)</div>"+
+    "</div>"+rows;
+}
+
+/* INIT */
+addVao();addVao();calcular();gAtualizar();cvRenderVoltageButtons();cvRenderTable();consultRender();
+
+
 
   </script>
 </body>
