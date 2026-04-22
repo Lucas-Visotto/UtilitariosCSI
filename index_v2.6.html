@@ -5270,31 +5270,175 @@ body.light .home-title span {
   transform-origin: 12px 9px;
 }
 
-@keyframes anim-conv-bolt {
+/* ── GRANDEZAS ELÉTRICAS ANIMAÇÃO ── */
 
-  0%,
-  70%,
+/* Loop gira continuamente */
+@keyframes anim-loop-rotate {
+  0% {
+    stroke-dashoffset: 0;
+  }
   100% {
+    stroke-dashoffset: -38;
+  }
+}
+
+/* Loop pulsa */
+@keyframes anim-loop-pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Setas aparecem em sequência */
+@keyframes anim-arrow-flow {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
     opacity: 1;
     transform: scale(1);
   }
+}
 
-  35% {
-    opacity: .3;
-    transform: scale(.85);
+/* Raio pisca (pulso de tensão) */
+@keyframes anim-bolt-flash {
+  0%, 70%, 100% {
+    opacity: 0;
   }
+  75%, 85% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.5;
+  }
+}
 
+/* Glow do raio */
+@keyframes anim-bolt-glow {
+  0%, 70%, 100% {
+    filter: drop-shadow(0 0 0px transparent);
+  }
+  75%, 85% {
+    filter: drop-shadow(0 0 3px var(--ok));
+  }
+}
+
+/* Aplicar quando ativo */
+#nav-conv.active svg .current-loop {
+  stroke: var(--accent2);
+  stroke-dasharray: 6 4;
+  animation: 
+    anim-loop-rotate 3s linear infinite,
+    anim-loop-pulse 2s ease-in-out infinite;
+}
+
+#nav-conv.active svg .current-arrow {
+  stroke: var(--accent2);
+}
+
+#nav-conv.active svg .current-arrow-1 {
+  animation: anim-arrow-flow 2s ease-in-out infinite;
+  transform-origin: 17.5px 9px;
+}
+
+#nav-conv.active svg .current-arrow-2 {
+  animation: anim-arrow-flow 2s ease-in-out 0.5s infinite;
+  transform-origin: 14.5px 6.5px;
+}
+
+#nav-conv.active svg .voltage-bolt {
+  stroke: var(--accent);
+  fill: var(--accent);
+  stroke-linecap: round;
+  animation: 
+    anim-bolt-flash 3s ease-in-out infinite,
+    anim-bolt-glow 3s ease-in-out infinite;
+}
+/* ── GRANDEZAS ELÉTRICAS ANIMAÇÃO FIM ── */
+
+
+/* ── NOTAS DIÁRIAS ANIMAÇÃO ── */
+@keyframes anim-notas-line1 {
+  0%, 100% { 
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  25% { 
+    transform: scaleX(0.7);
+    opacity: 0.5;
+  }
   50% {
-    opacity: .9;
-    transform: scale(1.08);
+    transform: scaleX(1);
+    opacity: 1;
   }
 }
 
-#nav-conv.active svg path {
-  animation: anim-conv-bolt 1.6s ease-in-out infinite;
-  transform-origin: 12px 12px;
+@keyframes anim-notas-line2 {
+  0%, 100% { 
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  35% { 
+    transform: scaleX(0.6);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
+@keyframes anim-notas-line3 {
+  0%, 100% { 
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  45% { 
+    transform: scaleX(0.4);
+    opacity: 0.3;
+  }
+  70% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes anim-notas-paper {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+/* Aplicar animações quando ativo */
+#nav-notas.active svg path {
+  animation: anim-notas-paper 2.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+#nav-notas.active svg line:nth-child(2) {
+  animation: anim-notas-line1 2s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+#nav-notas.active svg line:nth-child(3) {
+  animation: anim-notas-line2 2s ease-in-out .3s infinite;
+  transform-origin: left center;
+}
+
+#nav-notas.active svg line:nth-child(4) {
+  animation: anim-notas-line3 2s ease-in-out .6s infinite;
+  transform-origin: left center;
+}
+
+
+/* ── CONSULTAS ANIMAÇÃO ── */
 @keyframes anim-consult-glass {
 
   0%,
@@ -5351,108 +5495,8 @@ body.light .home-title span {
   animation: anim-consult-plus-h 2.2s ease-in-out infinite;
   transform-origin: 11px 11px;
 }
+/* ── CONSULTAS ANIMAÇÃO FIM ── */
 
-@keyframes anim-dash-ecg {
-
-  0%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-
-  100% {
-    stroke-dashoffset: -32;
-  }
-}
-
-#nav-dashboards.active svg polyline {
-  stroke-dasharray: 32 8;
-  animation: anim-dash-ecg .9s linear infinite;
-}
-
-.ni.active svg {
-  transition: none;
-}
-
-@keyframes anim-auto-top {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  40% {
-    transform: translateY(-2px);
-  }
-
-  70% {
-    transform: translateY(-1px);
-  }
-}
-
-@keyframes anim-auto-mid {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(1px);
-  }
-}
-
-#nav-automacoes.active svg path:first-child {
-  animation: anim-auto-top 1.8s ease-in-out infinite;
-  transform-origin: 12px 7px;
-}
-
-#nav-automacoes.active svg path:nth-child(2) {
-  animation: anim-auto-mid 1.8s ease-in-out .2s infinite;
-  transform-origin: 12px 17px;
-}
-
-#nav-automacoes.active svg path:nth-child(3) {
-  animation: anim-auto-mid 1.8s ease-in-out .4s infinite;
-  transform-origin: 12px 12px;
-}
-
-@keyframes anim-rename-pen {
-
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-
-  25% {
-    transform: translate(-1px, 1px) rotate(-3deg);
-  }
-
-  75% {
-    transform: translate(1px, -1px) rotate(3deg);
-  }
-}
-
-@keyframes anim-rename-line {
-
-  0%,
-  100% {
-    transform: scaleX(1);
-  }
-
-  50% {
-    transform: scaleX(1.1);
-  }
-}
-
-#nav-renomeador.active svg path:nth-child(2) {
-  animation: anim-rename-pen 1.6s ease-in-out infinite;
-  transform-origin: 18px 5px;
-}
-
-#nav-renomeador.active svg path:first-child {
-  animation: anim-rename-line 1.6s ease-in-out .2s infinite;
-  transform-origin: 12px 20px;
-}
 /* ══════════════════════════════════════════
    HEROES UNIVERSAIS — todas as páginas
 ══════════════════════════════════════════ */
@@ -6075,6 +6119,21 @@ body.light .card.notasDiarias {
           Notas Diárias
         </div>
 
+        <div class="ni" id="nav-conv" onclick="navTo('conv')">
+          <svg viewBox="0 0 24 24">
+            <!-- Loop circular -->
+            <circle class="current-loop" cx="12" cy="12" r="9" fill="none" stroke-width="1.5"/>
+            
+            <!-- Setas de fluxo no loop -->
+            <path class="current-arrow current-arrow-1" d="M 17.5,10 L 18,9 L 17,8.5" fill="none" stroke-width="1" stroke-linejoin="round"/>
+            <path class="current-arrow current-arrow-2" d="M 14,6.5 L 15,6 L 15.5,7" fill="none" stroke-width="1" stroke-linejoin="round"/>
+            
+            <!-- Raio central -->
+            <path class="voltage-bolt" d="M 13,7 L 10,12 L 12,12 L 11,17" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+          Grandezas Elétricas
+        </div>
+
         <br>
         <div class="snav-lbl">Dashboards</div>
         <div class="ni" id="nav-dashboards" onclick="navToSection('home','home-dashboards-section')"
@@ -6269,11 +6328,10 @@ body.light .card.notasDiarias {
             </div>
             <div class="home-hero-inner">
               <div class="home-eyebrow">CEMIG · OD/PI · CSI</div>
-              <div class="home-title"><span>Ferramentas de Operação e Controle</span></div>
+              <div class="home-title">Ferramentas de Operação e Controle</div>
               <div class="home-sub">Calculadoras, conversores e consultas operacionais para o dia a dia do controlador.</div>
             </div>
           </div>
-
 
           <!-- ═══════════════════════════════════════════
                 ANIMAÇÕES SVG — PRÉVIA DAS FERRAMENTAS
@@ -6808,6 +6866,112 @@ body.light .card.notasDiarias {
           </div>
         </div>
 
+
+        <div class="home-svg-sep"></div>
+
+        <!-- ── Grandezas Elétricas ── -->
+        <div class="home-svg-group" style="margin-bottom:20px;">
+          <button class="home-svg-group-label" onclick="navTo('conv')" title="Abrir Grandezas Elétricas">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--warn);fill:none;stroke-width:2;flex-shrink:0;">
+              <circle cx="12" cy="12" r="9" fill="none" stroke-width="1.5"/>
+              <path d="M 17.5,10 L 18,9 L 17,8.5" fill="none" stroke-width="1" stroke-linejoin="round"/>
+              <path d="M 14,6.5 L 15,6 L 15.5,7" fill="none" stroke-width="1" stroke-linejoin="round"/>
+              <path d="M 13,7 L 10,12 L 12,12 L 11,17" stroke-width="1.3" stroke-linejoin="round"/>
+            </svg>
+            Grandezas Elétricas
+            <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <div class="page-hero hero-conv" style="margin-bottom:16px;">
+            <div class="ph-svg-wrap">
+              <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                <!-- AMPERÍMETRO ANALÓGICO esquerdo -->
+                <circle cx="130" cy="65" r="50" class="cv-meter-body" style="stroke-width:1.5"/>
+                <circle cx="130" cy="65" r="42" class="cv-meter-face"/>
+                <!-- arco de escala -->
+                <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-bg" style="stroke-dasharray:none;stroke-width:4;"/>
+                <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-val cv-arc-anim" style="stroke-dasharray:120;"/>
+                <!-- marcações da escala -->
+                <line x1="88" y1="65" x2="96" y2="65" stroke="var(--border3)" stroke-width="1"/>
+                <line x1="130" y1="22" x2="130" y2="30" stroke="var(--border3)" stroke-width="1"/>
+                <line x1="172" y1="65" x2="164" y2="65" stroke="var(--border3)" stroke-width="1"/>
+                <line x1="96" y1="36" x2="101" y2="42" stroke="var(--border3)" stroke-width="1"/>
+                <line x1="164" y1="36" x2="159" y2="42" stroke="var(--border3)" stroke-width="1"/>
+                <!-- labels escala -->
+                <text x="80" y="70" class="cv-label">0</text>
+                <text x="124" y="20" class="cv-label">50%</text>
+                <text x="168" y="70" class="cv-label">100%</text>
+                <!-- agulha -->
+                <line x1="130" y1="65" x2="130" y2="28" class="cv-needle cv-needle-anim"/>
+                <circle cx="130" cy="65" r="4" fill="var(--warn)"/>
+                <!-- label central -->
+                <text x="130" y="80" class="cv-label" style="text-anchor:middle;">A</text>
+                <text x="130" y="92" class="cv-label-big" style="text-anchor:middle;font-size:13px;">220V</text>
+                <!-- parafusos do medidor -->
+                <circle cx="94" cy="112" r="3" fill="var(--border3)"/>
+                <circle cx="166" cy="112" r="3" fill="var(--border3)"/>
+
+                <!-- CIRCUITO CENTRAL — fios e nós -->
+                <!-- trilha horizontal superior -->
+                <line x1="200" y1="30" x2="560" y2="30" class="cv-wire-live cv-flow"/>
+                <!-- trilha horizontal inferior -->
+                <line x1="200" y1="90" x2="560" y2="90" class="cv-wire"/>
+                <!-- verticais nas extremidades -->
+                <line x1="200" y1="30" x2="200" y2="90" class="cv-wire"/>
+                <line x1="560" y1="30" x2="560" y2="90" class="cv-wire"/>
+
+                <!-- nó 1 — fórmula kVA -->
+                <rect x="260" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
+                <text x="300" y="24" class="cv-formula" style="text-anchor:middle;">S = V · I · √3</text>
+                <line x1="300" y1="30" x2="300" y2="30" class="cv-wire"/>
+                <circle cx="300" cy="30" r="3" class="cv-node"/>
+
+                <!-- nó 2 — fórmula kW -->
+                <rect x="380" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
+                <text x="420" y="24" class="cv-formula" style="text-anchor:middle;">P = S · FP</text>
+                <circle cx="420" cy="30" r="3" class="cv-node"/>
+
+                <!-- componente resistor simulado -->
+                <rect x="455" y="24" width="50" height="12" rx="2" fill="var(--surface3)" stroke="var(--border2)" stroke-width=".8"/>
+                <line x1="462" y1="30" x2="465" y2="24" stroke="var(--border3)" stroke-width=".8"/>
+                <line x1="465" y1="24" x2="470" y2="36" stroke="var(--border3)" stroke-width=".8"/>
+                <line x1="470" y1="36" x2="475" y2="24" stroke="var(--border3)" stroke-width=".8"/>
+                <line x1="475" y1="24" x2="480" y2="36" stroke="var(--border3)" stroke-width=".8"/>
+                <line x1="480" y1="36" x2="485" y2="30" stroke="var(--border3)" stroke-width=".8"/>
+                <line x1="485" y1="30" x2="499" y2="30" stroke="var(--border3)" stroke-width=".8"/>
+                <text x="470" y="46" class="cv-label">FP 0,85</text>
+
+                <!-- raio / bolt decorativo -->
+                <path d="M 232,18 L 226,30 L 232,28 L 226,42" class="cv-bolt-anim" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linejoin="round"/>
+
+                <!-- PAINEL DE RESULTADO direito -->
+                <rect x="580" y="10" width="165" height="95" rx="7" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
+                <rect x="580" y="10" width="165" height="18" rx="7" fill="rgba(255,184,48,.1)"/>
+                <text x="594" y="23" style="font-size:8px;fill:var(--warn);font-family:monospace;font-weight:700;">RESULTADO</text>
+
+                <text x="594" y="42" class="cv-label">kVA</text>
+                <text x="630" y="42" style="font-size:13px;fill:var(--warn);font-family:monospace;font-weight:700;text-anchor:end;">75,0</text>
+                <line x1="590" y1="46" x2="738" y2="46" stroke="var(--border)" stroke-width=".7"/>
+
+                <text x="594" y="60" class="cv-label">kW</text>
+                <text x="630" y="60" style="font-size:13px;fill:var(--text);font-family:monospace;font-weight:700;text-anchor:end;">63,8</text>
+                <line x1="590" y1="64" x2="738" y2="64" stroke="var(--border)" stroke-width=".7"/>
+
+                <text x="594" y="78" class="cv-label">A (tri 220V)</text>
+                <text x="738" y="78" style="font-size:13px;fill:var(--accent);font-family:monospace;font-weight:700;text-anchor:end;">196,8</text>
+                <line x1="590" y1="82" x2="738" y2="82" stroke="var(--border)" stroke-width=".7"/>
+
+                <text x="594" y="96" class="cv-label">A (mono)</text>
+                <text x="738" y="96" style="font-size:12px;fill:var(--text2);font-family:monospace;font-weight:700;text-anchor:end;">340,9</text>
+              </svg>
+            </div>
+            <div class="ih-info">
+              <div class="ih-info-title">Conversor de Grandezas Elétricas</div>
+              <div class="ih-info-sub">Converta kVA, kW e Amperes para qualquer tensão, fase e fator de potência — trifásico e monofásico.</div>
+            </div>
+          </div>
+        </div>
+
         <br>
         <div class="home-section-title"><h2>Automações (Bookmarklet)</h2><br></div>
 
@@ -6901,14 +7065,15 @@ body.light .card.notasDiarias {
                 Renomeador de Equipes
                 <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;margin-left:4px;opacity:.7;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
-          <div class="page-hero hero-rename" style="margin-bottom:22px;">
-            <div class="ph-svg-wrap">
-              <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
-                <defs>
-                  <marker id="rnarr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-                    <path d="M0,0 L5,2.5 L0,5 Z" fill="var(--accent)"/>
-                  </marker>
-                </defs>
+
+              <div class="page-hero hero-rename" style="margin-bottom:22px;">
+                <div class="ph-svg-wrap">
+                  <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
+                    <defs>
+                      <marker id="rnarr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                        <path d="M0,0 L5,2.5 L0,5 Z" fill="var(--accent)"/>
+                      </marker>
+                    </defs>
 
                 <!-- CSV INPUT esquerdo -->
                 <rect x="30" y="8" width="170" height="98" rx="6" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
@@ -6990,7 +7155,7 @@ body.light .card.notasDiarias {
               <div class="ph-info-sub">Carregue o CSV, clique no bookmarklet e o Digiteam é renomeado automaticamente — pulando bloqueadas e já atualizadas.</div>
             </div>
           </div>
-            </div>
+        </div>
 
           </div>
 
@@ -7145,15 +7310,16 @@ body.light .card.notasDiarias {
           <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:20px;">
 
             <!-- CHANGELOG compacto -->
-              <br>
+            <br>
             <div class="card" style="margin-bottom:0;">
               <div class="ct">Histórico de versões</div>
               <div class="home-changelog" style="max-height:220px;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--border3) transparent;">
                 
+                
                 <div class="home-cl-item">
                   <div class="home-cl-ver cl-new">v2.6</div>
                   <div class="home-cl-body">
-                    <div class="home-cl-title">Layout + aba Notas Diárias + Google maps na aba Coordenadas</div>
+                    <div class="home-cl-title">Layout + aba Notas Diárias + Google maps na aba Coordenadas + aba Grandezas Elétricas</div>
                   </div>
                 </div>
 
@@ -7254,6 +7420,7 @@ body.light .card.notasDiarias {
         </div>
       </div>
 
+<!-- ────────── FERRAMENTAS ──────── -->
       <!-- ── INTERLIGAÇÃO ── -->
       <div class="pg" id="page-interlig">
         <div class="pg-inner">
@@ -7817,96 +7984,6 @@ body.light .card.notasDiarias {
       <div class="pg" id="page-conv">
         <div class="pg-inner">
 
-          <!-- Hero Conversor Elétrico -->
-          <div class="page-hero hero-conv" style="margin-bottom:16px;">
-            <div class="ph-svg-wrap">
-              <svg viewBox="0 0 760 115" xmlns="http://www.w3.org/2000/svg" class="ph-svg">
-                <!-- AMPERÍMETRO ANALÓGICO esquerdo -->
-                <circle cx="130" cy="65" r="50" class="cv-meter-body" style="stroke-width:1.5"/>
-                <circle cx="130" cy="65" r="42" class="cv-meter-face"/>
-                <!-- arco de escala -->
-                <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-bg" style="stroke-dasharray:none;stroke-width:4;"/>
-                <path d="M 90,90 A 45,45 0 1,1 170,90" class="cv-arc cv-arc-val cv-arc-anim" style="stroke-dasharray:120;"/>
-                <!-- marcações da escala -->
-                <line x1="88" y1="65" x2="96" y2="65" stroke="var(--border3)" stroke-width="1"/>
-                <line x1="130" y1="22" x2="130" y2="30" stroke="var(--border3)" stroke-width="1"/>
-                <line x1="172" y1="65" x2="164" y2="65" stroke="var(--border3)" stroke-width="1"/>
-                <line x1="96" y1="36" x2="101" y2="42" stroke="var(--border3)" stroke-width="1"/>
-                <line x1="164" y1="36" x2="159" y2="42" stroke="var(--border3)" stroke-width="1"/>
-                <!-- labels escala -->
-                <text x="80" y="70" class="cv-label">0</text>
-                <text x="124" y="20" class="cv-label">50%</text>
-                <text x="168" y="70" class="cv-label">100%</text>
-                <!-- agulha -->
-                <line x1="130" y1="65" x2="130" y2="28" class="cv-needle cv-needle-anim"/>
-                <circle cx="130" cy="65" r="4" fill="var(--warn)"/>
-                <!-- label central -->
-                <text x="130" y="80" class="cv-label" style="text-anchor:middle;">A</text>
-                <text x="130" y="92" class="cv-label-big" style="text-anchor:middle;font-size:13px;">220V</text>
-                <!-- parafusos do medidor -->
-                <circle cx="94" cy="112" r="3" fill="var(--border3)"/>
-                <circle cx="166" cy="112" r="3" fill="var(--border3)"/>
-
-                <!-- CIRCUITO CENTRAL — fios e nós -->
-                <!-- trilha horizontal superior -->
-                <line x1="200" y1="30" x2="560" y2="30" class="cv-wire-live cv-flow"/>
-                <!-- trilha horizontal inferior -->
-                <line x1="200" y1="90" x2="560" y2="90" class="cv-wire"/>
-                <!-- verticais nas extremidades -->
-                <line x1="200" y1="30" x2="200" y2="90" class="cv-wire"/>
-                <line x1="560" y1="30" x2="560" y2="90" class="cv-wire"/>
-
-                <!-- nó 1 — fórmula kVA -->
-                <rect x="260" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
-                <text x="300" y="24" class="cv-formula" style="text-anchor:middle;">S = V · I · √3</text>
-                <line x1="300" y1="30" x2="300" y2="30" class="cv-wire"/>
-                <circle cx="300" cy="30" r="3" class="cv-node"/>
-
-                <!-- nó 2 — fórmula kW -->
-                <rect x="380" y="10" width="80" height="20" rx="4" fill="var(--surface2)" stroke="var(--warn)" stroke-width=".8"/>
-                <text x="420" y="24" class="cv-formula" style="text-anchor:middle;">P = S · FP</text>
-                <circle cx="420" cy="30" r="3" class="cv-node"/>
-
-                <!-- componente resistor simulado -->
-                <rect x="455" y="24" width="50" height="12" rx="2" fill="var(--surface3)" stroke="var(--border2)" stroke-width=".8"/>
-                <line x1="462" y1="30" x2="465" y2="24" stroke="var(--border3)" stroke-width=".8"/>
-                <line x1="465" y1="24" x2="470" y2="36" stroke="var(--border3)" stroke-width=".8"/>
-                <line x1="470" y1="36" x2="475" y2="24" stroke="var(--border3)" stroke-width=".8"/>
-                <line x1="475" y1="24" x2="480" y2="36" stroke="var(--border3)" stroke-width=".8"/>
-                <line x1="480" y1="36" x2="485" y2="30" stroke="var(--border3)" stroke-width=".8"/>
-                <line x1="485" y1="30" x2="499" y2="30" stroke="var(--border3)" stroke-width=".8"/>
-                <text x="470" y="46" class="cv-label">FP 0,85</text>
-
-                <!-- raio / bolt decorativo -->
-                <path d="M 232,18 L 226,30 L 232,28 L 226,42" class="cv-bolt-anim" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linejoin="round"/>
-
-                <!-- PAINEL DE RESULTADO direito -->
-                <rect x="580" y="10" width="165" height="95" rx="7" fill="var(--surface2)" stroke="var(--border2)" stroke-width="1"/>
-                <rect x="580" y="10" width="165" height="18" rx="7" fill="rgba(255,184,48,.1)"/>
-                <text x="594" y="23" style="font-size:8px;fill:var(--warn);font-family:monospace;font-weight:700;">RESULTADO</text>
-
-                <text x="594" y="42" class="cv-label">kVA</text>
-                <text x="630" y="42" style="font-size:13px;fill:var(--warn);font-family:monospace;font-weight:700;text-anchor:end;">75,0</text>
-                <line x1="590" y1="46" x2="738" y2="46" stroke="var(--border)" stroke-width=".7"/>
-
-                <text x="594" y="60" class="cv-label">kW</text>
-                <text x="630" y="60" style="font-size:13px;fill:var(--text);font-family:monospace;font-weight:700;text-anchor:end;">63,8</text>
-                <line x1="590" y1="64" x2="738" y2="64" stroke="var(--border)" stroke-width=".7"/>
-
-                <text x="594" y="78" class="cv-label">A (tri 220V)</text>
-                <text x="738" y="78" style="font-size:13px;fill:var(--accent);font-family:monospace;font-weight:700;text-anchor:end;">196,8</text>
-                <line x1="590" y1="82" x2="738" y2="82" stroke="var(--border)" stroke-width=".7"/>
-
-                <text x="594" y="96" class="cv-label">A (mono)</text>
-                <text x="738" y="96" style="font-size:12px;fill:var(--text2);font-family:monospace;font-weight:700;text-anchor:end;">340,9</text>
-              </svg>
-            </div>
-            <div class="ph-info">
-              <div class="ph-info-title">Conversor de Grandezas Elétricas</div>
-              <div class="ph-info-sub">Converta kVA, kW e Amperes para qualquer tensão, fase e fator de potência — trifásico e monofásico.</div>
-            </div>
-          </div>
-
           <!-- KPI strip conversor -->
           <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;" id="kpi-conv">
             <div class="kpi-card kpi-accent">
@@ -7995,16 +8072,6 @@ body.light .card.notasDiarias {
       <!-- ── AUTOMAÇÕES ── -->
       <div class="pg" id="page-automacoes">
         <div class="pg-inner">
-
-
-          <!-- Hero -->
-          <div class="home-hero" style="margin-bottom:22px;">
-            <div class="home-hero-inner">
-              <div class="home-eyebrow">DIGITEAM · AUTOMAÇÃO</div>
-              <div class="home-title" style="font-size:22px;"><span>Automações com Bookmarklets</span></div>
-              <div class="home-sub">Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada.</div>
-            </div>
-          </div>
 
           <!-- O QUE É UM BOOKMARKLET -->
           <div class="card" style="margin-bottom:16px;">
@@ -8282,19 +8349,6 @@ body.light .card.notasDiarias {
       <!-- ── RENOMEADOR DE EQUIPES ── -->
       <div class="pg" id="page-renomeador">
         <div class="pg-inner">
-
-          <!-- Hero -->
-          <div class="home-hero" style="margin-bottom:22px;">
-            <div class="home-hero-inner">
-              <div class="home-eyebrow"
-                style="background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.2);color:#38bdf8;">DIGITEAM ·
-                EQUIPES · LOTE</div>
-              <div class="home-title" style="font-size:22px;"><span style="background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Renomeador de Equipes</span>
-              </div>
-              <div class="home-sub">Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo
-                percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas.</div>
-            </div>
-          </div>
 
           <!-- COMO FUNCIONA -->
           <div class="card" style="margin-bottom:16px;">
@@ -8715,7 +8769,6 @@ body.light .card.notasDiarias {
   </div>
 
   <div id="toast"></div>
-
   <div id="chip-tooltip"></div>
 
   <!-- Chart.js carregado antes do script.js pois ceInit() depende dele -->
@@ -8724,6 +8777,7 @@ body.light .card.notasDiarias {
   <!-- Lógica da aplicação separada em arquivo próprio -->
 
   <script>
+    
   /* ── CURVA DE CARGA EDITÁVEL ── */
   var CURVA_BASE = [0.32, 0.25, 0.20, 0.18, 0.19, 0.22, 0.30, 0.42, 0.52, 0.55, 0.56, 0.54, 0.52, 0.50, 0.51, 0.53, 0.58, 0.65, 0.78, 1.00, 0.95, 0.82, 0.65, 0.48];
   var CURVA = CURVA_BASE.slice();
@@ -9017,12 +9071,17 @@ body.light .card.notasDiarias {
   var COORD_HIST = [];
   var periodosHrs = [];
 
+  /* -- ICONES DA BARRA SUPERIOR --*/
   var PICONS = {
     home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
     interlig: '<circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><line x1="9" y1="12" x2="15" y2="12"/>',
     gdis: '<rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="19"/>',
     coord: '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>',
-    conv: '<path d="M13 2L3 14h7l-2 8 10-12h-7l2-8z" stroke-linejoin="round" stroke-linecap="round"/>',
+    conv: `<circle class="current-loop" cx="12" cy="12" r="9" fill="none" stroke-width="1.5"/>
+      <path class="current-arrow current-arrow-1" d="M 17.5,10 L 18,9 L 17,8.5" fill="none" stroke-width="1" stroke-linejoin="round"/>
+      <path class="current-arrow current-arrow-2" d="M 14,6.5 L 15,6 L 15.5,7" fill="none" stroke-width="1" stroke-linejoin="round"/>
+      <path class="voltage-bolt" d="M 13,7 L 10,12 L 12,12 L 11,17" stroke-width="1.3" stroke-linejoin="round"/>
+`,
     consult: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>',
     notas: '<path d="M4 4h16v16H4z"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/>',
     automacoes: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
@@ -9033,39 +9092,28 @@ body.light .card.notasDiarias {
     home: { t: "Início", s: "Ferramentas CSI · CEMIG Operação · OD/PI" },
     interlig: { t: "Interligação de Transformadores", s: "Análise de capacidade do doador · Cabos · Janelas horárias" },
     gdis: { t: "Copiar G-Dis", s: "Extração automática de notas do G-Dis separadas por vírgula com filtro por notas de caixa ou poste, quando informadas no campo bairro." },
-    coord: { t: "Coordenadas", s: "Converta e padronize coordenadas geográficas em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha lat/lon padronizados." },
-    conv: { t: "Conversor Elétrico", s: "kVA · kW · Amperes — trifásico e monofásico para qualquer tensão e FP" },
-    consult: { t: "Consultas", s: "Busca universal por polos, malhas, códigos de locais, de dispositivos, de reprova, de fechamento ou manobras." },
+    coord: { t: "Coordenadas", s: "Converta e padronize coordenadas geográficas em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha lat/lon padronizados." },    consult: { t: "Consultas", s: "Busca universal por polos, malhas, códigos de locais, de dispositivos, de reprova, de fechamento ou manobras." },
     notas: { t: "Notas Diárias", s: "Armazene anotações temporárias do dia" },
-    conv:{t:"Conversor Elétrico",s:"kVA · kW · Amperes — trifásico e monofásico para qualquer tensão e FP"},
-    automacoes: { t: "Seletor de Intervalo", s: "Automação · Digiteam · Bookmarklet" },
-    renomeador: { t: "Renomeador de Equipes", s: "Automação · Digiteam · CSV + Bookmarklet" },
+    conv:{t:"Grandezas Elétricas",s:"Converta kVA, kW e Amperes para qualquer tensão, fase e fator de potência — trifásico e monofásico."},
+    automacoes: { t: "Seletor de Intervalo", s: "Automações com Bookmarklets: Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada." },
+    renomeador: { t: "Renomeador de Equipes", s: "Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas." },
   };
 
   function openSb() { document.getElementById("sb").classList.add("open"); document.getElementById("overlay").classList.add("on"); }
   function closeSb() { document.getElementById("sb").classList.remove("open"); document.getElementById("overlay").classList.remove("on"); }
 
-  function navToSection(pageId, sectionId) {
-    navTo(pageId);
-    setTimeout(function () {
-      var el = document.getElementById(sectionId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        /* flash highlight */
-        el.style.transition = 'outline-color .3s';
-        el.style.outline = '2px solid rgba(0,229,184,.35)';
-        el.style.borderRadius = '12px';
-        setTimeout(function () { el.style.outline = '2px solid transparent'; }, 1200);
-      }
-    }, 120);
-  }
-
-  function navTo(id) {
+  function navTo(id, noScroll) {
     document.querySelectorAll(".ni").forEach(function (e) { e.classList.remove("active"); });
     document.querySelectorAll(".pg").forEach(function (e) { e.classList.remove("active"); });
     document.getElementById("nav-" + id).classList.add("active");
     var pg = document.getElementById("page-" + id);
     pg.classList.add("active");
+    
+    // 👇 SÓ FAZ SCROLL AO TOPO SE NÃO FOR NAVEGAÇÃO PARA SEÇÃO
+    if (!noScroll) {
+      document.getElementById('pages').scrollTop = 0;
+    }
+    
     // Restart entry animation
     pg.querySelectorAll(".card,.kpi-strip").forEach(function (el) {
       el.style.animation = "none";
@@ -9093,6 +9141,21 @@ body.light .card.notasDiarias {
       if (id === "interlig" && CE.canvas) { ceResize(); ceRender(); }
     }, 60);
     closeSb();
+  }
+
+  function navToSection(pageId, sectionId) {
+    navTo(pageId, true); // 👈 passa true para NÃO resetar scroll
+    setTimeout(function () {
+      var el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        /* flash highlight */
+        el.style.transition = 'outline-color .3s';
+        el.style.outline = '2px solid rgba(0,229,184,.35)';
+        el.style.borderRadius = '12px';
+        setTimeout(function () { el.style.outline = '2px solid transparent'; }, 1200);
+      }
+    }, 120);
   }
 
 function toggleTheme(init = false) {
@@ -11526,130 +11589,6 @@ function toggleTheme(init = false) {
     toast("Campos limpos!");
   }
   /* ── FIM: PARTE DO GOOGLE MAPS ── */
-
-
-
-
-  var CV={tensao:220,fase:"tri",fp:0.85,unidade:"kva",customV:false};
-var CV_REFS=[5,10,15,25,30,37.5,45,50,75,100,112.5,150,200,250,300];
-
-function cvLimpar(){
-  document.getElementById("cv-valor").value="";
-  document.getElementById("cv-results").innerHTML="<div class=\"cv-empty\">Insira um valor para converter.</div>";
-  cvRenderTable();
-}
-function cvRenderVoltageButtons(){
-  var bar=document.getElementById("cv-vbar");
-  if(CV.fase==="tri"){
-    bar.innerHTML=
-      "<div class=\"rb"+(CV.tensao===220&&!CV.customV?" on":"")+"\" id=\"cvt-220\" onclick=\"cvSetV(220)\">220 V</div>"+
-      "<div class=\"rb"+(CV.tensao===127&&!CV.customV?" on":"")+"\" id=\"cvt-127\" onclick=\"cvSetV(127)\">127 V</div>"+
-      "<div class=\"rb"+(CV.tensao===380&&!CV.customV?" on":"")+"\" id=\"cvt-380\" onclick=\"cvSetV(380)\">380 V</div>"+
-      "<div class=\"rb"+(CV.customV?" on":"")+"\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
-  } else {
-    // Monofásico CEMIG: 110V (MT rural) ou 240V (padrão BT)
-    bar.innerHTML=
-      "<div class=\"rb"+(CV.tensao===240&&!CV.customV?" on":"")+"\" id=\"cvt-240\" onclick=\"cvSetV(240)\">240 V</div>"+
-      "<div class=\"rb"+(CV.tensao===110&&!CV.customV?" on":"")+"\" id=\"cvt-110\" onclick=\"cvSetV(110)\">110 V</div>"+
-      "<div class=\"rb"+(CV.customV?" on":"")+"\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
-  }
-}
-
-function cvSetV(v){
-  var inp=document.getElementById("cv-tensao");
-  if(v==="custom"){
-    CV.customV=true;
-    inp.style.display="block";
-    CV.tensao=parseFloat(inp.value)||CV.tensao;
-  } else {
-    CV.customV=false;
-    CV.tensao=v;
-    inp.style.display="none";
-  }
-  cvRenderVoltageButtons();
-  cvCalc();
-}
-function cvSetF(f){
-  CV.fase=f;
-  // Ajusta tensão padrão ao mudar fase
-  if(f==="mono"&&(CV.tensao===127||CV.tensao===220||CV.tensao===380)){CV.tensao=240;CV.customV=false;}
-  if(f==="tri"&&(CV.tensao===110||CV.tensao===240)){CV.tensao=220;CV.customV=false;}
-  document.getElementById("cv-tensao").style.display="none";
-  ["tri","mono"].forEach(function(x){document.getElementById("cvf-"+x).classList.toggle("on",x===f);});
-  cvRenderVoltageButtons();
-  cvCalc();
-}
-function cvSetFP(fp){
-  CV.fp=fp;
-  ["085","090","092","1"].forEach(function(x){document.getElementById("cvfp-"+x).classList.toggle("on",parseFloat("0."+x.replace("0","."))==fp||(x==="1"&&fp===1.0)||(x==="085"&&fp===0.85)||(x==="090"&&fp===0.90)||(x==="092"&&fp===0.92));});
-  cvCalc();
-}
-function cvSetU(u){
-  CV.unidade=u;
-  ["kva","kw","a"].forEach(function(x){document.getElementById("cvu-"+x).classList.toggle("on",x===u);});
-  cvCalc();
-}
-
-function cvToKVA(val,u){
-  if(u==="kva"){return val;}
-  if(u==="kw"){return val/CV.fp;}
-  // A → kVA
-  if(CV.fase==="tri"){return (val*Math.sqrt(3)*CV.tensao)/1000;}
-  return (val*CV.tensao)/1000;
-}
-function cvFromKVA(kva){
-  var kw=kva*CV.fp;
-  var a=CV.fase==="tri"?(kva*1000)/(Math.sqrt(3)*CV.tensao):(kva*1000)/CV.tensao;
-  return {kva:kva,kw:kw,a:a};
-}
-function cvFmt(v,dec){return v.toFixed(dec===undefined?2:dec).replace(".",",");}
-
-function cvCalc(){
-  var raw=parseFloat(document.getElementById("cv-valor").value);
-  var el=document.getElementById("cv-results");
-  if(!raw||isNaN(raw)){el.innerHTML="<div class=\"cv-empty\">Insira um valor para converter.</div>";cvRenderTable();return;}
-  var kva=cvToKVA(raw,CV.unidade);
-  var r=cvFromKVA(kva);
-  var items=[
-    {lbl:"Potência Aparente",val:cvFmt(r.kva)+" kVA",hl:CV.unidade==="kva"},
-    {lbl:"Potência Ativa",val:cvFmt(r.kw)+" kW",hl:CV.unidade==="kw"},
-    {lbl:"Corrente",val:cvFmt(r.a,1)+" A",hl:CV.unidade==="a"},
-    {lbl:"Fator de Potência",val:CV.fp.toFixed(2).replace(".",","),hl:false},
-    {lbl:"Tensão / Fases",val:CV.tensao+" V — "+(CV.fase==="tri"?"Trifásico":"Monofásico"),hl:false}
-  ];
-  el.innerHTML=items.map(function(it){
-    return "<div class=\"cv-result-item"+(it.hl?" highlight":"")+"\">"+
-      "<span class=\"cv-result-lbl\">"+it.lbl+"</span>"+
-      "<span class=\"cv-result-val\">"+it.val+"</span>"+
-    "</div>";
-  }).join("");
-  cvRenderTable();
-}
-
-function cvRenderTable(){
-  var lbl=(CV.fase==="tri"?"Trifásico":"Monofásico")+" "+CV.tensao+" V, FP "+CV.fp.toFixed(2).replace(".",",");
-  document.getElementById("cv-ref-label").textContent=lbl;
-  var rows=CV_REFS.map(function(kva){
-    var r=cvFromKVA(kva);
-    return "<div class=\"cv-table-row\" onclick=\"document.getElementById('cv-valor').value='"+kva+"';cvSetU('kva');cvCalc();\">"+
-      "<div class=\"cv-table-cell\">"+kva+" kVA</div>"+
-      "<div class=\"cv-table-cell\">"+cvFmt(r.kva)+" kVA</div>"+
-      "<div class=\"cv-table-cell\">"+cvFmt(r.kw)+" kW</div>"+
-      "<div class=\"cv-table-cell\">"+cvFmt(r.a,1)+" A</div>"+
-    "</div>";
-  }).join("");
-  document.getElementById("cv-table").innerHTML=
-    "<div class=\"cv-table-row header\">"+
-      "<div class=\"cv-table-cell\">Potência</div>"+
-      "<div class=\"cv-table-cell\">kVA</div>"+
-      "<div class=\"cv-table-cell\">kW</div>"+
-      "<div class=\"cv-table-cell\">Corrente (A)</div>"+
-    "</div>"+rows;
-}
-
-/* INIT */
-addVao();addVao();calcular();gAtualizar();cvRenderVoltageButtons();cvRenderTable();consultRender();
-
 
 
   </script>
