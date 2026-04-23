@@ -2029,23 +2029,33 @@ body.light .bsec{
   background: var(--surface);
   border: 1px solid var(--border2);
   border-radius: 10px;
-  padding: 12px 16px;
+  padding: 16px 16px;
   transition: border-color .15s, box-shadow .15s;
 }
+
 .consult-search-box:focus-within {
   border-color: #00e5b8;
   box-shadow: 0 0 0 3px rgba(0, 229, 184, .10);
 }
+
 .consult-search-box input {
   border: none;
   background: transparent;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text);
   outline: none;
   width: 100%;
   padding: 0;
+  box-shadow: none;
 }
+
+.consult-search-box input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
 .consult-search-box input::placeholder { color: var(--hint); font-size: 12px; }
 
 .consult-search-hit {
@@ -3678,7 +3688,7 @@ body.light .bm-link {
 .dev-section {
   border-top: 1px solid var(--border);
   padding-top: 20px;
-  margin-bottom: 16px;
+  margin-top: 0;
 }
 
 /* Título */
@@ -3686,7 +3696,7 @@ body.light .bm-link {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -3695,7 +3705,7 @@ body.light .bm-link {
 .dev-container {
   display: flex;
   gap: 16px;
-  flex-wrap: wrap;
+
 }
 
 /* Card Individual */
@@ -3709,9 +3719,6 @@ body.light .bm-link {
   cursor: default;
 }
 
-.dev-card:hover {
-  background: var(--surface2); /* Efeito sutil ao passar o mouse */
-}
 
 /* Avatares */
 .dev-avatar {
@@ -7379,13 +7386,14 @@ body.light .card.notasDiarias {
                     <div class="home-cl-title">Lançamento — Interligação · G-Dis · Coordenadas</div>
                   </div>
                 </div>
-
+                
               </div>
             </div>
 
           </div>
 
           <!-- Equipe de Desenvolvimento -->
+          <br><br>
           <section class="dev-section">
             <h3 class="dev-section-title">Equipe de Desenvolvimento</h3>
             
@@ -7418,8 +7426,10 @@ body.light .card.notasDiarias {
           </section>
 
         </div>
+
       </div>
 
+      
 <!-- ────────── FERRAMENTAS ──────── -->
       <!-- ── INTERLIGAÇÃO ── -->
       <div class="pg" id="page-interlig">
@@ -7579,7 +7589,7 @@ body.light .card.notasDiarias {
           <!-- Hero G-Dis -->
           <div class="page-hero hero-gdis" style="margin-bottom:16px;">
             <div class="ph-info">
-              <div class="ph-info-sub">⚠️ Notas de MT não são copiadas!</div>
+              <div class="ph-info-sub">⚠️ Notas de MT e NORMALIZADAS não são copiadas!</div>
             </div>
           </div>
           <div class="kpi-strip" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
@@ -7594,7 +7604,7 @@ body.light .card.notasDiarias {
                 rows="8"
                 oninput="gAtualizar()"></textarea>
               <div class="brow" style="margin-top: 14px;">
-                <button class="bdel" id="gBtnLp" onclick="gLimpar()" disabled>Limpar</button>
+                <button class="bdel" id="gBtnLp" onclick="gLimpar()">Limpar</button>
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:2px;">
@@ -7611,6 +7621,7 @@ body.light .card.notasDiarias {
                   </div>
                 </div>
               </div>
+              
               <div class="card" style="flex:1;">
                 <div class="ct" style="margin-bottom:10px;">Ação rápida</div>
                 <button class="bok"
@@ -7621,12 +7632,13 @@ body.light .card.notasDiarias {
                     align-items:center;
                     justify-content:center;
                     gap:8px;"
-                  id="gBtnCp" onclick="gCopiar()" disabled>
+                  id="gBtnCp" onclick="gCopiar()">
                   Copiar todas as notas
                   <span id="gBadgeTotal" class="gbadge">—</span>
                 </button>
+                
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                  <button class="bsec" id="gBtnCx" onclick="gCopiarFiltro('caixa')" disabled
+                  <button class="bsec" id="gBtnCx" onclick="gCopiarFiltro('caixa')"
                     style="font-size:12px;padding:9px 8px;display:flex;align-items:center;justify-content:center;gap:5px;">
                     <svg viewBox="0 0 24 24"
                       style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
@@ -7636,7 +7648,7 @@ body.light .card.notasDiarias {
                     Copiar notas na caixa
                     <span id="gBadgeCx" class="gbadge gbadge-warn">—</span>
                   </button>
-                  <button class="bsec" id="gBtnPst" onclick="gCopiarFiltro('poste')" disabled
+                  <button class="bsec" id="gBtnPst" onclick="gCopiarFiltro('poste')"
                     style="font-size:12px;padding:9px 8px;display:flex;align-items:center;justify-content:center;gap:5px;">
                     <svg viewBox="0 0 24 24"
                       style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;">
@@ -7700,7 +7712,7 @@ body.light .card.notasDiarias {
               </div>
               <div class="coord-hint" id="coord-hint">Aguardando entrada…</div>
               <div class="brow" style="margin-top:14px;">
-                <button class="bok bok-wide" onclick="cCopiarTudo()">Copiar lat + lon</button>
+                <button class="bok bok-wide" onclick="cCopiarTudo()">Copiar latitude + longitude</button>
                 <button class="bdel" onclick="cLimpar()">Limpar</button>
               </div>
             </div>
@@ -7939,7 +7951,7 @@ body.light .card.notasDiarias {
           <div style="text-align:center;margin-bottom:4px;">
             <div style="font-size:13px;color:var(--muted);margin-top:2px;max-width:700px;margin-left:auto;margin-right:auto;">
               <p>❗ Os dados <strong>não são permanentes</strong> e podem ser perdidos ao reiniciar ou fazer logoff da máquina. </p>
-              <p>As exclusões de notas são permanentes e não podem ser restauradas </p>
+              <p>As exclusões de notas são permanentes e não podem ser restauradas. </p>
             </div>
           </div>
         </div>
@@ -8774,8 +8786,6 @@ body.light .card.notasDiarias {
   <!-- Chart.js carregado antes do script.js pois ceInit() depende dele -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
-  <!-- Lógica da aplicação separada em arquivo próprio -->
-
   <script>
     
   /* ── CURVA DE CARGA EDITÁVEL ── */
@@ -8805,11 +8815,13 @@ body.light .card.notasDiarias {
       if (CE.dragging === -1) { CE.dragging = ceClosest(pt.x); }
       ceDrag(pt.x, pt.y);
     });
+
     window.addEventListener("mousemove", function (e) {
       if (CE.dragging < 0) return;
       var pt = ceEvtPt(e);
       ceDrag(pt.x, pt.y);
     });
+
     window.addEventListener("mouseup", function () {
       if (CE.dragging >= 0) { CE.dragging = -1; if (INTERLIG_VERIFICADO) calcular(); }
     });
@@ -8822,12 +8834,14 @@ body.light .card.notasDiarias {
       if (CE.dragging === -1) { CE.dragging = ceClosest(pt.x); }
       ceDrag(pt.x, pt.y);
     }, { passive: false });
+
     window.addEventListener("touchmove", function (e) {
       if (CE.dragging < 0) return;
       e.preventDefault();
       var pt = ceEvtPt(e.touches[0]);
       ceDrag(pt.x, pt.y);
     }, { passive: false });
+
     window.addEventListener("touchend", function () {
       if (CE.dragging >= 0) { CE.dragging = -1; if (INTERLIG_VERIFICADO) calcular(); }
     });
@@ -8855,6 +8869,7 @@ body.light .card.notasDiarias {
     var r = CE.canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
+
   function ceHitTest(x, y) {
     for (var h = 0; h < 24; h++) {
       var dx = x - ceX(h), dy = y - ceY(CURVA[h]);
@@ -8862,9 +8877,11 @@ body.light .card.notasDiarias {
     }
     return -1;
   }
+
   function ceClosest(x) {
     return Math.round(Math.max(0, Math.min(23, (x - CE.pad.l) / (CE.W - CE.pad.l - CE.pad.r) * 23)));
   }
+
   function ceDrag(x, y) {
     if (CE.dragging < 0) return;
     CURVA[CE.dragging] = ceVfromY(y);
@@ -9081,7 +9098,7 @@ body.light .card.notasDiarias {
       <path class="current-arrow current-arrow-1" d="M 17.5,10 L 18,9 L 17,8.5" fill="none" stroke-width="1" stroke-linejoin="round"/>
       <path class="current-arrow current-arrow-2" d="M 14,6.5 L 15,6 L 15.5,7" fill="none" stroke-width="1" stroke-linejoin="round"/>
       <path class="voltage-bolt" d="M 13,7 L 10,12 L 12,12 L 11,17" stroke-width="1.3" stroke-linejoin="round"/>
-`,
+      `,
     consult: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>',
     notas: '<path d="M4 4h16v16H4z"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/>',
     automacoes: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
@@ -9089,14 +9106,14 @@ body.light .card.notasDiarias {
   };
 
   var PTITLES = {
-    home: { t: "Início", s: "Ferramentas CSI · CEMIG Operação · OD/PI" },
+    home: { t: "Início", s: "Apresentação das ferramentas" },
     interlig: { t: "Interligação de Transformadores", s: "Análise de capacidade do doador · Cabos · Janelas horárias" },
     gdis: { t: "Copiar G-Dis", s: "Extração automática de notas do G-Dis separadas por vírgula com filtro por notas de caixa ou poste, quando informadas no campo bairro." },
     coord: { t: "Coordenadas", s: "Converta e padronize coordenadas geográficas em qualquer formato — com espaço, vírgula, ponto-e-vírgula ou DMS — e obtenha lat/lon padronizados." },    consult: { t: "Consultas", s: "Busca universal por polos, malhas, códigos de locais, de dispositivos, de reprova, de fechamento ou manobras." },
     notas: { t: "Notas Diárias", s: "Armazene anotações temporárias do dia" },
     conv:{t:"Grandezas Elétricas",s:"Converta kVA, kW e Amperes para qualquer tensão, fase e fator de potência — trifásico e monofásico."},
     automacoes: { t: "Seletor de Intervalo", s: "Automações com Bookmarklets: Scripts prontos que rodam direto no navegador. Arrasta uma vez para os favoritos e depois é só clicar — sem instalar nada." },
-    renomeador: { t: "Renomeador de Equipes", s: "Dois bookmarklets: o primeiro carrega um CSV com os dados das equipes, o segundo percorre o Digiteam renomeando tudo em lote — pulando bloqueadas e já atualizadas." },
+    renomeador: { t: "Renomeador de Equipes", s: "Dois bookmarklets, um Carrega CSV, o outro renomeia equipes em lote, pulando bloqueadas/atualizadas." },
   };
 
   function openSb() { document.getElementById("sb").classList.add("open"); document.getElementById("overlay").classList.add("on"); }
@@ -9109,7 +9126,7 @@ body.light .card.notasDiarias {
     var pg = document.getElementById("page-" + id);
     pg.classList.add("active");
     
-    // 👇 SÓ FAZ SCROLL AO TOPO SE NÃO FOR NAVEGAÇÃO PARA SEÇÃO
+    // SÓ FAZ SCROLL AO TOPO SE NÃO FOR NAVEGAÇÃO PARA SEÇÃO
     if (!noScroll) {
       document.getElementById('pages').scrollTop = 0;
     }
@@ -9120,10 +9137,13 @@ body.light .card.notasDiarias {
       el.offsetHeight;
       el.style.animation = "";
     });
+
     // Update topbar icon with crossfade
     var titleBlock = document.querySelector(".topbar-title-block");
-    if (titleBlock) { titleBlock.style.opacity = "0"; titleBlock.style.transform = "translateY(4px)"; }
+    if (titleBlock) { titleBlock.style.opacity = "0"; titleBlock.style.transform = "translateY(4px)";}
+
     var iconEl = document.getElementById("topbar-page-svg");
+
     if (iconEl && PICONS[id]) {
       iconEl.innerHTML = PICONS[id];
       var wrap = document.getElementById("topbar-page-icon");
@@ -9133,8 +9153,10 @@ body.light .card.notasDiarias {
         setTimeout(function () { wrap.style.transform = ""; }, 150);
       }
     }
+
     document.getElementById("ttitle").textContent = PTITLES[id].t;
     document.getElementById("tsub").textContent = PTITLES[id].s;
+
     setTimeout(function () {
       if (titleBlock) { titleBlock.style.opacity = ""; titleBlock.style.transform = ""; }
       /* Re-render curve editor when navigating to interlig (canvas may have been hidden) */
@@ -9158,24 +9180,24 @@ body.light .card.notasDiarias {
     }, 120);
   }
 
-function toggleTheme(init = false) {
-  // Só alterna se NÃO for inicialização
-  if (!init) {
-    DARK = !DARK;
+  function toggleTheme(init = false) {
+    // Só alterna se NÃO for inicialização
+    if (!init) {
+      DARK = !DARK;
+    }
+
+    document.body.classList.toggle("light", !DARK);
+    document.getElementById("themeLbl").textContent = DARK ? "Claro" : "Escuro";
+
+    var ic = document.getElementById("themeIcon");
+
+    ic.innerHTML = DARK
+      ? "<circle cx=\"12\" cy=\"12\" r=\"5\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"/><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/>"
+      : "<path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/>";
+
+    if (CI) { calcular(); }
+    if (CE.canvas) { ceRender(); }
   }
-
-  document.body.classList.toggle("light", !DARK);
-  document.getElementById("themeLbl").textContent = DARK ? "Claro" : "Escuro";
-
-  var ic = document.getElementById("themeIcon");
-
-  ic.innerHTML = DARK
-    ? "<circle cx=\"12\" cy=\"12\" r=\"5\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"/><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/>"
-    : "<path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/>";
-
-  if (CI) { calcular(); }
-  if (CE.canvas) { ceRender(); }
-}
   window.onload = function () {
     toggleTheme(true); // inicializa sem inverter
   };
@@ -9201,11 +9223,14 @@ function toggleTheme(init = false) {
       toast("Adicione pelo menos um vão de cabo antes de verificar.");
       return;
     }
+
     INTERLIG_VERIFICADO = true;
     calcular();
+
     /* Reveal chart card and resultado */
     var cc = document.getElementById("card-curvas");
     if (cc) { cc.style.display = ""; }
+
     /* Scroll to result */
     setTimeout(function () {
       var r = document.getElementById("resultado-final");
@@ -9236,11 +9261,13 @@ function toggleTheme(init = false) {
     ["conv", "prot"].forEach(function (x) { document.getElementById("tp-" + t + "-" + x).classList.toggle("on", x === v); });
     calcular();
   }
+
   function setF(t, v) {
     S[t === "doador" ? "faseD" : "faseQ"] = v;
     ["tri", "mono"].forEach(function (x) { document.getElementById("fase-" + t + "-" + x).classList.toggle("on", x === v); });
     calcular();
   }
+
   function addVao() { S.vid++; S.vaos.push({ id: S.vid, cabo: 0 }); renderVaos(); calcular(); }
   function removeVao(id) { S.vaos = S.vaos.filter(function (v) { return v.id !== id; }); renderVaos(); calcular(); }
 
@@ -9377,6 +9404,7 @@ function toggleTheme(init = false) {
       if (p > 85) return DARK ? "rgba(255,184,48,0.55)" : "rgba(200,130,0,0.45)";
       return DARK ? "rgba(0,184,255,0.50)" : "rgba(0,130,200,0.40)";
     });
+
     var barColQ = dT.map(function (t) {
       var p = maxD > 0 ? (t / maxD * 100) : 0;
       if (p > 100) return DARK ? "rgba(255,80,100,0.35)" : "rgba(220,40,60,0.28)";
@@ -9502,6 +9530,7 @@ function toggleTheme(init = false) {
         periodosHrs.push({ de: pi, ate: pj - 1, s: ps, maxPct: maxPct });
         pi = pj;
       }
+
       var f2 = function (h) { return h + "h"; };
       var barSegs = "";
       periodosHrs.forEach(function (p) {
@@ -9697,7 +9726,7 @@ function toggleTheme(init = false) {
     setTimeout(function () { gf.style.width = Math.min(target, 100).toFixed(1) + "%"; }, 20);
   }
 
-  /* G-DIS */
+  /* ———————————————————— G-DIS ———————————————————— */
   var RNOTA = /(?:^|[^\d])(\d{9})(?!\d)/g, GTMR;
   var GNOTAS = [];
   var G_MAPA = {};
@@ -9757,6 +9786,7 @@ function toggleTheme(init = false) {
       document.getElementById("gstat-dup").textContent = "—";
       gUpdateButtons(); return;
     }
+
     requestAnimationFrame(function () {
       // Filtra linhas cujo tipo de serviço deve ser ignorado
       var linhasFiltradas = txt.split("\n").filter(function(linha) {
@@ -9769,6 +9799,7 @@ function toggleTheme(init = false) {
       var u = [...new Set(m)];
       GNOTAS = u; G_MAPA = {};
       var dup = total - u.length;
+
       // Classifica cada OS pela linha de origem
       linhasFiltradas.forEach(function (linha) {
         var osLinha = [...linha.matchAll(RNOTA)].map(function (x) { return x[1]; });
@@ -9780,6 +9811,7 @@ function toggleTheme(init = false) {
           if (!G_MAPA[os]) { G_MAPA[os] = ePoste ? "poste" : eCaixa ? "caixa" : "outro"; }
         });
       });
+
       document.getElementById("gstat-total").textContent = u.length || "0";
       document.getElementById("gstat-dup").textContent = dup > 0 ? dup : "0";
       if (u.length) {
@@ -9797,10 +9829,6 @@ function toggleTheme(init = false) {
     var hasOut = GNOTAS.length > 0;
     var nCx = GNOTAS.filter(function (os) { return G_MAPA[os] === "caixa"; }).length;
     var nPst = GNOTAS.filter(function (os) { return G_MAPA[os] === "poste"; }).length;
-    document.getElementById("gBtnLp").disabled = !inp && !hasOut;
-    document.getElementById("gBtnCp").disabled = !hasOut;
-    document.getElementById("gBtnCx").disabled = !nCx;
-    document.getElementById("gBtnPst").disabled = !nPst;
 
     // badges
     var bT = document.getElementById("gBadgeTotal");
@@ -9831,18 +9859,29 @@ function toggleTheme(init = false) {
   }
 
   function gCopiar() {
-    if (!GNOTAS.length) { return; }
-    copyText(GNOTAS.join(",")); toast(GNOTAS.length + " nota(s) copiada(s)");
+    if (!GNOTAS.length) { 
+      toast("Sem notas para copiar!"); 
+      return; 
+    }
+    copyText(GNOTAS.join(",")); 
+    toast(GNOTAS.length + " nota(s) copiada(s)");
   }
 
   function gCopiarFiltro(tipo) {
     var lista = GNOTAS.filter(function (os) { return G_MAPA[os] === tipo; });
-    if (!lista.length) { toast("Nenhuma nota identificada como " + (tipo === "caixa" ? "CX" : "Poste")); return; }
+    if (!lista.length) { 
+      toast("Sem notas para copiar!"); 
+      return; 
+    }
     copyText(lista.join(","));
     toast(lista.length + " nota(s) " + (tipo === "caixa" ? "de caixa" : "de poste") + " copiada(s)");
   }
 
   function gLimpar() {
+    if (!GNOTAS.length) { 
+      toast("Sem notas para limpar!"); 
+      return; 
+    }
     GNOTAS = []; G_MAPA = {};
     document.getElementById("gin").value = "";
     document.getElementById("gout").value = "";
@@ -10155,29 +10194,35 @@ function toggleTheme(init = false) {
     ["ponto", "virgula"].forEach(function (x) { document.getElementById("fmt-" + x).classList.toggle("on", x === v); });
     cConverter();
   }
+
   function cConverter() {
     var val = document.getElementById("cinput").value.trim();
     var latEl = document.getElementById("clat");
     var lonEl = document.getElementById("clon");
     var hint = document.getElementById("coord-hint");
+
     if (!val) {
       CLAT = null; CLON = null;
       latEl.textContent = "—"; lonEl.textContent = "—";
       latEl.className = "coord-box-val"; lonEl.className = "coord-box-val";
       hint.textContent = "Aguardando entrada…"; return;
     }
+
     var nums = val.match(/-?\d+(?:[.,]\d+)?/g);
     if (!nums || nums.length < 2) {
       latEl.textContent = "Inválido"; lonEl.textContent = "Inválido";
       latEl.className = "coord-box-val"; lonEl.className = "coord-box-val";
       hint.textContent = "Formato não reconhecido"; return;
     }
+
     var lat = parseFloat(nums[0].replace(",", "."));
     var lon = parseFloat(nums[1].replace(",", "."));
+
     if (isNaN(lat) || isNaN(lon)) {
       latEl.textContent = "Inválido"; lonEl.textContent = "Inválido";
       hint.textContent = "Valores inválidos"; return;
     }
+
     CLAT = lat; CLON = lon;
     var f = function (v) { return CFMT === "virgula" ? v.toString().replace(".", ",") : v.toString(); };
     latEl.textContent = f(CLAT); lonEl.textContent = f(CLON);
@@ -10185,26 +10230,36 @@ function toggleTheme(init = false) {
     hint.textContent = "Clique nos campos para copiar individualmente";
     cAddHist(f(CLAT), f(CLON), val);
   }
+
   function cCopiar(campo) {
     var v = campo === "lat" ? CLAT : CLON;
     if (v === null) { return; }
     var f = function (v) { return CFMT === "virgula" ? v.toString().replace(".", ",") : v.toString(); };
     copyText(f(v)); toast((campo === "lat" ? "Latitude" : "Longitude") + " copiada");
   }
+
   function cCopiarTudo() {
-    if (CLAT === null) { return; }
+    if (CLAT === null) { 
+        toast("Sem coordenadas para copiar!"); 
+        return; 
+    }
     var f = function (v) { return CFMT === "virgula" ? v.toString().replace(".", ",") : v.toString(); };
     copyText(f(CLAT) + " " + f(CLON)); toast("Lat + Lon copiados");
   }
+
   function cLimpar() {
     document.getElementById("cinput").value = "";
-    CLAT = null; CLON = null;
+    if (CLAT === null) { 
+      toast("Sem coordenadas para limpar!"); 
+      return; 
+    }
     document.getElementById("clat").textContent = "—";
     document.getElementById("clon").textContent = "—";
     document.getElementById("clat").className = "coord-box-val";
     document.getElementById("clon").className = "coord-box-val";
     document.getElementById("coord-hint").textContent = "Aguardando entrada…";
   }
+
   function cAddHist(lat, lon, orig) {
     var already = COORD_HIST.some(function (h) { return h.lat === lat && h.lon === lon; });
     if (already) { return; }
@@ -10233,8 +10288,6 @@ function toggleTheme(init = false) {
       el.appendChild(row);
     });
   }
-
-
   </script>
 
   <script src="dados.js"></script>
@@ -10363,9 +10416,9 @@ function toggleTheme(init = false) {
   if (e.target === document.getElementById("polo-popup-overlay")) poloPopupHide();
   }
 
-  /* ── Smart unified search ── */
+  /* ── Busca unificada inteligente ── */
 
-  /* Helper: set search field and trigger (kept for external use) */
+  /* Auxiliar: define campo de busca e acionamento (mantido para uso externo) */
   function consultSetSearch(val) {
   var el = document.getElementById('consult-search');
   if (el) { el.value = val; consultSearch(); el.focus(); }
@@ -10403,120 +10456,120 @@ function toggleTheme(init = false) {
 
   /* ── Chip Modal ── */
   function openChipModal(code) {
-  var ind = CONSULT_MAP[code];
-  var desc = DESC_NOTAS[code] || '';
-  var chips = CHIP_FECH_MAP[code] || [];
-  var maDesc = (typeof DESC_MANOBRA !== 'undefined') ? (DESC_MANOBRA[code] || null) : null;
+    var ind = CONSULT_MAP[code];
+    var desc = DESC_NOTAS[code] || '';
+    var chips = CHIP_FECH_MAP[code] || [];
+    var maDesc = (typeof DESC_MANOBRA !== 'undefined') ? (DESC_MANOBRA[code] || null) : null;
 
-  /* Header */
-  var ic = document.getElementById('chip-modal-ic');
-  var color = ind ? ind.color : 'var(--muted)';
-  var bg    = ind ? ind.bg    : 'var(--surface3)';
-  ic.style.background = bg;
-  ic.style.color = color;
-  ic.style.border = '1.5px solid ' + color;
-  ic.textContent = code.slice(0, 2);
+    /* Header */
+    var ic = document.getElementById('chip-modal-ic');
+    var color = ind ? ind.color : 'var(--muted)';
+    var bg    = ind ? ind.bg    : 'var(--surface3)';
+    ic.style.background = bg;
+    ic.style.color = color;
+    ic.style.border = '1.5px solid ' + color;
+    ic.textContent = code.slice(0, 2);
 
-  document.getElementById('chip-modal-code').textContent = code;
-  document.getElementById('chip-modal-code').style.color = color;
-  document.getElementById('chip-modal-fullname').textContent = desc;
-  document.getElementById('chip-modal-fullname').style.display = desc ? '' : 'none';
+    document.getElementById('chip-modal-code').textContent = code;
+    document.getElementById('chip-modal-code').style.color = color;
+    document.getElementById('chip-modal-fullname').textContent = desc;
+    document.getElementById('chip-modal-fullname').style.display = desc ? '' : 'none';
 
-  var badge = document.getElementById('chip-modal-badge');
-  if (ind) {
-    badge.textContent = ind.label + (ind.desc ? ' — ' + ind.desc : '');
-    badge.style.color = color;
-    badge.style.background = bg;
-    badge.style.borderColor = ind.border || color;
-  } else {
-    badge.textContent = 'Manobra';
-    badge.style.color = '#a78bfa';
-    badge.style.background = 'rgba(167,139,250,.1)';
-    badge.style.borderColor = 'rgba(167,139,250,.3)';
-  }
+    var badge = document.getElementById('chip-modal-badge');
+    if (ind) {
+      badge.textContent = ind.label + (ind.desc ? ' — ' + ind.desc : '');
+      badge.style.color = color;
+      badge.style.background = bg;
+      badge.style.borderColor = ind.border || color;
+    } else {
+      badge.textContent = 'Manobra';
+      badge.style.color = '#a78bfa';
+      badge.style.background = 'rgba(167,139,250,.1)';
+      badge.style.borderColor = 'rgba(167,139,250,.3)';
+    }
 
-  /* Body */
-  var body = '';
+    /* Body */
+    var body = '';
 
-  /* Descrição do item de manobra (se for MAXX) */
-  if (maDesc) {
-    body += '<div class="chip-modal-section-title" style="color:#a78bfa;">⚙ Item de Manobra</div>' +
-      '<div class="manobra-desc-row" style="margin-bottom:12px;">' +
-        '<span class="manobra-desc-cod">' + code + '</span>' +
-        '<span class="manobra-desc-txt">' + maDesc + '</span>' +
-      '</div>';
-  }
+    /* Descrição do item de manobra (se for MAXX) */
+    if (maDesc) {
+      body += '<div class="chip-modal-section-title" style="color:#a78bfa;">⚙ Item de Manobra</div>' +
+        '<div class="manobra-desc-row" style="margin-bottom:12px;">' +
+          '<span class="manobra-desc-cod">' + code + '</span>' +
+          '<span class="manobra-desc-txt">' + maDesc + '</span>' +
+        '</div>';
+    }
 
-  /* Códigos de fechamento */
-  var has770 = chips.some(function(c) { return c.cod === '7.70'; });
+    /* Códigos de fechamento */
+    var has770 = chips.some(function(c) { return c.cod === '7.70'; });
 
-  if (chips.length) {
-    body += '<div class="chip-modal-section-title">Códigos de Fechamento (' + chips.length + ')</div>';
-    body += chips.map(function(c) {
-      var extra = '';
-      if (c.cod === '7.70') {
-        extra = '<button class="reprova-link-btn" onclick="openReprovaModal()" title="Ver todos os códigos de reprova">' +
-          '<svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
-          'consultar códigos de reprova' +
-        '</button>';
-      }
-      return '<div class="chip-modal-cod-row">' +
-        '<span class="chip-modal-cod-num">' + c.cod + '</span>' +
-        '<span class="chip-modal-cod-desc">' + c.desc + extra + '</span>' +
-      '</div>';
-    }).join('');
-  } else {
-    body += '<div class="chip-modal-empty">Sem códigos de fechamento cadastrados.</div>';
-  }
+    if (chips.length) {
+      body += '<div class="chip-modal-section-title">Códigos de Fechamento (' + chips.length + ')</div>';
+      body += chips.map(function(c) {
+        var extra = '';
+        if (c.cod === '7.70') {
+          extra = '<button class="reprova-link-btn" onclick="openReprovaModal()" title="Ver todos os códigos de reprova">' +
+            '<svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+            'consultar códigos de reprova' +
+          '</button>';
+        }
+        return '<div class="chip-modal-cod-row">' +
+          '<span class="chip-modal-cod-num">' + c.cod + '</span>' +
+          '<span class="chip-modal-cod-desc">' + c.desc + extra + '</span>' +
+        '</div>';
+      }).join('');
+    } else {
+      body += '<div class="chip-modal-empty">Sem códigos de fechamento cadastrados.</div>';
+    }
 
-  document.getElementById('chip-modal-body').innerHTML = body;
-  document.getElementById('chip-modal-overlay').classList.add('visible');
-  document.body.style.overflow = 'hidden';
+    document.getElementById('chip-modal-body').innerHTML = body;
+    document.getElementById('chip-modal-overlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
   }
 
   function hideChipModal() {
-  document.getElementById('chip-modal-overlay').classList.remove('visible');
-  document.body.style.overflow = '';
+    document.getElementById('chip-modal-overlay').classList.remove('visible');
+    document.body.style.overflow = '';
   }
 
   function closeChipModal(e) {
-  if (e.target === document.getElementById('chip-modal-overlay')) hideChipModal();
+    if (e.target === document.getElementById('chip-modal-overlay')) hideChipModal();
   }
 
   /* ── Modal de Reprova ── */
   function openReprovaModal() {
-  reprovaModalFilter('');
-  document.getElementById('reprova-modal-search').value = '';
-  document.getElementById('reprova-modal-overlay').classList.add('visible');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function() { document.getElementById('reprova-modal-search').focus(); }, 80);
+    reprovaModalFilter('');
+    document.getElementById('reprova-modal-search').value = '';
+    document.getElementById('reprova-modal-overlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { document.getElementById('reprova-modal-search').focus(); }, 80);
   }
 
   function hideReprovaModal() {
-  document.getElementById('reprova-modal-overlay').classList.remove('visible');
-  document.body.style.overflow = '';
+    document.getElementById('reprova-modal-overlay').classList.remove('visible');
+    document.body.style.overflow = '';
   }
 
   function closeReprovaModal(e) {
-  if (e.target === document.getElementById('reprova-modal-overlay')) hideReprovaModal();
+    if (e.target === document.getElementById('reprova-modal-overlay')) hideReprovaModal();
   }
 
   function reprovaModalFilter(q) {
-  if (typeof DESC_REPROVA === 'undefined') return;
-  q = (q || '').toUpperCase().trim();
-  var body = document.getElementById('reprova-modal-body');
-  var rows = Object.keys(DESC_REPROVA).filter(function(k) {
-    if (!q) return true;
-    /* aceita: R70, 70, ou texto na descrição */
-    var num = q.replace(/^R\s*/, '');
-    return k === num || ('R' + k).indexOf(q) >= 0 || DESC_REPROVA[k].toUpperCase().indexOf(q) >= 0;
-  }).map(function(k) {
-    return '<div class="reprova-modal-row">' +
-      '<span class="reprova-modal-num">R' + k + '</span>' +
-      '<span class="reprova-modal-desc">' + DESC_REPROVA[k] + '</span>' +
-    '</div>';
-  }).join('');
-  body.innerHTML = rows || '<div style="color:var(--hint);font-size:12px;padding:12px 0;text-align:center;">Nenhum resultado.</div>';
+    if (typeof DESC_REPROVA === 'undefined') return;
+    q = (q || '').toUpperCase().trim();
+    var body = document.getElementById('reprova-modal-body');
+    var rows = Object.keys(DESC_REPROVA).filter(function(k) {
+      if (!q) return true;
+      /* aceita: R70, 70, ou texto na descrição */
+      var num = q.replace(/^R\s*/, '');
+      return k === num || ('R' + k).indexOf(q) >= 0 || DESC_REPROVA[k].toUpperCase().indexOf(q) >= 0;
+    }).map(function(k) {
+      return '<div class="reprova-modal-row">' +
+        '<span class="reprova-modal-num">R' + k + '</span>' +
+        '<span class="reprova-modal-desc">' + DESC_REPROVA[k] + '</span>' +
+      '</div>';
+    }).join('');
+    body.innerHTML = rows || '<div style="color:var(--hint);font-size:12px;padding:12px 0;text-align:center;">Nenhum resultado.</div>';
   }
 
   document.addEventListener('keydown', function(e2) {
@@ -10525,123 +10578,123 @@ function toggleTheme(init = false) {
 
   /* ── consultRender ── */
   function consultRender() {
-  var grid = document.getElementById('consult-grid');
-  if (!grid) return;
+    var grid = document.getElementById('consult-grid');
+    if (!grid) return;
 
-  var html = '';
+    var html = '';
 
-  /* ── CARD 1: Manobras (MAXX) — full width, primeiro ── */
-  var maColor  = '#a78bfa';
-  var maBg     = 'rgba(167,139,250,.1)';
-  var maBorder = 'rgba(167,139,250,.28)';
+    /* ── CARD 1: Manobras (MAXX) — full width, primeiro ── */
+    var maColor  = '#a78bfa';
+    var maBg     = 'rgba(167,139,250,.1)';
+    var maBorder = 'rgba(167,139,250,.28)';
 
-  /* Coleta todos os códigos MA* existentes em INDICADORES */
-  var allMaCodes = [];
-  INDICADORES.forEach(function(ind) {
-    ind.servicos.forEach(function(s) {
-      if (/^MA[A-Z0-9]/.test(s) && allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
+    /* Coleta todos os códigos MA* existentes em INDICADORES */
+    var allMaCodes = [];
+    INDICADORES.forEach(function(ind) {
+      ind.servicos.forEach(function(s) {
+        if (/^MA[A-Z0-9]/.test(s) && allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
+      });
     });
-  });
-  /* Adiciona os que estão em DESC_MANOBRA mas não em INDICADORES */
-  if (typeof DESC_MANOBRA !== 'undefined') {
-    Object.keys(DESC_MANOBRA).forEach(function(s) {
-      if (allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
-    });
-  }
-  allMaCodes.sort();
+    /* Adiciona os que estão em DESC_MANOBRA mas não em INDICADORES */
+    if (typeof DESC_MANOBRA !== 'undefined') {
+      Object.keys(DESC_MANOBRA).forEach(function(s) {
+        if (allMaCodes.indexOf(s) < 0) allMaCodes.push(s);
+      });
+    }
+    allMaCodes.sort();
 
-  if (allMaCodes.length) {
-    html += '<div class="consult-card c-manobra full-width">';
-    html += '<div class="consult-header">';
-    html += '<div class="consult-header-ic" style="background:rgba(167,139,250,.12);color:' + maColor + ';border:1.5px solid ' + maBorder + ';">MA</div>';
-    html += '<div><div class="consult-header-title" style="color:' + maColor + ';">MANOBRAS</div>';
-    html += '<div class="consult-header-subtitle">Itens de manobra — distribuição e transmissão</div></div>';
-    html += '<span class="consult-header-count" style="color:' + maColor + ';border-color:' + maBorder + ';background:' + maBg + ';">' + allMaCodes.length + '</span>';
-    html += '</div>';
-    html += '<div class="consult-chips">';
-    html += allMaCodes.map(function(code) {
-      var desc = (typeof DESC_MANOBRA !== 'undefined' && DESC_MANOBRA[code]) ? DESC_MANOBRA[code] : (DESC_NOTAS[code] || '');
-      return '<span class="consult-chip" style="color:' + maColor + ';background:' + maBg + ';border-color:' + maBorder + ';cursor:pointer;" ' +
-        'onclick="openChipModal(\'' + code + '\')" title="' + desc + '">' + code + '</span>';
-    }).join('');
-    html += '</div></div>';
-  }
-
-  /* ── CARD 2: Emergências combo (BT + MT num único card) ── */
-  var btInd = INDICADORES.find(function(i) { return i.id === 'emerg-bt'; });
-  var mtInd = INDICADORES.find(function(i) { return i.id === 'emerg-mt'; });
-  if (btInd || mtInd) {
-    var totalEmerg = ((btInd ? btInd.servicos.length : 0) + (mtInd ? mtInd.servicos.length : 0));
-    html += '<div class="consult-card c-emerg-combo full-width">';
-    html += '<div class="consult-header">';
-    html += '<div class="consult-header-ic" style="background:rgba(255,77,106,.1);color:#ff4d6a;border:1.5px solid rgba(255,77,106,.3);">EM</div>';
-    html += '<div><div class="consult-header-title" style="color:#ff6b84;">EMERGÊNCIAS</div>';
-    html += '<div class="consult-header-subtitle">Atendimentos emergenciais BT e MT</div></div>';
-    html += '<span class="consult-header-count" style="color:#ff4d6a;border-color:rgba(255,77,106,.28);background:rgba(255,77,106,.09);">' + totalEmerg + '</span>';
-    html += '</div>';
-
-    if (mtInd) {
-      html += '<div class="consult-subsection">';
-      html += '<div class="consult-subsection-label">';
-      html += '<span class="sslabel-dot" style="background:#ff4d6a;box-shadow:0 0 6px #ff4d6a;"></span>';
-      html += 'EMERG·MT — ' + mtInd.servicos.length + ' serviços';
+    if (allMaCodes.length) {
+      html += '<div class="consult-card c-manobra full-width">';
+      html += '<div class="consult-header">';
+      html += '<div class="consult-header-ic" style="background:rgba(167,139,250,.12);color:' + maColor + ';border:1.5px solid ' + maBorder + ';">MA</div>';
+      html += '<div><div class="consult-header-title" style="color:' + maColor + ';">MANOBRAS</div>';
+      html += '<div class="consult-header-subtitle">Itens de manobra — distribuição e transmissão</div></div>';
+      html += '<span class="consult-header-count" style="color:' + maColor + ';border-color:' + maBorder + ';background:' + maBg + ';">' + allMaCodes.length + '</span>';
       html += '</div>';
-      html += '<div style="display:flex;flex-wrap:wrap;gap:5px;padding-bottom:10px;">';
-      html += mtInd.servicos.map(function(code) {
-        var d = DESC_NOTAS[code] || '';
-        return '<span class="consult-chip" style="color:#ff4d6a;background:rgba(255,77,106,.1);border-color:rgba(255,77,106,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+      html += '<div class="consult-chips">';
+      html += allMaCodes.map(function(code) {
+        var desc = (typeof DESC_MANOBRA !== 'undefined' && DESC_MANOBRA[code]) ? DESC_MANOBRA[code] : (DESC_NOTAS[code] || '');
+        return '<span class="consult-chip" style="color:' + maColor + ';background:' + maBg + ';border-color:' + maBorder + ';cursor:pointer;" ' +
+          'onclick="openChipModal(\'' + code + '\')" title="' + desc + '">' + code + '</span>';
       }).join('');
       html += '</div></div>';
     }
 
-    if (btInd) {
-      html += '<div class="consult-subsection">';
-      html += '<div class="consult-subsection-label">';
-      html += '<span class="sslabel-dot" style="background:#ffb830;box-shadow:0 0 6px #ffb830;"></span>';
-      html += 'EMERG·BT — ' + btInd.servicos.length + ' serviços';
+    /* ── CARD 2: Emergências combo (BT + MT num único card) ── */
+    var btInd = INDICADORES.find(function(i) { return i.id === 'emerg-bt'; });
+    var mtInd = INDICADORES.find(function(i) { return i.id === 'emerg-mt'; });
+    if (btInd || mtInd) {
+      var totalEmerg = ((btInd ? btInd.servicos.length : 0) + (mtInd ? mtInd.servicos.length : 0));
+      html += '<div class="consult-card c-emerg-combo full-width">';
+      html += '<div class="consult-header">';
+      html += '<div class="consult-header-ic" style="background:rgba(255,77,106,.1);color:#ff4d6a;border:1.5px solid rgba(255,77,106,.3);">EM</div>';
+      html += '<div><div class="consult-header-title" style="color:#ff6b84;">EMERGÊNCIAS</div>';
+      html += '<div class="consult-header-subtitle">Atendimentos emergenciais BT e MT</div></div>';
+      html += '<span class="consult-header-count" style="color:#ff4d6a;border-color:rgba(255,77,106,.28);background:rgba(255,77,106,.09);">' + totalEmerg + '</span>';
       html += '</div>';
-      html += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
-      html += btInd.servicos.map(function(code) {
+
+      if (mtInd) {
+        html += '<div class="consult-subsection">';
+        html += '<div class="consult-subsection-label">';
+        html += '<span class="sslabel-dot" style="background:#ff4d6a;box-shadow:0 0 6px #ff4d6a;"></span>';
+        html += 'EMERG·MT — ' + mtInd.servicos.length + ' serviços';
+        html += '</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:5px;padding-bottom:10px;">';
+        html += mtInd.servicos.map(function(code) {
+          var d = DESC_NOTAS[code] || '';
+          return '<span class="consult-chip" style="color:#ff4d6a;background:rgba(255,77,106,.1);border-color:rgba(255,77,106,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+        }).join('');
+        html += '</div></div>';
+      }
+
+      if (btInd) {
+        html += '<div class="consult-subsection">';
+        html += '<div class="consult-subsection-label">';
+        html += '<span class="sslabel-dot" style="background:#ffb830;box-shadow:0 0 6px #ffb830;"></span>';
+        html += 'EMERG·BT — ' + btInd.servicos.length + ' serviços';
+        html += '</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
+        html += btInd.servicos.map(function(code) {
+          var d = DESC_NOTAS[code] || '';
+          return '<span class="consult-chip" style="color:#ffb830;background:rgba(255,184,48,.1);border-color:rgba(255,184,48,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+        }).join('');
+        html += '</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* ── Demais indicadores (excluindo emerg-bt e emerg-mt) ── */
+    var clsMap = {
+      'pmal':     'c-pmal',
+      'pmar':     'c-pmar',
+      'pmag':     'c-pmag',
+      'inspecao': 'c-insp',
+    };
+    /* Indicadores que ocupam largura total */
+    var fullWidthIds = { 'outros': true };
+
+    INDICADORES.forEach(function(ind) {
+      if (ind.id === 'emerg-bt' || ind.id === 'emerg-mt') return;
+      var cls = clsMap[ind.id] || '';
+      var fw  = fullWidthIds[ind.id] ? ' full-width' : '';
+      html += '<div class="consult-card ' + cls + fw + '">';
+      html += '<div class="consult-header">';
+      html += '<div class="consult-header-ic" style="background:' + ind.bg + ';color:' + ind.color + ';border:1.5px solid ' + ind.border + ';">' + ind.label.slice(0,2) + '</div>';
+      html += '<div>';
+      html += '<div class="consult-header-title" style="color:' + ind.color + ';">' + ind.label + '</div>';
+      if (ind.desc) html += '<div class="consult-header-subtitle">' + ind.desc + '</div>';
+      html += '</div>';
+      html += '<span class="consult-header-count" style="color:' + ind.color + ';border-color:' + ind.border + ';background:' + ind.bg + ';">' + ind.servicos.length + '</span>';
+      html += '</div>';
+      html += '<div class="consult-chips">';
+      html += ind.servicos.map(function(code) {
         var d = DESC_NOTAS[code] || '';
-        return '<span class="consult-chip" style="color:#ffb830;background:rgba(255,184,48,.1);border-color:rgba(255,184,48,.25);cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
+        return '<span class="consult-chip" style="color:' + ind.color + ';background:' + ind.bg + ';border-color:' + ind.border + ';cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
       }).join('');
       html += '</div></div>';
-    }
-    html += '</div>';
-  }
+    });
 
-  /* ── Demais indicadores (excluindo emerg-bt e emerg-mt) ── */
-  var clsMap = {
-    'pmal':     'c-pmal',
-    'pmar':     'c-pmar',
-    'pmag':     'c-pmag',
-    'inspecao': 'c-insp',
-  };
-  /* Indicadores que ocupam largura total */
-  var fullWidthIds = { 'outros': true };
-
-  INDICADORES.forEach(function(ind) {
-    if (ind.id === 'emerg-bt' || ind.id === 'emerg-mt') return;
-    var cls = clsMap[ind.id] || '';
-    var fw  = fullWidthIds[ind.id] ? ' full-width' : '';
-    html += '<div class="consult-card ' + cls + fw + '">';
-    html += '<div class="consult-header">';
-    html += '<div class="consult-header-ic" style="background:' + ind.bg + ';color:' + ind.color + ';border:1.5px solid ' + ind.border + ';">' + ind.label.slice(0,2) + '</div>';
-    html += '<div>';
-    html += '<div class="consult-header-title" style="color:' + ind.color + ';">' + ind.label + '</div>';
-    if (ind.desc) html += '<div class="consult-header-subtitle">' + ind.desc + '</div>';
-    html += '</div>';
-    html += '<span class="consult-header-count" style="color:' + ind.color + ';border-color:' + ind.border + ';background:' + ind.bg + ';">' + ind.servicos.length + '</span>';
-    html += '</div>';
-    html += '<div class="consult-chips">';
-    html += ind.servicos.map(function(code) {
-      var d = DESC_NOTAS[code] || '';
-      return '<span class="consult-chip" style="color:' + ind.color + ';background:' + ind.bg + ';border-color:' + ind.border + ';cursor:pointer;" onclick="openChipModal(\'' + code + '\')" title="' + d + '">' + code + '</span>';
-    }).join('');
-    html += '</div></div>';
-  });
-
-  grid.innerHTML = html;
+    grid.innerHTML = html;
   }
 
   function consultSearch() {
@@ -10951,77 +11004,83 @@ function toggleTheme(init = false) {
   var CV_REFS = [5, 10, 15, 25, 30, 37.5, 45, 50, 75, 100, 112.5, 150, 200, 250, 300];
 
   function cvLimpar() {
-  document.getElementById("cv-valor").value = "";
-  document.getElementById("cv-results").innerHTML = "<div class=\"cv-empty\">Insira um valor para converter.</div>";
-  cvRenderTable();
+    document.getElementById("cv-valor").value = "";
+    document.getElementById("cv-results").innerHTML = "<div class=\"cv-empty\">Insira um valor para converter.</div>";
+    cvRenderTable();
   }
+
   function cvRenderVoltageButtons() {
-  var bar = document.getElementById("cv-vbar");
-  if (CV.fase === "tri") {
-    bar.innerHTML =
-      "<div class=\"rb" + (CV.tensao === 220 && !CV.customV ? " on" : "") + "\" id=\"cvt-220\" onclick=\"cvSetV(220)\">220 V</div>" +
-      "<div class=\"rb" + (CV.tensao === 127 && !CV.customV ? " on" : "") + "\" id=\"cvt-127\" onclick=\"cvSetV(127)\">127 V</div>" +
-      "<div class=\"rb" + (CV.tensao === 380 && !CV.customV ? " on" : "") + "\" id=\"cvt-380\" onclick=\"cvSetV(380)\">380 V</div>" +
-      "<div class=\"rb" + (CV.customV ? " on" : "") + "\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
-  } else {
-    // Monofásico CEMIG: 110V (MT rural) ou 240V (padrão BT)
-    bar.innerHTML =
-      "<div class=\"rb" + (CV.tensao === 240 && !CV.customV ? " on" : "") + "\" id=\"cvt-240\" onclick=\"cvSetV(240)\">240 V</div>" +
-      "<div class=\"rb" + (CV.tensao === 110 && !CV.customV ? " on" : "") + "\" id=\"cvt-110\" onclick=\"cvSetV(110)\">110 V</div>" +
-      "<div class=\"rb" + (CV.customV ? " on" : "") + "\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
-  }
+    var bar = document.getElementById("cv-vbar");
+    if (CV.fase === "tri") {
+      bar.innerHTML =
+        "<div class=\"rb" + (CV.tensao === 220 && !CV.customV ? " on" : "") + "\" id=\"cvt-220\" onclick=\"cvSetV(220)\">220 V</div>" +
+        "<div class=\"rb" + (CV.tensao === 127 && !CV.customV ? " on" : "") + "\" id=\"cvt-127\" onclick=\"cvSetV(127)\">127 V</div>" +
+        "<div class=\"rb" + (CV.tensao === 380 && !CV.customV ? " on" : "") + "\" id=\"cvt-380\" onclick=\"cvSetV(380)\">380 V</div>" +
+        "<div class=\"rb" + (CV.customV ? " on" : "") + "\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
+    } else {
+      // Monofásico CEMIG: 110V (MT rural) ou 240V (padrão BT)
+      bar.innerHTML =
+        "<div class=\"rb" + (CV.tensao === 240 && !CV.customV ? " on" : "") + "\" id=\"cvt-240\" onclick=\"cvSetV(240)\">240 V</div>" +
+        "<div class=\"rb" + (CV.tensao === 110 && !CV.customV ? " on" : "") + "\" id=\"cvt-110\" onclick=\"cvSetV(110)\">110 V</div>" +
+        "<div class=\"rb" + (CV.customV ? " on" : "") + "\" id=\"cvt-custom\" onclick=\"cvSetV('custom')\">Outro</div>";
+    }
   }
 
   function cvSetV(v) {
-  var inp = document.getElementById("cv-tensao");
-  if (v === "custom") {
-    CV.customV = true;
-    inp.style.display = "block";
-    CV.tensao = parseFloat(inp.value) || CV.tensao;
-  } else {
-    CV.customV = false;
-    CV.tensao = v;
-    inp.style.display = "none";
-  }
-  cvRenderVoltageButtons();
-  cvCalc();
-  }
+    var inp = document.getElementById("cv-tensao");
+      if (v === "custom") {
+        CV.customV = true;
+        inp.style.display = "block";
+        CV.tensao = parseFloat(inp.value) || CV.tensao;
+      } else {
+        CV.customV = false;
+        CV.tensao = v;
+        inp.style.display = "none";
+      }
+      cvRenderVoltageButtons();
+      cvCalc();
+    }
+
   function cvSetF(f) {
-  CV.fase = f;
-  // Ajusta tensão padrão ao mudar fase
-  if (f === "mono" && (CV.tensao === 127 || CV.tensao === 220 || CV.tensao === 380)) { CV.tensao = 240; CV.customV = false; }
-  if (f === "tri" && (CV.tensao === 110 || CV.tensao === 240)) { CV.tensao = 220; CV.customV = false; }
-  document.getElementById("cv-tensao").style.display = "none";
-  ["tri", "mono"].forEach(function (x) { document.getElementById("cvf-" + x).classList.toggle("on", x === f); });
-  cvRenderVoltageButtons();
-  cvCalc();
+    CV.fase = f;
+    // Ajusta tensão padrão ao mudar fase
+    if (f === "mono" && (CV.tensao === 127 || CV.tensao === 220 || CV.tensao === 380)) { CV.tensao = 240; CV.customV = false; }
+    if (f === "tri" && (CV.tensao === 110 || CV.tensao === 240)) { CV.tensao = 220; CV.customV = false; }
+    document.getElementById("cv-tensao").style.display = "none";
+    ["tri", "mono"].forEach(function (x) { document.getElementById("cvf-" + x).classList.toggle("on", x === f); });
+    cvRenderVoltageButtons();
+    cvCalc();
   }
+
   function cvSetFP(fp) {
-  CV.fp = fp;
-  ["085", "090", "092", "1"].forEach(function (x) {
-    var val = x === "085" ? 0.85 : x === "090" ? 0.90 : x === "092" ? 0.92 : 1.0;
-    document.getElementById("cvfp-" + x).classList.toggle("on", val === fp);
-  });
-  cvCalc();
+    CV.fp = fp;
+    ["085", "090", "092", "1"].forEach(function (x) {
+      var val = x === "085" ? 0.85 : x === "090" ? 0.90 : x === "092" ? 0.92 : 1.0;
+      document.getElementById("cvfp-" + x).classList.toggle("on", val === fp);
+    });
+    cvCalc();
   }
+
   function cvSetU(u) {
-  CV.unidade = u;
-  ["kva", "kw", "a"].forEach(function (x) { document.getElementById("cvu-" + x).classList.toggle("on", x === u); });
-  cvCalc();
+    CV.unidade = u;
+    ["kva", "kw", "a"].forEach(function (x) { document.getElementById("cvu-" + x).classList.toggle("on", x === u); });
+    cvCalc();
   }
 
   function cvToKVA(val, u) {
-  if (u === "kva") { return val; }
-  if (u === "kw") { return val / CV.fp; }
-  // A → kVA
-  if (CV.fase === "tri") { return (val * Math.sqrt(3) * CV.tensao) / 1000; }
-  return (val * CV.tensao) / 1000;
+    if (u === "kva") { return val; }
+    if (u === "kw") { return val / CV.fp; }
+    // A → kVA
+    if (CV.fase === "tri") { return (val * Math.sqrt(3) * CV.tensao) / 1000; }
+    return (val * CV.tensao) / 1000;
   }
+
   function cvFromKVA(kva) {
-  var kw = kva * CV.fp;
-  var a = CV.fase === "tri" ? (kva * 1000) / (Math.sqrt(3) * CV.tensao) : (kva * 1000) / CV.tensao;
-  return { kva: kva, kw: kw, a: a };
+    var kw = kva * CV.fp;
+    var a = CV.fase === "tri" ? (kva * 1000) / (Math.sqrt(3) * CV.tensao) : (kva * 1000) / CV.tensao;
+    return { kva: kva, kw: kw, a: a };
   }
+
   function cvFmt(v, dec) { return v.toFixed(dec === undefined ? 2 : dec).replace(".", ","); }
 
   function cvCalc() {
@@ -11588,9 +11647,20 @@ function toggleTheme(init = false) {
     document.getElementById("map-iframe").src = "";
     toast("Campos limpos!");
   }
+  
+  // Inicializa o mapa com localização padrão
+  function inicializarMapa() {
+    const mapIframe = document.getElementById("map-iframe");
+    // Belo Horizonte, MG - Centro
+    mapIframe.src = "https://maps.google.com/maps?q=-19.9167,-43.9345&hl=pt-BR&z=9&output=embed";
+  }
+
+  // Chama ao carregar a página de Coordenadas
+  if (document.getElementById("map-iframe")) {
+    inicializarMapa();
+  }
   /* ── FIM: PARTE DO GOOGLE MAPS ── */
-
-
+  
   </script>
 </body>
 </html>
